@@ -11,13 +11,13 @@ Pay attention if you have the follow requeriments.
 ## How to Install
 Just run the following lines on your server:
 
-'''
+```
 sudo su -c "apt-get install git-core"
 sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./ckan_installer.sh"
-'''
+```
 
 ## Have questions?
-Just let me know here, on "Issues", or send me a email: luiz@thenets.org
+Just let me know here, on "Issues", or send me an email: luiz@thenets.org
 
 
 ## For future
