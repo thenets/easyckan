@@ -1,0 +1,105 @@
+# Preparations
+# ==============================================
+Set best repositories for "apt-get" command.
+
+
+# Main dependences
+# ==============================================
+sudo su
+apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
+mkdir /usr/java
+ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
+
+
+# Setup a PostgreSQL database
+# ==============================================
+su postgres
+createuser -S -D -R -P ckan_default
+createdb -O ckan_default ckan_default -E utf-8
+exit
+
+
+# Setup CKAN
+# ==============================================
+# Create user (as root)
+useradd -m -s /sbin/nologin -d /usr/lib/ckan -c "CKAN User" ckan
+sudo usermod -a -G staff ckan
+chmod 775 -R /usr/local/lib/python2.7
+chmod 755 /usr/lib/ckan
+chown ckan.33 -R /usr/lib/ckan
+
+# Download and install CKAN
+apt-get install -y  python-pastescript
+su -s /bin/bash - ckan
+mkdir -p /usr/lib/ckan/default
+virtualenv --no-site-packages /usr/lib/ckan/default
+. /usr/lib/ckan/default/bin/activate
+pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.5.2#egg=ckan'
+pip install -r /usr/lib/ckan/default/src/ckan/requirements.txt
+pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt
+
+# Create main CKAN config files
+exit
+mkdir -p /etc/ckan/default
+chown -R ckan.ckan /etc/ckan
+su -s /bin/bash - ckan
+
+. /usr/lib/ckan/default/bin/activate
+
+paster make-config ckan /etc/ckan/default/development.ini
+nano /etc/ckan/default/development.ini
+    # Edit lines:
+    | sqlalchemy.url = postgresql://ckan_default:YOUR_PASSWORD_HERE@localhost/ckan_default
+    | ckan.site_id = default
+    | solr_url = http://127.0.0.1:8080/solr
+    | ckan.site_url = http://localhost
+exit
+chown ckan.33 -R /etc/ckan/default
+
+# Setup a storage path
+mkdir -p /var/lib/ckan
+chown -R ckan.33 /var/lib/ckan
+sed -i 's/#ckan.storage_path/ckan.storage_path/g' /etc/ckan/default/development.ini
+
+
+
+# Install Solr
+# ==============================================
+apt-get -y install solr-tomcat
+mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
+ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+
+
+# Restarting services
+# ==============================================
+service tomcat6 restart
+
+
+# Setup database
+# ==============================================
+su -s /bin/bash - ckan
+. /usr/lib/ckan/default/bin/activate
+cd /usr/lib/ckan/default/src/ckan
+paster db init -c /etc/ckan/default/development.ini
+exit
+
+# Last configurations
+# ==============================================
+ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
+
+
+# Create a admin account
+# ==============================================
+su -s /bin/bash - ckan
+. /usr/lib/ckan/default/bin/activate
+cd /usr/lib/ckan/default/src/ckan
+paster sysadmin add admin -c /etc/ckan/default/development.ini
+exit
+
+
+# Start server
+# ==============================================
+su -s /bin/bash - ckan
+. /usr/lib/ckan/default/bin/activate
+cd /usr/lib/ckan/default/src/ckan
+paster serve /etc/ckan/default/development.ini

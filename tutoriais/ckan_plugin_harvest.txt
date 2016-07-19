@@ -1,0 +1,24 @@
+# Redis database
+# ==============================================
+sudo su
+apt-get install -y redis-server
+sed -i "s/## Plugins Settings/## Plugins Settings\n\n# Harvest plugin dependence\nckan.harvest.mq.type = redis\n/g" /etc/ckan/default/development.ini
+
+
+# Install Harvest plugin
+# ==============================================
+su -s /bin/bash - ckan
+. /usr/lib/ckan/default/bin/activate
+cd /usr/lib/ckan/default/src/ckan
+pip install -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest
+pip install -r /usr/lib/ckan/default/src/ckanext-harvest/pip-requirements.txt
+
+
+# Activate Harvest plugin
+# ==============================================
+sed -i 's/ckan.plugins = /ckan.plugins = harvest ckan_harvester /g' /etc/ckan/default/development.ini
+
+
+# Configuration of Harvest plugin
+# ==============================================
+paster --plugin=ckanext-harvest harvester initdb --config=/etc/ckan/default/development.ini
