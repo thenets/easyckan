@@ -3,8 +3,8 @@ Easiest way to install CKAN platform.
 
 ## What have inside the Easy CKAN?
 - CKAN 2.5.2
-- [Plugin] DataStore (version for CKAN base installation)
-- [Plugin] Harvest 0.5
+- [[Plugin] DataStore (version for CKAN base installation)](http://docs.ckan.org/en/latest/maintaining/datastore.html)
+- [[Plugin] Harvest 0.5](https://github.com/ckan/ckanext-harvest)
 
 ## 1. Requirements
 Pay attention if you have the follow requirements.
@@ -32,7 +32,7 @@ sudo /root/easy_ckan/server.sh
 
 ### 3.2. Harvest Helper (plugin)
 This helper is a simple interface for Harvest Plugin.
-You can learn more about on plugin's page at [CKANext Harvest]:https://github.com/ckan/ckanext-harvest
+You can learn more about on plugin's page at [CKANext Harvest](https://github.com/ckan/ckanext-harvest)
 But below a create some examples:
 
 ```
@@ -50,8 +50,8 @@ I want to add some additional improments:
 - Feature: Deploy with Apache/NGINX
 - Feature: Uninstaller
 - Feature: More plugins
-    + [Wordpress integration for CKAN]:http://extensions.ckan.org/extension/wordpresser/
-    + [CKAN extension to integrate Google Analytics data into CKAN]:http://extensions.ckan.org/extension/googleanalytics/
+    + [Wordpress integration for CKAN](http://extensions.ckan.org/extension/wordpresser/)
+    + [CKAN extension to integrate Google Analytics data into CKAN](http://extensions.ckan.org/extension/googleanalytics/)
 - Compatibility: Support for Ubuntu 16.04
 - Improvement: Better bash interface
 
