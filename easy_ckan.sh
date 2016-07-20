@@ -27,11 +27,9 @@ cp -R ./helpers /root/easy_ckan/
 # Finish
 # ==============================================
 echo    ""
-echo    ""
 echo    "# ======================================================== #"
-echo    "# == CKAN installation complete!                        == #"
+echo    "# == Easy CKAN                                          == #"
 echo    "# ======================================================== #"
 echo    "| If you have any question or need support, just open an   |"
 echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
 echo    "# ======================================================== #"
-read success

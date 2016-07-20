@@ -207,10 +207,15 @@ su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
 
 
 su -c "sleep 2"
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == CKAN installation complete!                        == #"
+echo    "# ======================================================== #"
 echo    "|"
 echo    "| To start the server, just run:"
-echo    "| 	sudo /root/start_server.sh"
+echo    "| 	sudo /root/easy_ckan/server.sh"
 echo    "| Will be avaliable on URL:"
-echo    "| 	http://	$v_siteurl:5000"
+echo    "| 	http://$v_siteurl:5000"
 echo    "|"
 echo    "# Press [Enter] to continue..."
+read success
