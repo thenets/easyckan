@@ -1,12 +1,7 @@
-clear
 echo    "# ======================================================== #"
-echo    "# == Welcome to Easy CKAN installation for Ubuntu 14.04 == #"
-echo    "# ======================================================== #"
-echo    "| If you have any question or need support, just open an   |"
-echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
+echo    "# == Easy CKAN installation for Ubuntu 14.04            == #"
 echo    "# ======================================================== #"
 su -c "sleep 3"
-
 
 
 # Preparations
@@ -26,8 +21,6 @@ apt-get upgrade -y
 
 # Main dependences
 # ==============================================
-
-clear
 echo    "# ======================================================== #"
 echo    "# == 2. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
@@ -60,7 +53,7 @@ read v_password
 
 # Setup a PostgreSQL database
 # ==============================================
-echo    "| Insert the SAME passwork two more times..."
+echo    "| Insert the SAME password two more times..."
 : $(su postgres -c "createuser -S -D -R -P ckan_default")
 su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
 
@@ -71,7 +64,6 @@ su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
 
 # Setup CKAN
 # ==============================================
-clear
 echo    "# ======================================================== #"
 echo    "# == 4. Setup CKAN                                      == #"
 echo    "# ======================================================== #"
@@ -129,7 +121,6 @@ sed -i 's/#ckan.storage_path/ckan.storage_path/g' /etc/ckan/default/development.
 
 # Install Solr
 # ==============================================
-clear
 echo    "# ======================================================== #"
 echo    "# == 5. Install Apache Solr                             == #"
 echo    "# ======================================================== #"
@@ -149,7 +140,6 @@ service tomcat6 restart
 
 # Last configurations
 # ==============================================
-clear
 echo    "# ======================================================== #"
 echo    "# == 6. Finishing                                       == #"
 echo    "# ======================================================== #"
@@ -180,77 +170,33 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 
 
 
-
-# Download controller scripts
+# PLUGINS
 # ==============================================
-clear
 echo    "# ======================================================== #"
-echo    "# == 8. Getting helpers                                 == #"
+echo    "# == 8. Creating Helpers                                == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-
-cd /root
-wget -nv https://dl.dropboxusercontent.com/u/1644096/ckan/run/start_server.sh -O start_server.sh
-chmod +x start_server.sh
-wget -nv https://dl.dropboxusercontent.com/u/1644096/ckan/run/harvest.sh -O harvest.sh
-chmod +x harvest.sh
+mkdir -p /root/easy_ckan/
+cp /tmp/Easy-CKAN/helpers/server.sh /root/easy_ckan/server.sh
 
 
 
 
+# PLUGINS
+# ==============================================
+echo    "# ======================================================== #"
+echo    "# == [PLUGIN] DataStore Install                         == #"
+echo    "# ======================================================== #"
+su -c "sleep 2"
 
 # PLUGIN DataStore Installer
-# ==============================================
-clear
-echo    "# ======================================================== #"
-echo    "# == 9. [PLUGIN] DataStore Install                      == #"
-echo    "# ======================================================== #"
-su -c "sleep 2"
-
-cd /tmp
-# Activating plugin
-sed -i 's/ckan.plugins = /ckan.plugins = datastore /g' /etc/ckan/default/development.ini
-
-# Set-up the database
-su postgres -c "createuser -S -D -R -P -l datastore_default"
-su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
-
-# Set-up database configuration access
-sed -i "s/ckan_default:pass@localhost/ckan_default:$v_password@localhost/g" /etc/ckan/default/development.ini
-sed -i "s/datastore_default:pass@localhost/datastore_default:$v_password@localhost/g" /etc/ckan/default/development.ini
-
-# Uncomment database settings
-sed -i 's/#ckan.datastore.write_url/ckan.datastore.write_url/g' /etc/ckan/default/development.ini
-sed -i 's/#ckan.datastore.read_url/ckan.datastore.read_url/g' /etc/ckan/default/development.ini
-
-# Set permissions
-su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/development.ini > /etc/ckan/default/_plugin_datastore.sql"
-su postgres -c "cat /etc/ckan/default/_plugin_datastore.sql | psql --set ON_ERROR_STOP=1"
-
-
-
-
+su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
 
 # PLUGIN Harvest Installer
-# ==============================================
-cd /tmp
-rm ckan_installer_harvest.sh
-wget -nv https://dl.dropboxusercontent.com/u/1644096/ckan/plugins_installers/ckan_installer_harvest.sh -O ckan_installer_harvest.sh
-chmod +x ckan_installer_harvest.sh
-su -c "./ckan_installer_harvest.sh"
+su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
 
 
 
-
-# Finish
-# ==============================================
-clear
-echo    "# ======================================================== #"
-echo    "# == CKAN installation complete!                        == #"
-echo    "# ======================================================== #"
-echo    "| If you have any question or need support, just open an   |"
-echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
-echo    "# ======================================================== #"
 su -c "sleep 2"
 echo    "|"
 echo    "| To start the server, just run:"
@@ -259,4 +205,3 @@ echo    "| Will be avaliable on URL:"
 echo    "| 	http://	$v_siteurl:5000"
 echo    "|"
 echo    "# Press [Enter] to continue..."
-read success

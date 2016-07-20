@@ -1,13 +1,21 @@
+echo    ""
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == Easy CKAN - Plugin DataStore installation          == #"
+echo    "# ======================================================== #"
+su -c "sleep 3"
+
 echo    "# == CKAN : Plugin DataStore installation"
-echo -n "| Type PostgreSQL password: "
+echo -n "| Type DataStore password: "
 read v_password
+
+# Set-up the database
+echo    "| Insert the SAME password two more times..."
+: $(su postgres -c "createuser -S -D -R -P -l datastore_default")
+su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
 
 # Activating plugin
 sed -i 's/ckan.plugins = /ckan.plugins = datastore /g' /etc/ckan/default/development.ini
-
-# Set-up the database
-su postgres -c "createuser -S -D -R -P -l datastore_default"
-su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
 
 # Set-up database configuration access
 sed -i "s/ckan_default:pass@localhost/ckan_default:$v_password@localhost/g" /etc/ckan/default/development.ini
