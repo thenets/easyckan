@@ -1,11 +1,11 @@
 echo    ""
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == Easy CKAN - Plugin DataStore installation          == #"
+echo    "# == Easy CKAN : [PLUGIN] DataStore installation        == #"
 echo    "# ======================================================== #"
 su -c "sleep 3"
 
-echo    "# == CKAN : Plugin DataStore installation"
+echo    "# == Setup Postgres for DataStore"
 echo -n "| Type DataStore password: "
 read v_password
 

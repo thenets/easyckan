@@ -9,7 +9,8 @@ su -c "sleep 3"
 
 
 
-echo "Starting CKAN Installation..."
+#echo "Starting CKAN Installation..."
+echo ""
 	
 # Fix bash permissions
 chmod +x ./*/*.sh
