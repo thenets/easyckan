@@ -13,7 +13,7 @@ Just run the following lines on your server:
 
 ```
 sudo su -c "apt-get install git-core"
-sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./ckan_installer.sh"
+sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
 ```
 
 ## 3. How to use (helpers)
