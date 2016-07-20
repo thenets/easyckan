@@ -62,6 +62,6 @@ If you want the lastest Easy CKAN version, use following lines to your installat
 
 ```
 sudo su -c "apt-get install git-core"
-sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone -v dev https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
+sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone -b dev https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
 ```
 
