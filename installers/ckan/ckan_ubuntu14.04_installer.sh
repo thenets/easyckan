@@ -31,6 +31,7 @@ ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
 # HARD FIX POSTGRES
 service postgresql restart
+touch /etc/ckan/default/_fix_postgresql_encode.sql
 cat > /etc/ckan/default/_fix_postgresql_encode.sql <<EOL
 	update pg_database set datallowconn = TRUE where datname = 'template0'; 
 
@@ -43,6 +44,8 @@ cat > /etc/ckan/default/_fix_postgresql_encode.sql <<EOL
 	\c template1
 	update pg_database set datallowconn = FALSE where datname = 'template0';
 EOL
+chmod 777 /etc/ckan/default/_fix_postgresql_encode.sql
+chown postgres.postgres /etc/ckan/default/_fix_postgresql_encode.sql
 su postgres -c "cat /etc/ckan/default/_fix_postgresql_encode.sql | psql -U postgres --set ON_ERROR_STOP=1"
 # HARD FIX POSTGRES
 
