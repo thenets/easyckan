@@ -32,7 +32,6 @@ ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
 # HARD FIX POSTGRES
 service postgresql restart
-<<<<<<< HEAD
 
 su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
 
@@ -42,24 +41,6 @@ su postgres -c "psql -d template0 -c \"create database template1 with template =
 su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
 
 su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
-=======
-touch /etc/ckan/default/_fix_postgresql_encode.sql
-cat > /etc/ckan/default/_fix_postgresql_encode.sql <<EOL
-	update pg_database set datallowconn = TRUE where datname = 'template0'; 
-
-	\c template0
-	update pg_database set datistemplate = FALSE where datname = 'template1';
-	drop database template1;
-	create database template1 with template = template0 encoding = 'UTF8';
-	update pg_database set datistemplate = TRUE where datname = 'template1';
-
-	\c template1
-	update pg_database set datallowconn = FALSE where datname = 'template0';
-EOL
-chmod 777 /etc/ckan/default/_fix_postgresql_encode.sql
-chown postgres.postgres /etc/ckan/default/_fix_postgresql_encode.sql
-su postgres -c "cat /etc/ckan/default/_fix_postgresql_encode.sql | psql -U postgres --set ON_ERROR_STOP=1"
->>>>>>> a4eb31e97d3ea220d79975be952dc12b15908c34
 # HARD FIX POSTGRES
 
 
