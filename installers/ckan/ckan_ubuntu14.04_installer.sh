@@ -29,21 +29,18 @@ mkdir /usr/java
 ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
 
+
 # HARD FIX POSTGRES
 service postgresql restart
-cat > /etc/ckan/default/_fix_postgresql_encode.sql <<EOL
-	update pg_database set datallowconn = TRUE where datname = 'template0'; 
 
-	\c template0
-	update pg_database set datistemplate = FALSE where datname = 'template1';
-	drop database template1;
-	create database template1 with template = template0 encoding = 'UTF8';
-	update pg_database set datistemplate = TRUE where datname = 'template1';
+su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
 
-	\c template1
-	update pg_database set datallowconn = FALSE where datname = 'template0';
-EOL
-su postgres -c "cat /etc/ckan/default/_fix_postgresql_encode.sql | psql -U postgres --set ON_ERROR_STOP=1"
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
+su postgres -c "psql -d template0 -c \"drop database template1;\""
+su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
+
+su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
 # HARD FIX POSTGRES
 
 

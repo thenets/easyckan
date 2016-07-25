@@ -38,6 +38,12 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plug
 echo    "| Creating Helper"
 mkdir -p /root/easy_ckan/
 cp /tmp/Easy-CKAN/helpers/harvest.sh /root/easy_ckan/harvest.sh
+cp /tmp/Easy-CKAN/helpers/harvest_background.sh /root/easy_ckan/harvest_background.sh
+
+
+
+# Install service
+# ==============================================
 
 
 echo    "# Harvest was installed! #"
