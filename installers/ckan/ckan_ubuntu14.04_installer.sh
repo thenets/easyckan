@@ -30,20 +30,6 @@ ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
 
 
-# HARD FIX POSTGRES
-service postgresql restart
-
-su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
-
-su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
-su postgres -c "psql -d template0 -c \"drop database template1;\""
-su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
-su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
-
-su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
-# HARD FIX POSTGRES
-
-
 
 # Get parameters from user
 # ==============================================
@@ -162,6 +148,19 @@ echo    "# ======================================================== #"
 echo    "# == 6. Finishing                                       == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
+
+# HARD FIX POSTGRES
+service postgresql restart
+
+su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
+
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
+su postgres -c "psql -d template0 -c \"drop database template1;\""
+su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
+
+su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
+# HARD FIX POSTGRES
 
 echo    "# 6.1. Initilize CKAN database..."
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
