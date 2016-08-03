@@ -520,10 +520,21 @@
 	"buffers":
 	[
 		{
+			"contents": "clear\necho    \"# ======================================================== #\"\necho    \"# == Welcome to Easy CKAN installation for Ubuntu 14.04 == #\"\necho    \"# ======================================================== #\"\necho    \"| If you have any question or need support, just open an   |\"\necho    \"| issue on: https://github.com/thenets/Easy-CKAN           |\"\necho    \"# ======================================================== #\"\nsu -c \"sleep 3\"\n\n\n\n#echo \"Starting CKAN Installation...\"\necho \"\"\n\n# Fix bash permissions\nchmod +x ./*/*.sh\n\n\n\n# ========================================\n# Selecting OS version\n# ========================================\n\nif [[ $string == *\"My long\"* ]]\nthen\n  echo \"It's there!\";\nfi\n# Run Ubuntu 14.04 installer\n./installers/ckan/ckan_ubuntu14.04_installer.sh\n\n# Install helpers\ncp -R ./helpers /root/easy_ckan/\n\n\n\n\n# Finish\n# ==============================================\necho    \"\"\necho    \"# ======================================================== #\"\necho    \"# == Easy CKAN                                          == #\"\necho    \"# ======================================================== #\"\necho    \"| If you have any question or need support, just open an   |\"\necho    \"| issue on: https://github.com/thenets/Easy-CKAN           |\"\necho    \"|                                                          |\"\necho    \"| Luiz Felipe F M Costa                                    |\"\necho    \"| TheNets.org                                              |\"\necho    \"# ======================================================== #\"\n",
+			"file": "easy_ckan.sh",
+			"file_size": 1382,
+			"file_write_time": 131146801517611335,
+			"settings":
+			{
+				"buffer_size": 1555,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "installers/ckan/ckan_ubuntu14.04_installer.sh",
 			"settings":
 			{
-				"buffer_size": 8790,
+				"buffer_size": 8731,
 				"line_ending": "Unix"
 			}
 		}
@@ -531,9 +542,13 @@
 	"build_system": "Packages/User/TyrBuilder.sublime-build",
 	"command_palette":
 	{
-		"height": 292.0,
+		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"",
+				"About"
+			],
 			[
 				"pack ins",
 				"Package Control: Install Package"
@@ -587,7 +602,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 575.0
+		"width": 449.0
 	},
 	"console":
 	{
@@ -608,6 +623,8 @@
 	},
 	"file_history":
 	[
+		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
+		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu16.04_installer.sh",
 		"/home/luiz/Projects/Easy-CKAN/.gitignore",
 		"/home/luiz/Projects/TyrAlgorithm/src/Tyr/StageSearch.py",
 		"/home/luiz/Projects/TyrAlgorithm/src/main.py",
@@ -631,7 +648,6 @@
 		"/home/luiz/Projects/TyrAlgorithm/app/Tyr/StageSearch.py",
 		"/home/luiz/Projects/TyrAlgorithm/app/Tyr/TyrGraph.py",
 		"/home/luiz/Projects/TyrAlgorithm/README.md",
-		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
 		"/home/luiz/Projects/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh",
 		"/home/luiz/Projects/Easy-CKAN/helpers/harvest_background.sh",
 		"/home/luiz/Projects/Easy-CKAN/helpers/server.sh",
@@ -734,8 +750,7 @@
 		"/var/www/html/Stream-Soccer/application/modules/home/scss/base_home.scss",
 		"/var/www/html/Stream-Soccer/application/modules/home/views/_menu_top.php",
 		"/var/www/html/Stream-Soccer/application/modules/home/views/_header.php",
-		"/var/www/html/Stream-Soccer/application/models/Jogo.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/views/_footer.php"
+		"/var/www/html/Stream-Soccer/application/models/Jogo.php"
 	],
 	"find":
 	{
@@ -762,6 +777,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"bleach",
+			"7",
 			"=",
 			"validCluster",
 			"validClusterTotal",
@@ -887,9 +904,7 @@
 			" md-24",
 			"<li class=\"mdl-menu__item\"><a ",
 			" class=\"mdl-navigation__link\"",
-			"menu-notifications",
-			"Notification",
-			"demo-menu-lower-right"
+			"menu-notifications"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -913,19 +928,47 @@
 			[
 				{
 					"buffer": 0,
-					"file": "installers/ckan/ckan_ubuntu14.04_installer.sh",
+					"file": "easy_ckan.sh",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8790,
+						"buffer_size": 1555,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6354,
-								6354
+								713,
+								713
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "installers/ckan/ckan_ubuntu14.04_installer.sh",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 8731,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -933,10 +976,10 @@
 							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2250.0,
+						"translation.y": 2160.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -1008,6 +1051,14 @@
 		"height": 500.0,
 		"selected_items":
 		[
+			[
+				"",
+				"~/Projects/TyrAlgorithm/Tyr.sublime-project"
+			],
+			[
+				"tyr",
+				"~/Projects/TyrAlgorithm/Tyr.sublime-project"
+			],
 			[
 				"ty",
 				"~/Projects/TyrAlgorithm/Tyr.sublime-project"

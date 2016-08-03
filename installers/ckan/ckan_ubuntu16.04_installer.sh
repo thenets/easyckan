@@ -1,8 +1,8 @@
 echo    "# ======================================================== #"
-echo    "# == Easy CKAN installation for Ubuntu 14.04            == #"
+echo    "# == Easy CKAN installation for Ubuntu 16.04            == #"
 echo    "# 	                                                        #"
 echo    "# Special thanks to:	                                    #"
-echo    "#   Alerson Luz (GitHub: alersonluz)	                    #"
+echo    "#   Adrien GRIMAL                 	                    	#"
 echo    "# ======================================================== #"
 su -c "sleep 3"
 
@@ -27,9 +27,9 @@ echo    "# ======================================================== #"
 echo    "# == 2. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
+apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
 mkdir /usr/java
-ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
+ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
 
 
 
@@ -93,6 +93,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install h
 # Installing CKAN and dependences
 echo    "# 4.3. Installing CKAN and dependences..."
 su -c "sleep 2"
+sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.5.2#egg=ckan'"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
 
