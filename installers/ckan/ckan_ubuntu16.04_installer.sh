@@ -1,8 +1,8 @@
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN installation for Ubuntu 16.04            == #"
-echo    "# 	                                                        #"
-echo    "# Special thanks to:	                                    #"
-echo    "#   Adrien GRIMAL                 	                    	#"
+echo    "#                                                          #"
+echo    "# Special thanks to:                                       #"
+echo    "#   Adrien GRIMAL                                          #"
 echo    "# ======================================================== #"
 su -c "sleep 3"
 
@@ -93,8 +93,8 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install h
 # Installing CKAN and dependences
 echo    "# 4.3. Installing CKAN and dependences..."
 su -c "sleep 2"
-sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.5.2#egg=ckan'"
+sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
 
 # Create main CKAN config files

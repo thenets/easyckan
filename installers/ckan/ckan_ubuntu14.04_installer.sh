@@ -1,8 +1,8 @@
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN installation for Ubuntu 14.04            == #"
-echo    "# 	                                                        #"
-echo    "# Special thanks to:	                                    #"
-echo    "#   Alerson Luz (GitHub: alersonluz)	                    #"
+echo    "#                                                          #"
+echo    "# Special thanks to:                                       #"
+echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
 echo    "# ======================================================== #"
 su -c "sleep 3"
 
