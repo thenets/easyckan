@@ -128,14 +128,25 @@ echo    "# ======================================================== #"
 echo    "# == 5. Install Apache Solr                             == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-echo    "# 5.1. Installing from 'apt-get'..."
-apt-get -y install solr-tomcat
-mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 
-# Restarting services
-echo    "# 5.2. Restarting Solr..."
-service tomcat6 restart
+solr_from_source=1
+	# Solr installation from source
+	if [[ $solr_from_source == 1 ]]
+	then
+	
+
+	# Solr installation from package manager
+	else
+		echo    "# 5.1. Installing from 'apt-get'..."
+		apt-get -y install solr-tomcat
+		mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
+		ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+
+		# Restarting services
+		echo    "# 5.2. Restarting Solr..."
+		service tomcat6 restart
+
+	fi
 
 
 
