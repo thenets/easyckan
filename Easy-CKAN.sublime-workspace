@@ -520,18 +520,10 @@
 	"buffers":
 	[
 		{
-			"file": "installers/ckan/ckan_ubuntu14.04_installer.sh",
+			"file": "installers/ckan/ckan_ubuntu16.04_installer.sh",
 			"settings":
 			{
-				"buffer_size": 8897,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "easy_ckan.sh",
-			"settings":
-			{
-				"buffer_size": 2082,
+				"buffer_size": 8905,
 				"line_ending": "Unix"
 			}
 		}
@@ -620,12 +612,12 @@
 	},
 	"file_history":
 	[
+		"/home/luiz/Projects/Easy-CKAN/easy_ckan.sh",
+		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/nginx.conf",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.conf",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.wsgi",
 		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu16.04_installer.sh",
-		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
-		"/home/luiz/Projects/Easy-CKAN/easy_ckan.sh",
 		"/home/luiz/Projects/Easy-CKAN/.gitignore",
 		"/home/luiz/Projects/TyrAlgorithm/src/Tyr/StageSearch.py",
 		"/home/luiz/Projects/TyrAlgorithm/src/main.py",
@@ -925,60 +917,30 @@
 			[
 				{
 					"buffer": 0,
-					"file": "installers/ckan/ckan_ubuntu14.04_installer.sh",
+					"file": "installers/ckan/ckan_ubuntu16.04_installer.sh",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8897,
+						"buffer_size": 8905,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4647,
-								4647
+								1129,
+								1129
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1417.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "easy_ckan.sh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2082,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								697,
-								697
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]

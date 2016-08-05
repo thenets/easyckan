@@ -133,11 +133,11 @@ su -c "sleep 2"
 echo    "# 5.1. Installing from 'apt-get'..."
 apt-get -y install solr-tomcat
 mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
+ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema-1.4.xml /etc/solr/conf/schema.xml
 
 # Restarting services
 echo    "# 5.2. Restarting Solr..."
-service tomcat6 restart
+service tomcat7 restart
 
 
 
