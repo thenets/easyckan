@@ -1,8 +1,9 @@
 echo    "# ======================================================== #"
-echo    "# == Easy CKAN installation for Ubuntu 14.04            == #"
+echo    "# == Easy CKAN installation for Ubuntu 16.04            == #"
 echo    "#                                                          #"
 echo    "# Special thanks to:                                       #"
 echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
+echo    "#   Adrien GRIMAL                                          #"
 echo    "# ======================================================== #"
 su -c "sleep 3"
 
@@ -27,9 +28,9 @@ echo    "# ======================================================== #"
 echo    "# == 2. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
+apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
 mkdir /usr/java
-ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
+ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
 
 
 
@@ -94,6 +95,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install h
 echo    "# 4.3. Installing CKAN and dependences..."
 su -c "sleep 2"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.5.2#egg=ckan'"
+sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
 
 # Create main CKAN config files
@@ -128,25 +130,14 @@ echo    "# ======================================================== #"
 echo    "# == 5. Install Apache Solr                             == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
+echo    "# 5.1. Installing from 'apt-get'..."
+apt-get -y install solr-tomcat
+mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
+cp /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 
-solr_from_source=1
-	# Solr installation from source
-	if [[ $solr_from_source == 1 ]]
-	then
-	
-
-	# Solr installation from package manager
-	else
-		echo    "# 5.1. Installing from 'apt-get'..."
-		apt-get -y install solr-tomcat
-		mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-		ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-
-		# Restarting services
-		echo    "# 5.2. Restarting Solr..."
-		service tomcat6 restart
-
-	fi
+# Restarting services
+echo    "# 5.2. Restarting Solr..."
+service tomcat7 restart
 
 
 
@@ -182,7 +173,7 @@ ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
 echo    "# 6.3. Enable Tomcat6 and PostgreSQL on startup..."
 sudo update-rc.d postgresql enable
-sudo update-rc.d tomcat6 enable
+sudo update-rc.d tomcat7 enable
 
 
 
@@ -244,6 +235,8 @@ if [[ $plugin_harvest == "y" ]]
 then
 	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
 fi
+
+
 
 
 su -c "sleep 2"
