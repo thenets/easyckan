@@ -225,7 +225,7 @@ if [[ $plugin_datastore == "y" ]]
 then
 	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
 fi
-
+echo    ""
 
 # PLUGIN Harvest Installer
 echo    "# PLUGIN Harvest"

@@ -227,11 +227,23 @@ echo    "# ======================================================== #"
 su -c "sleep 2"
 
 # PLUGIN DataStore Installer
-su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
+echo    "# PLUGIN DataStore"
+echo -n "# You want to install? [y/N]: "
+read plugin_datastore
+if [[ $plugin_datastore == "y" ]]
+then
+	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
+fi
+echo    ""
 
 # PLUGIN Harvest Installer
-su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
-
+echo    "# PLUGIN Harvest"
+echo -n "# You want to install? [y/N]: "
+read plugin_harvest
+if [[ $plugin_harvest == "y" ]]
+then
+	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
+fi
 
 
 su -c "sleep 2"
