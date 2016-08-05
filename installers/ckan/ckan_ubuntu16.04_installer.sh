@@ -133,7 +133,7 @@ su -c "sleep 2"
 echo    "# 5.1. Installing from 'apt-get'..."
 apt-get -y install solr-tomcat
 mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema-1.4.xml /etc/solr/conf/schema.xml
+cp /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 
 # Restarting services
 echo    "# 5.2. Restarting Solr..."
@@ -173,7 +173,7 @@ ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
 echo    "# 6.3. Enable Tomcat6 and PostgreSQL on startup..."
 sudo update-rc.d postgresql enable
-sudo update-rc.d tomcat6 enable
+sudo update-rc.d tomcat7 enable
 
 
 
@@ -218,10 +218,24 @@ echo    "# ======================================================== #"
 su -c "sleep 2"
 
 # PLUGIN DataStore Installer
-su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
+echo    "# PLUGIN DataStore"
+echo -n "# You want to install? [y/N]: "
+read plugin_datastore
+if [[ $plugin_datastore == "y" ]]
+then
+	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
+fi
+
 
 # PLUGIN Harvest Installer
-su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
+echo    "# PLUGIN Harvest"
+echo -n "# You want to install? [y/N]: "
+read plugin_harvest
+if [[ $plugin_harvest == "y" ]]
+then
+	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
+fi
+
 
 
 
