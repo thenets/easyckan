@@ -199,21 +199,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 echo    ""
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == 8. Creating Helpers                                == #"
-echo    "# ======================================================== #"
-su -c "sleep 2"
-mkdir -p /root/easy_ckan/
-cp /tmp/Easy-CKAN/helpers/server.sh /root/easy_ckan/server.sh
-
-
-
-
-# PLUGINS
-# ==============================================
-echo    ""
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == [PLUGIN] DataStore Install                         == #"
+echo    "# == Plugins (optional)		                         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 
@@ -244,11 +230,6 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == CKAN installation complete!                        == #"
 echo    "# ======================================================== #"
-echo    "|"
-echo    "| To start the server, just run:"
-echo    "| 	sudo /root/easy_ckan/server.sh"
-echo    "| Will be avaliable on URL:"
-echo    "| 	http://$v_siteurl:5000"
 echo    "|"
 echo    "# Press [Enter] to continue..."
 read success

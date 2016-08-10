@@ -1,16 +1,14 @@
 clear
 echo    "# ======================================================== #"
-echo    "# == Welcome to Easy CKAN installation                  == #"
+echo    "# == Welcome to Easy CKAN installation v0.2             == #"
 echo    "# ======================================================== #"
 echo    "| If you have any question or need support, just open an   |"
 echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
 echo    "# ======================================================== #"
+echo ""
 su -c "sleep 3"
 
 
-
-#echo "Starting CKAN Installation..."
-echo ""
 
 # Fix bash permissions
 chmod +x ./*/*.sh
@@ -48,8 +46,30 @@ os_version_compatible=1
 
 
 
-# Install helpers
-cp -R ./helpers /root/easy_ckan/
+# Install command line tools
+# ==============================================
+echo    ""
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == Installing Easy CKAN command line tools            == #"
+echo    "# ======================================================== #"
+su -c "sleep 2"
+mkdir -p /etc/easyckan/
+
+# Copying folders
+cp -avr ./bin/ 			/etc/easyckan/bin/
+cp -avr ./conf/ 		/etc/easyckan/conf/
+cp -avr ./helpers/ 		/etc/easyckan/helpers/
+cp -avr ./installers/ 	/etc/easyckan/installers/
+
+# Set permissions
+chmod +x /etc/easyckan/bin/easyckan
+
+# Add easyckan to path
+ln -s /etc/easyckan/bin/easyckan /usr/bin/easyckan
+
+echo "... done!"
+su -c "sleep 1"
 
 
 
@@ -62,6 +82,10 @@ echo    "# == Easy CKAN                                          == #"
 echo    "# ======================================================== #"
 echo    "| If you have any question or need support, just open an   |"
 echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
+echo    "|                                                          |"
+echo    "| Run the following command to learn the mainly commands:  |"
+echo    "|     # sudo easyckan help                                 |"
+echo    "|                                                          |"
 echo    "|                                                          |"
 echo    "| Luiz Felipe F M Costa                                    |"
 echo    "| TheNets.org                                              |"

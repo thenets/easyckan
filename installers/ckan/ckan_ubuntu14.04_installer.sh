@@ -174,13 +174,16 @@ su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TR
 su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
 # HARD FIX POSTGRES
 
-echo    "# 6.1. Initilize CKAN database..."
+echo 	"# 6.1. Enable CKAN debug mode on development.ini"
+sed -i 's/debug = false/debug = true/g' /etc/ckan/default/development.ini
+
+echo    "# 6.2. Initilize CKAN database..."
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
 
-echo    "# 6.2. Set 'who.ini'..."
+echo    "# 6.3. Set 'who.ini'..."
 ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
-echo    "# 6.3. Enable Tomcat6 and PostgreSQL on startup..."
+echo    "# 6.4. Enable Tomcat6 and PostgreSQL on startup..."
 sudo update-rc.d postgresql enable
 sudo update-rc.d tomcat6 enable
 
@@ -200,20 +203,6 @@ echo    "# 7.1 Creating a Admin account..."
 echo    "| Your account name will be 'admin'."
 echo    "| Type the admin password:"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster sysadmin add admin -c /etc/ckan/default/development.ini"
-
-
-
-# PLUGINS
-# ==============================================
-echo    ""
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == 8. Creating Helpers                                == #"
-echo    "# ======================================================== #"
-su -c "sleep 2"
-mkdir -p /root/easy_ckan/
-cp /tmp/Easy-CKAN/helpers/server.sh /root/easy_ckan/server.sh
-
 
 
 
@@ -246,16 +235,13 @@ then
 fi
 
 
+
+
 su -c "sleep 2"
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == CKAN installation complete!                        == #"
+echo    "# == CKAN platform installation complete!               == #"
 echo    "# ======================================================== #"
-echo    "|"
-echo    "| To start the server, just run:"
-echo    "| 	sudo /root/easy_ckan/server.sh"
-echo    "| Will be avaliable on URL:"
-echo    "| 	http://$v_siteurl:5000"
 echo    "|"
 echo    "# Press [Enter] to continue..."
 read success

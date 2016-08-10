@@ -519,14 +519,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "installers/ckan/ckan_ubuntu16.04_installer.sh",
-			"settings":
-			{
-				"buffer_size": 8905,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "Packages/User/TyrBuilder.sublime-build",
 	"command_palette":
@@ -612,12 +604,12 @@
 	},
 	"file_history":
 	[
-		"/home/luiz/Projects/Easy-CKAN/easy_ckan.sh",
+		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu16.04_installer.sh",
 		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
+		"/home/luiz/Projects/Easy-CKAN/easy_ckan.sh",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/nginx.conf",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.conf",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.wsgi",
-		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu16.04_installer.sh",
 		"/home/luiz/Projects/Easy-CKAN/.gitignore",
 		"/home/luiz/Projects/TyrAlgorithm/src/Tyr/StageSearch.py",
 		"/home/luiz/Projects/TyrAlgorithm/src/main.py",
@@ -766,6 +758,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"plugin_datastore",
 			"4.04",
 			"bleach",
 			"7",
@@ -892,8 +885,7 @@
 			" data-badge=\"1\"",
 			"rial-icons",
 			" md-24",
-			"<li class=\"mdl-menu__item\"><a ",
-			" class=\"mdl-navigation__link\""
+			"<li class=\"mdl-menu__item\"><a "
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -912,37 +904,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "installers/ckan/ckan_ubuntu16.04_installer.sh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8905,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1129,
-								1129
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
