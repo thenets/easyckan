@@ -4,19 +4,22 @@
 # TODO all messages dialogs
 
 # Ubuntu 14.04 base
-apt-get purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
+apt-get remove --purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
 
 # Ubuntu 16.04 base
-apt-get purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
+apt-get remove --purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
 
 # Solr / Tomcat
-apt-get purge -y solr-tomcat
+apt-get remove --purge -y solr-tomcat
 
 # Paster (Python)
-apt-get purge -y  python-pastescript
+apt-get remove --purge -y  python-pastescript
 
 # Deploy
-apt-get purge -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
+apt-get remove --purge -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
+
+# Wipe useless packages
+apt-get autoremove
 
 # Remove CKAN directories
 rm -Rf /etc/ckan/

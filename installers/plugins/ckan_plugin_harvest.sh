@@ -41,6 +41,12 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plug
 # cp /tmp/Easy-CKAN/helpers/harvest_background.sh /root/easy_ckan/harvest_background.sh
 
 
+# Install on startup
+# ==============================================
+chmod +x /etc/easyckan/helpers/harvest_background.sh
+echo "@reboot /etc/easyckan/helpers/harvest_background.sh" > /etc/cron.d/ckan_harvest
+
+
 
 # Install service
 # ==============================================

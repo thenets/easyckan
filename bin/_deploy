@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Stop services if already installed
+service apache2 stop
+service nginx stop
+
 # Install dependences
 apt-get update
 apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx

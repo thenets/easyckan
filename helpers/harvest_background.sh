@@ -1,4 +1,4 @@
 #!/bin/bash
 
-nohup ./harvest.sh gather_consumer &
-nohup ./harvest.sh fetch_consumer &
+nohup /etc/easyckan/helpers/harvest.sh gather_consumer &
+nohup /etc/easyckan/helpers/harvest.sh fetch_consumer &
