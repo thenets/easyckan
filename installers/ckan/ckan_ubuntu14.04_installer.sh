@@ -200,7 +200,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 echo    ""
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == [PLUGIN] DataStore Install                         == #"
+echo    "# == Plugins (optional)		                         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 

@@ -6,13 +6,47 @@
 
 
 
+# ===============================================
+# Install
+# ===============================================
+if [[ $1 == *"deploy"* ]]
+then
+	os_version=$(lsb_release -r) # Get OS version
+	os_version_compatible=1
+
+	# Run Ubuntu 14.04 installer
+	if [[ $os_version == *"14.04"* ]]
+	then
+		os_version_compatible=1
+		/etc/easyckan/installers/ckan/ckan_ubuntu14.04_installer.sh
+	fi
+
+	# Run Ubuntu 16.04 installer
+	if [[ $os_version == *"16.04"* ]]
+	then
+		os_version_compatible=1
+		/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer.sh
+	fi
+
+	# No distro compatible
+	if [[ $os_version_compatible == 0 ]]
+	then
+		echo "Your Linux distro is not compatible! :/"
+		echo "Check the GitHub repository for supported versions\n or request for other distros versions."
+		echo "   GitHub URL: https://github.com/thenets/Easy-CKAN"
+	fi
+fi
+
+
+
+# ===============================================
 # Deploy
 # ===============================================
 if [[ $1 == *"deploy"* ]]
 then
 	# Install dependences
 	apt-get update
-	apt-get install apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
+	apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
 
 	# Remove old files
 	rm -f /etc/apache2/sites-available/ckan_default.conf
@@ -35,10 +69,16 @@ then
 	# Open port 8888 for Apache HTTP Server
 	sed -i 's/Listen 80/Listen 8888/g' /etc/apache2/ports.conf
 
+	# Set permissions
+	chown ckan.www-data -R /var/lib/ckan/
+	chmod 775 -R /var/lib/ckan/
+	chown ckan.www-data -R /etc/ckan/
+	chmod 775 -R /etc/ckan/
+
 	# Enable CKAN services
 	a2ensite ckan_default
 	a2dissite 000-default
-	rm -vi /etc/nginx/sites-enabled/default
+	rm -vif /etc/nginx/sites-enabled/default
 	ln -s /etc/nginx/sites-available/ckan /etc/nginx/sites-enabled/ckan_default
 	service apache2 restart
 	service nginx restart
@@ -49,23 +89,40 @@ fi
 
 
 
+# ===============================================
 # Update
 # ===============================================
 if [[ $1 == *"update"* ]]
 then
 	# Download Easy CKAN from GitHub
 	cd /tmp 
-	rm -rf ./Easy-CKAN 
-	git clone -b dev https://github.com/thenets/Easy-CKAN.git 
+	rm -rf ./Easy-CKAN
+	if [[ $2 == *"dev"* ]] # Check if will use dev version
+	then
+		git clone -b dev https://github.com/thenets/Easy-CKAN.git
+	else
+		git clone https://github.com/thenets/Easy-CKAN.git
+	fi
 	cd ./Easy-CKAN
 
 	# Update Easy CKAN files
 	rm -Rf /etc/easyckan/
 	mkdir -p /etc/easyckan/
-	cp -R ./bin/ 			/etc/easyckan/bin/
-	cp -R ./conf/	 		/etc/easyckan/conf/
-	cp -R ./helpers/ 		/etc/easyckan/helpers/
-	cp -R ./installers/ 	/etc/easyckan/installers/
+	cp -R ./bin/ /etc/easyckan/bin/
+	cp -R ./conf/ /etc/easyckan/conf/
+	cp -R ./helpers/ /etc/easyckan/helpers/
+	cp -R ./installers/ /etc/easyckan/installers/
 
 	echo "Update success! õ/"
+fi
+
+
+
+
+# ===============================================
+# Plugin
+# ===============================================
+if [[ $1 == *"plugin"* ]]
+then
+	echo "Will be added on future release... :("
 fi
