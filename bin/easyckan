@@ -119,8 +119,11 @@ then
 	cd ./Easy-CKAN
 
 	# Update Easy CKAN files
-	rm -Rf /etc/easyckan/
 	mkdir -p /etc/easyckan/
+	rm -Rf /etc/easyckan/bin/
+	rm -Rf /etc/easyckan/conf/
+	rm -Rf /etc/easyckan/helpers/
+	rm -Rf /etc/easyckan/installers/
 	cp -R ./bin/ /etc/easyckan/bin/
 	cp -R ./conf/ /etc/easyckan/conf/
 	cp -R ./helpers/ /etc/easyckan/helpers/
