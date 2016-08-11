@@ -56,7 +56,7 @@ read v_password
 # ==============================================
 #echo    "| Insert the SAME password two more times..."
 #: $(su postgres -c "createuser -S -D -R -P ckan_default")
-su postgres -c "psql --command \"CREATE USER ckan_default WITH SUPERUSER PASSWORD '"$v_password"';\""
+su postgres -c "psql --command \"CREATE USER ckan_default WITH PASSWORD '"$v_password"';\""
 su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
 
 
