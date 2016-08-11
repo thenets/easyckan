@@ -41,15 +41,22 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plug
 # cp /tmp/Easy-CKAN/helpers/harvest_background.sh /root/easy_ckan/harvest_background.sh
 
 
-# Install on startup
+# Install on startup (init.d)
 # ==============================================
-rm -f /etc/init.d/easyckan_harvest
-rm -f /etc/rc0.d/easyckan_harvest
-cp /etc/easyckan/helpers/harvest_background /etc/init.d/easyckan_harvest
-ln -s /etc/init.d/easyckan_harvest /etc/rc0.d/easyckan_harvest
+# rm -f /etc/init.d/easyckan_harvest
+# rm -f /etc/rc0.d/easyckan_harvest
+# cp /etc/easyckan/helpers/harvest_background /etc/init.d/easyckan_harvest
+# ln -s /etc/init.d/easyckan_harvest /etc/rc0.d/easyckan_harvest
+# chmod +x /etc/easyckan/helpers/harvest_background
+# chmod +x /etc/init.d/easyckan_harvest
+# chmod +x /etc/rc0.d/easyckan_harvest
+
+
+# Crontab
+# ==============================================
 chmod +x /etc/easyckan/helpers/harvest_background
-chmod +x /etc/init.d/easyckan_harvest
-chmod +x /etc/rc0.d/easyckan_harvest
+touch /var/spool/cron/crontabs/root
+echo "@reboot /etc/easyckan/helpers/harvest_background" >> /var/spool/cron/crontabs/root
 
 
 # Install service

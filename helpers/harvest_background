@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 ### BEGIN INIT INFO
 # Provides:             easyckan_harvest
 # Required-Start:       $syslog $remote_fs
@@ -11,5 +11,5 @@
 # Description:          Watch for changes on CKAN Harvester datasets
 ### END INIT INFO
 
-su -c "nohup /etc/easyckan/helpers/harvest.sh gather_consumer";
-su -c "nohup /etc/easyckan/helpers/harvest.sh fetch_consumer";
+su -c "nohup /etc/easyckan/helpers/harvest.sh gather_consumer" &
+su -c "nohup /etc/easyckan/helpers/harvest.sh fetch_consumer" &
