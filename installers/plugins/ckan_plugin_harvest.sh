@@ -55,14 +55,10 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plug
 # Crontab
 # ==============================================
 chmod +x /etc/easyckan/helpers/harvest_background
-touch /var/spool/cron/crontabs/root
-echo "@reboot /etc/easyckan/helpers/harvest_background" >> /var/spool/cron/crontabs/root
-
-
-# Install service
-# ==============================================
+echo "@reboot /etc/easyckan/helpers/harvest_background" > /tmp/cron_harvest
+crontab -u root /tmp/cron_harvest
 
 
 echo    "# Harvest was installed! #"
-su -c "sleep 2"
-
+echo    "Press [Enter] to continue..."
+: $(/etc/easyckan/helpers/harvest_background)

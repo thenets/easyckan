@@ -16,7 +16,7 @@ EASYCKAN_VERSION="v0.2 Alpha"
 # ===============================================
 if [[ $1 == "version" ]]
 then
-	echo "Easy CKAN version "$EASYCKAN_VERSION
+	echo "Easy CKAN version: "$EASYCKAN_VERSION
 
 	if [ -x "$(command -v apachectl)" ]; then
 		apachectl -v | grep Apache --color=never -s
@@ -129,5 +129,7 @@ then
 	cp -R ./helpers/ /etc/easyckan/helpers/
 	cp -R ./installers/ /etc/easyckan/installers/
 
-	echo "Update success! õ/"
+	echo ""
+	echo "Easy CKAN version: "$EASYCKAN_VERSION
+	echo "Command line tools update success! õ/"
 fi
