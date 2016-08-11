@@ -1,8 +1,23 @@
 #!/bin/bash
 
+# Set vars
+# ===============================================
+EASYCKAN_VERSION="v0.2 Alpha"
+
+
+
 # Check if is root user
 # ===============================================
 
+
+
+# ===============================================
+# Version
+# ===============================================
+if [[ $1 == "version" ]]
+then
+	echo "Easy CKAN version "$EASYCKAN_VERSION
+fi
 
 
 
@@ -11,34 +26,9 @@
 # ===============================================
 if [[ $1 == "install" ]]
 then
-	os_version=$(lsb_release -r) # Get OS version
-	os_version_compatible=1
-
-	# Run Ubuntu 14.04 installer
-	if [[ $os_version == *"14.04"* ]]
-	then
-		os_version_compatible=1
-		/etc/easyckan/installers/ckan/ckan_ubuntu14.04_installer.sh
-	fi
-
-	# Run Ubuntu 16.04 installer
-	if [[ $os_version == *"16.04"* ]]
-	then
-		os_version_compatible=1
-		/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer.sh
-	fi
-
-	# No distro compatible
-	if [[ $os_version_compatible == 0 ]]
-	then
-		echo "Your Linux distro is not compatible! :/"
-		echo "Check the GitHub repository for supported versions\n or request for other distros versions."
-		echo "   GitHub URL: https://github.com/thenets/Easy-CKAN"
-	fi
+	chmod +x /etc/easyckan/bin/_install
+	/etc/easyckan/bin/_install
 fi
-
-
-
 
 
 
@@ -53,57 +43,49 @@ fi
 
 
 
-
-
 # ===============================================
 # Deploy
 # ===============================================
 if [[ $1 == *"deploy"* ]]
 then
-	# Install dependences
-	apt-get update
-	apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
-
-	# Remove old files
-	rm -f /etc/apache2/sites-available/ckan_default.conf
-	rm -f /etc/nginx/sites-available/ckan
-	rm -f /etc/ckan/default/production.ini
-
-	# Create CKAN production.ini
-	cp /etc/ckan/default/development.ini /etc/ckan/default/production.ini
-	sed -i 's/debug = true/debug = false/g' /etc/ckan/default/production.ini # Disable debug mode
-
-	# Install Apache WSGI for Python application
-	cp /etc/easyckan/conf/apache.wsgi /etc/ckan/default/apache.wsgi
-
-	# Install Apache HTTP Server Virtual Host
-	cp /etc/easyckan/conf/apache2/ckan_default.conf /etc/apache2/sites-available/ckan_default.conf
-
-	# Install NGINX Server Site Config
-	cp /etc/easyckan/conf/nginx/ckan /etc/nginx/sites-available/ckan
-
-	# Open port 8888 for Apache HTTP Server
-	sed -i 's/Listen 80/Listen 8888/g' /etc/apache2/ports.conf
-
-	# Set permissions
-	chown ckan.www-data -R /var/lib/ckan/
-	chmod 775 -R /var/lib/ckan/
-	chown ckan.www-data -R /etc/ckan/
-	chmod 775 -R /etc/ckan/
-
-	# Enable CKAN services
-	a2ensite ckan_default
-	a2dissite 000-default
-	rm -vif /etc/nginx/sites-enabled/default
-	ln -s /etc/nginx/sites-available/ckan /etc/nginx/sites-enabled/ckan_default
-	service apache2 restart
-	service nginx restart
-
-	# Send emails TODO
-	# https://www.howtoforge.com/tutorial/configure-postfix-to-use-gmail-as-a-mail-relay/
+	chmod +x /etc/easyckan/bin/_deploy
+	/etc/easyckan/bin/_deploy
 fi
 
 
+
+# ===============================================
+# Plugin
+# ===============================================
+if [[ $1 == *"plugin"* ]]
+then
+	chmod +x /etc/easyckan/bin/_plugin
+	/etc/easyckan/bin/_plugin
+fi
+
+
+
+# ===============================================
+# Uninstall
+# ===============================================
+if [[ $1 == "uninstall" ]]
+then
+	chmod +x /etc/easyckan/bin/_uninstall
+	/etc/easyckan/bin/_uninstall
+fi
+
+
+
+# ===============================================
+# Help
+# ===============================================
+if [[ $1 == "help" ]]
+then
+	echo "Easy CKAN version "$EASYCKAN_VERSION
+	echo ""
+	chmod +x /etc/easyckan/bin/_help
+	/etc/easyckan/bin/_help
+fi
 
 
 
@@ -133,46 +115,3 @@ then
 
 	echo "Update success! õ/"
 fi
-
-
-
-
-
-# ===============================================
-# Plugin
-# ===============================================
-if [[ $1 == *"plugin"* ]]
-then
-	echo "Will be added on future release... :("
-fi
-
-
-
-
-# ===============================================
-# Uninstall
-# ===============================================
-if [[ $1 == "uninstall" ]]
-then
-	# TODO all messages dialogs
-
-	# Ubuntu 14.04 base
-	apt-get purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
-
-	# Ubuntu 16.04 base
-	apt-get purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
-
-	# Solr / Tomcat
-	apt-get purge -y solr-tomcat
-
-	# Paster (Python)
-	apt-get purge -y  python-pastescript
-
-	# Deploy
-	apt-get purge -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
-
-	# Remove CKAN directories
-	rm -Rf /etc/ckan/
-	rm -Rf /var/lib/ckan/
-fi
-

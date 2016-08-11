@@ -1,6 +1,6 @@
 clear
 echo    "# ======================================================== #"
-echo    "# == Welcome to Easy CKAN installation v0.2             == #"
+echo    "# == Welcome to Easy CKAN installation                  == #"
 echo    "# ======================================================== #"
 echo    "| If you have any question or need support, just open an   |"
 echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
