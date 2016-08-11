@@ -43,6 +43,19 @@ fi
 
 
 # ===============================================
+# Server (for development)
+# ===============================================
+if [[ $1 == "server" ]]
+then
+	chmod +x /etc/easyckan/helpers/server.sh
+	/etc/easyckan/helpers/server.sh
+fi
+
+
+
+
+
+# ===============================================
 # Deploy
 # ===============================================
 if [[ $1 == *"deploy"* ]]
@@ -132,7 +145,6 @@ if [[ $1 == *"plugin"* ]]
 then
 	echo "Will be added on future release... :("
 fi
-
 
 
 
