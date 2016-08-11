@@ -9,7 +9,7 @@
 # ===============================================
 # Install
 # ===============================================
-if [[ $1 == *"deploy"* ]]
+if [[ $1 == "install" ]]
 then
 	os_version=$(lsb_release -r) # Get OS version
 	os_version_compatible=1
@@ -36,6 +36,9 @@ then
 		echo "   GitHub URL: https://github.com/thenets/Easy-CKAN"
 	fi
 fi
+
+
+
 
 
 
@@ -89,6 +92,8 @@ fi
 
 
 
+
+
 # ===============================================
 # Update
 # ===============================================
@@ -119,6 +124,7 @@ fi
 
 
 
+
 # ===============================================
 # Plugin
 # ===============================================
@@ -126,3 +132,35 @@ if [[ $1 == *"plugin"* ]]
 then
 	echo "Will be added on future release... :("
 fi
+
+
+
+
+
+# ===============================================
+# Uninstall
+# ===============================================
+if [[ $1 == "uninstall" ]]
+then
+	# TODO all messages dialogs
+
+	# Ubuntu 14.04 base
+	apt-get purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
+
+	# Ubuntu 16.04 base
+	apt-get purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
+
+	# Solr / Tomcat
+	apt-get purge -y solr-tomcat
+
+	# Paster (Python)
+	apt-get purge -y  python-pastescript
+
+	# Deploy
+	apt-get purge -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
+
+	# Remove CKAN directories
+	rm -Rf /etc/ckan/
+	rm -Rf /var/lib/ckan/
+fi
+
