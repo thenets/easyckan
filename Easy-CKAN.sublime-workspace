@@ -519,6 +519,14 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "easy_ckan.sh",
+			"settings":
+			{
+				"buffer_size": 2165,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "Packages/User/TyrBuilder.sublime-build",
 	"command_palette":
@@ -604,12 +612,22 @@
 	},
 	"file_history":
 	[
-		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu16.04_installer.sh",
-		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
+		"/home/luiz/Projects/Easy-CKAN/bin/_deploy",
+		"/home/luiz/Projects/Easy-CKAN/bin/_help",
+		"/home/luiz/Projects/Easy-CKAN/bin/easyckan",
 		"/home/luiz/Projects/Easy-CKAN/easy_ckan.sh",
-		"/home/luiz/Projects/Easy-CKAN/installers/contrib/nginx.conf",
-		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.conf",
+		"/home/luiz/Projects/Easy-CKAN/bin/_uninstall",
+		"/home/luiz/Projects/Easy-CKAN/bin/_plugin",
+		"/home/luiz/Projects/Easy-CKAN/bin/install_ckan",
+		"/home/luiz/Projects/Easy-CKAN/helpers/server.sh",
+		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu14.04_installer.sh",
+		"/home/luiz/Projects/Easy-CKAN/README.md",
+		"/home/luiz/Projects/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh",
+		"/home/luiz/Projects/Easy-CKAN/installers/ckan/ckan_ubuntu16.04_installer.sh",
+		"/home/luiz/Projects/Easy-CKAN/installers/contrib/nginx/ckan.conf",
 		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.wsgi",
+		"/home/luiz/Projects/Easy-CKAN/installers/contrib/apache.conf",
+		"/home/luiz/Projects/Easy-CKAN/installers/contrib/nginx.conf",
 		"/home/luiz/Projects/Easy-CKAN/.gitignore",
 		"/home/luiz/Projects/TyrAlgorithm/src/Tyr/StageSearch.py",
 		"/home/luiz/Projects/TyrAlgorithm/src/main.py",
@@ -633,9 +651,7 @@
 		"/home/luiz/Projects/TyrAlgorithm/app/Tyr/StageSearch.py",
 		"/home/luiz/Projects/TyrAlgorithm/app/Tyr/TyrGraph.py",
 		"/home/luiz/Projects/TyrAlgorithm/README.md",
-		"/home/luiz/Projects/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh",
 		"/home/luiz/Projects/Easy-CKAN/helpers/harvest_background.sh",
-		"/home/luiz/Projects/Easy-CKAN/helpers/server.sh",
 		"/run/user/1000/gvfs/sftp:host=ckan.dev,user=luiz/home/luiz/plugins/ckanext-dadosabertos/ckanext/dadosabertos/templates/snippets/search_field.html",
 		"/run/user/1000/gvfs/sftp:host=ckan.dev,user=luiz/home/luiz/plugins/ckanext-dadosabertos/ckanext/dadosabertos/templates/base.html",
 		"/run/user/1000/gvfs/sftp:host=ckan.dev,user=luiz/home/luiz/plugins/ckanext-dadosabertos/ckanext/dadosabertos/templates/home/layout1.html",
@@ -653,7 +669,6 @@
 		"/home/luiz/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
 		"/home/luiz/Projects/DadosAbertos/ckanext-dadosabertos/ckanext/dadosabertos/templates/layout_base.html",
 		"/run/user/1000/gvfs/sftp:host=ckan.dev,user=luiz/home/luiz/plugins/ckanext-dadosgovbr/ckanext/dadosgovbr/templates/home/_util.html",
-		"/home/luiz/Projects/Easy-CKAN/README.md",
 		"/home/luiz/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 		"/home/luiz/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
 		"/home/luiz/Projects/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh",
@@ -724,14 +739,7 @@
 		"/var/www/html/previsor_sisu_blog/wp-content/themes/previsor_sisu/src/MIGRATION_SCRIPT",
 		"/var/www/html/Stream-Soccer/application/models/Sumula.php",
 		"/var/www/html/Stream-Soccer/application/models/Campeonato.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/controllers/Home.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/views/campeonato.php",
-		"/var/www/html/Stream-Soccer/application/modules/admin/controllers/Sumulas.php",
-		"/var/www/html/Stream-Soccer/application/modules/admin/views/sumulas/panel.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/views/home.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/views/ao_vivo.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/views/jogo.php",
-		"/var/www/html/Stream-Soccer/application/modules/home/scss/base_home.scss"
+		"/var/www/html/Stream-Soccer/application/modules/home/controllers/Home.php"
 	],
 	"find":
 	{
@@ -758,6 +766,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"easyckan_version",
+			"_uninstall",
+			"_deploy",
+			"_install",
+			"apt-get",
+			"installers",
+			"&&",
+			"sudo",
+			"installers",
+			"debug",
+			"helpers",
 			"plugin_datastore",
 			"4.04",
 			"bleach",
@@ -874,18 +893,7 @@
 			"render_chat",
 			"finder",
 			"$('",
-			"usercard",
-			"finder",
-			"Finder",
-			"finder",
-			"chat",
-			"id_user",
-			"result",
-			"id=\"",
-			" data-badge=\"1\"",
-			"rial-icons",
-			" md-24",
-			"<li class=\"mdl-menu__item\"><a "
+			"usercard"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -904,8 +912,37 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "easy_ckan.sh",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 2165,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],

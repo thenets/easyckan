@@ -17,6 +17,19 @@ EASYCKAN_VERSION="v0.2 Alpha"
 if [[ $1 == "version" ]]
 then
 	echo "Easy CKAN version "$EASYCKAN_VERSION
+
+	if [ -x "$(command -v apachectl)" ]; then
+		apachectl -v | grep Apache --color=never -s
+	fi
+
+	if [ -x "$(command -v nginx)" ]; then
+		nginx -v | grep nginx --color=never -s
+	fi
+	
+	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
+		echo -n "CKAN platform version: "
+	    cat /usr/lib/ckan/default/src/ckan/CHANGELOG.rst | grep v2 -m 1 --color=never -s
+	fi
 fi
 
 
