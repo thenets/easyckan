@@ -57,10 +57,10 @@ su -c "sleep 2"
 mkdir -p /etc/easyckan/
 
 # Copying folders
-cp -avr ./bin/ 			/etc/easyckan/bin/
-cp -avr ./conf/ 		/etc/easyckan/conf/
-cp -avr ./helpers/ 		/etc/easyckan/helpers/
-cp -avr ./installers/ 	/etc/easyckan/installers/
+cp -R  /bin/ 			/etc/easyckan/bin/
+cp -R  /conf/ 			/etc/easyckan/conf/
+cp -R  /helpers/ 		/etc/easyckan/helpers/
+cp -R  /installers/ 	/etc/easyckan/installers/
 
 # Set permissions
 chmod +x /etc/easyckan/bin/easyckan

@@ -61,10 +61,11 @@ then
 
 	# Update Easy CKAN files
 	rm -Rf /etc/easyckan/
-	cp -avr ./bin/ 			/etc/easyckan/bin/
-	cp -avr ./conf/ 		/etc/easyckan/conf/
-	cp -avr ./helpers/ 		/etc/easyckan/helpers/
-	cp -avr ./installers/ 	/etc/easyckan/installers/
+	mkdir -p /etc/easyckan/
+	cp -R ./bin/ 			/etc/easyckan/bin/
+	cp -R ./conf/	 		/etc/easyckan/conf/
+	cp -R ./helpers/ 		/etc/easyckan/helpers/
+	cp -R ./installers/ 	/etc/easyckan/installers/
 
 	echo "Update success! õ/"
 fi
