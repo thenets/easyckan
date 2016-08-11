@@ -7,11 +7,33 @@ echo    "# ======================================================== #"
 su -c "sleep 3"
 
 
+
+
+
+# Get parameters from user
+# ==============================================
+clear
+echo    "# ======================================================== #"
+echo    "# == 1. Set main config variables                       == #"
+echo    "# ======================================================== #"
+echo    ""
+echo    "# 1.1. Set site URL"
+echo    "| You site URL must be like http://localhost"
+echo -n "| Type the domain: http://"
+read v_siteurl
+
+echo    ""
+echo    "# 1.2. Set Password PostgreSQL (database)"
+echo    "| Enter a password to be used on installation process. "
+echo -n "| Type a password: "
+read v_password
+
+
 # Preparations
 # ==============================================
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == 1. Update Ubuntu packages                          == #"
+echo    "# == 2. Update Ubuntu packages                          == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 cd /tmp
@@ -24,7 +46,7 @@ apt-get upgrade -y
 # Main dependences
 # ==============================================
 echo    "# ======================================================== #"
-echo    "# == 2. Install CKAN dependences from 'apt-get'         == #"
+echo    "# == 3. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
@@ -34,32 +56,12 @@ ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
 
 
-# Get parameters from user
-# ==============================================
-clear
-echo    "# ======================================================== #"
-echo    "# == 3. Set main config variables                       == #"
-echo    "# ======================================================== #"
-echo    ""
-echo    "# 3.1. Set site URL"
-echo    "| You site URL must be like http://localhost"
-echo -n "| Type the domain: http://"
-read v_siteurl
-
-echo    ""
-echo    "# 3.2. Set Password PostgreSQL (database)"
-echo    "| Enter a password to be used on installation process. "
-echo -n "| Type a password: "
-read v_password
-
 # Setup a PostgreSQL database
 # ==============================================
 #echo    "| Insert the SAME password two more times..."
 #: $(su postgres -c "createuser -S -D -R -P ckan_default")
 su postgres -c "psql --command \"CREATE USER ckan_default WITH PASSWORD '"$v_password"';\""
-su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
-
-
+#su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
 
 
 
