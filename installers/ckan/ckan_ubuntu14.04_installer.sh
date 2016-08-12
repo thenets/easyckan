@@ -11,6 +11,7 @@ su -c "sleep 3"
 
 # Get parameters from user
 # ==============================================
+echo    ""
 echo    "# ======================================================== #"
 echo    "# == 1. Set main config variables                       == #"
 echo    "# ======================================================== #"
@@ -203,7 +204,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 echo    ""
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == Plugins (optional)		                         == #"
+echo    "# == Plugins (optional)                                 == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 

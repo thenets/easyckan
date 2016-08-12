@@ -59,6 +59,8 @@ echo "@reboot /etc/easyckan/helpers/harvest_background" > /tmp/cron_harvest
 crontab -u root /tmp/cron_harvest
 
 
+echo    "| Starting Harvest daemon...#"
+/etc/easyckan/helpers/harvest_background
+
+
 echo    "# Harvest was installed! #"
-echo    "Press [Enter] to continue..."
-: $(/etc/easyckan/helpers/harvest_background)

@@ -11,5 +11,5 @@
 # Description:          Watch for changes on CKAN Harvester datasets
 ### END INIT INFO
 
-su -c "nohup /etc/easyckan/helpers/harvest.sh gather_consumer" &
-su -c "nohup /etc/easyckan/helpers/harvest.sh fetch_consumer" &
+su -c "nohup /etc/easyckan/helpers/harvest.sh gather_consumer >/dev/null 2>&1 &" &
+su -c "nohup /etc/easyckan/helpers/harvest.sh fetch_consumer >/dev/null 2>&1 &" &
