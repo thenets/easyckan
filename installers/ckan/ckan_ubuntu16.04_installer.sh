@@ -167,9 +167,11 @@ su postgres -c "psql -d template0 -c \"create database template1 with template =
 su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
 
 su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
+service postgresql restart
 # HARD FIX POSTGRES
 
 echo    "# 6.1. Initilize CKAN database..."
+service tomcat7 restart
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
 
 echo    "# 6.2. Set 'who.ini'..."

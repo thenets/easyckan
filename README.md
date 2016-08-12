@@ -20,6 +20,7 @@ Pay attention if you have the follow requirements.
 Just run the following lines on your server:
 
 ```
+sudo su -c "apt-get update && apt-get upgrade -y"
 sudo su -c "apt-get install git-core"
 sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
 sudo su -c "easyckan install"
@@ -64,6 +65,7 @@ If you want the lastest Easy CKAN version, use following lines to your installat
 !IMPORTANT! Probably you will find some bugs. This is just for developers.
 
 ```
+sudo su -c "apt-get update && apt-get upgrade -y"
 sudo su -c "apt-get install git-core"
 sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone -b dev https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
 sudo su -c "easyckan install"
