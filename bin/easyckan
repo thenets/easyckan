@@ -1,0 +1,135 @@
+#!/bin/bash
+
+# Set vars
+# ===============================================
+EASYCKAN_VERSION="v0.2 Alpha"
+
+
+
+# Check if is root user
+# ===============================================
+
+
+
+# ===============================================
+# Version
+# ===============================================
+if [[ $1 == "version" ]]
+then
+	echo "Easy CKAN version: "$EASYCKAN_VERSION
+
+	if [ -x "$(command -v apachectl)" ]; then
+		apachectl -v | grep Apache --color=never -s
+	fi
+
+	if [ -x "$(command -v nginx)" ]; then
+		nginx -v | grep nginx --color=never -s
+	fi
+	
+	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
+		echo -n "CKAN platform version: "
+	    cat /usr/lib/ckan/default/src/ckan/CHANGELOG.rst | grep v2 -m 1 --color=never -s
+	fi
+fi
+
+
+
+# ===============================================
+# Install
+# ===============================================
+if [[ $1 == "install" ]]
+then
+	chmod +x /etc/easyckan/bin/_install
+	/etc/easyckan/bin/_install
+fi
+
+
+
+# ===============================================
+# Server (for development)
+# ===============================================
+if [[ $1 == "server" ]]
+then
+	chmod +x /etc/easyckan/helpers/server.sh
+	/etc/easyckan/helpers/server.sh
+fi
+
+
+
+# ===============================================
+# Deploy
+# ===============================================
+if [[ $1 == *"deploy"* ]]
+then
+	chmod +x /etc/easyckan/bin/_deploy
+	/etc/easyckan/bin/_deploy
+fi
+
+
+
+# ===============================================
+# Plugin
+# ===============================================
+if [[ $1 == *"plugin"* ]]
+then
+	chmod +x /etc/easyckan/bin/_plugin
+	/etc/easyckan/bin/_plugin
+fi
+
+
+
+# ===============================================
+# Uninstall
+# ===============================================
+if [[ $1 == "uninstall" ]]
+then
+	chmod +x /etc/easyckan/bin/_uninstall
+	/etc/easyckan/bin/_uninstall
+fi
+
+
+
+# ===============================================
+# Help
+# ===============================================
+if [[ $1 == "help" ]] || [[ $1 == "" ]]
+then
+	echo "Easy CKAN version "$EASYCKAN_VERSION
+	echo ""
+	chmod +x /etc/easyckan/bin/_help
+	/etc/easyckan/bin/_help
+fi
+
+
+
+# ===============================================
+# Update
+# ===============================================
+if [[ $1 == *"update"* ]]
+then
+	# Download Easy CKAN from GitHub
+	cd /tmp 
+	rm -rf ./Easy-CKAN
+	if [[ $2 == *"dev"* ]] # Check if will use dev version
+	then
+		git clone -b dev https://github.com/thenets/Easy-CKAN.git
+	else
+		git clone https://github.com/thenets/Easy-CKAN.git
+	fi
+	cd ./Easy-CKAN
+
+	# Update Easy CKAN files
+	mkdir -p /etc/easyckan/
+	rm -Rf /etc/easyckan/bin/
+	rm -Rf /etc/easyckan/conf/
+	rm -Rf /etc/easyckan/helpers/
+	rm -Rf /etc/easyckan/installers/
+	cp -R ./bin/ /etc/easyckan/bin/
+	cp -R ./conf/ /etc/easyckan/conf/
+	cp -R ./helpers/ /etc/easyckan/helpers/
+	cp -R ./installers/ /etc/easyckan/installers/
+
+	echo ""
+	echo "Easy CKAN version: "$EASYCKAN_VERSION
+	echo "Command line tools update success! õ/"
+fi

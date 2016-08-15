@@ -1,3 +1,4 @@
+clear
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN installation for Ubuntu 14.04            == #"
 echo    "#                                                          #"
@@ -7,11 +8,33 @@ echo    "# ======================================================== #"
 su -c "sleep 3"
 
 
+
+# Get parameters from user
+# ==============================================
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == 1. Set main config variables                       == #"
+echo    "# ======================================================== #"
+echo    ""
+echo    "# 1.1. Set site URL"
+echo    "| You site URL must be like http://localhost"
+echo -n "| Type the domain: http://"
+read v_siteurl
+
+echo    ""
+echo    "# 1.2. Set Password PostgreSQL (database)"
+echo    "| Enter a password to be used on installation process. "
+echo -n "| Type a password: "
+read v_password
+
+
+
+
 # Preparations
 # ==============================================
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == 1. Update Ubuntu packages                          == #"
+echo    "# == 2. Update Ubuntu packages                          == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 cd /tmp
@@ -24,7 +47,7 @@ apt-get upgrade -y
 # Main dependences
 # ==============================================
 echo    "# ======================================================== #"
-echo    "# == 2. Install CKAN dependences from 'apt-get'         == #"
+echo    "# == 3. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
@@ -34,31 +57,12 @@ ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
 
 
-# Get parameters from user
-# ==============================================
-clear
-echo    "# ======================================================== #"
-echo    "# == 3. Set main config variables                       == #"
-echo    "# ======================================================== #"
-echo    ""
-echo    "# 3.1. Set site URL"
-echo    "| You site URL must be like http://localhost"
-echo -n "| Type the domain: http://"
-read v_siteurl
-
-echo    ""
-echo    "# 3.2. Set Password PostgreSQL (database)"
-echo    "| Enter a password to be used on installation process. "
-echo -n "| Type a password: "
-read v_password
-
 # Setup a PostgreSQL database
 # ==============================================
-echo    "| Insert the SAME password two more times..."
-: $(su postgres -c "createuser -S -D -R -P ckan_default")
+#echo    "| Insert the SAME password two more times..."
+#: $(su postgres -c "createuser -S -D -R -P ckan_default")
+su postgres -c "psql --command \"CREATE USER ckan_default WITH PASSWORD '"$v_password"';\""
 su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
-
-
 
 
 
@@ -129,25 +133,14 @@ echo    "# == 5. Install Apache Solr                             == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 
-solr_from_source=1
-	# Solr installation from source
-	if [[ $solr_from_source == 1 ]]
-	then
-	
+echo    "# 5.1. Installing from 'apt-get'..."
+apt-get -y install solr-tomcat
+mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
+ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
 
-	# Solr installation from package manager
-	else
-		echo    "# 5.1. Installing from 'apt-get'..."
-		apt-get -y install solr-tomcat
-		mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-		ln -s /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-
-		# Restarting services
-		echo    "# 5.2. Restarting Solr..."
-		service tomcat6 restart
-
-	fi
-
+# Restarting services
+echo    "# 5.2. Restarting Solr..."
+service tomcat6 restart
 
 
 
@@ -174,13 +167,16 @@ su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TR
 su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
 # HARD FIX POSTGRES
 
-echo    "# 6.1. Initilize CKAN database..."
+echo 	"# 6.1. Enable CKAN debug mode on development.ini"
+sed -i 's/debug = false/debug = true/g' /etc/ckan/default/development.ini
+
+echo    "# 6.2. Initilize CKAN database..."
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
 
-echo    "# 6.2. Set 'who.ini'..."
+echo    "# 6.3. Set 'who.ini'..."
 ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
-echo    "# 6.3. Enable Tomcat6 and PostgreSQL on startup..."
+echo    "# 6.4. Enable Tomcat6 and PostgreSQL on startup..."
 sudo update-rc.d postgresql enable
 sudo update-rc.d tomcat6 enable
 
@@ -208,21 +204,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 echo    ""
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == 8. Creating Helpers                                == #"
-echo    "# ======================================================== #"
-su -c "sleep 2"
-mkdir -p /root/easy_ckan/
-cp /tmp/Easy-CKAN/helpers/server.sh /root/easy_ckan/server.sh
-
-
-
-
-# PLUGINS
-# ==============================================
-echo    ""
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == [PLUGIN] DataStore Install                         == #"
+echo    "# == Plugins (optional)                                 == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 
@@ -246,16 +228,13 @@ then
 fi
 
 
+
+
 su -c "sleep 2"
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == CKAN installation complete!                        == #"
+echo    "# == CKAN platform installation complete!               == #"
 echo    "# ======================================================== #"
-echo    "|"
-echo    "| To start the server, just run:"
-echo    "| 	sudo /root/easy_ckan/server.sh"
-echo    "| Will be avaliable on URL:"
-echo    "| 	http://$v_siteurl:5000"
 echo    "|"
 echo    "# Press [Enter] to continue..."
 read success

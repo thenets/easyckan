@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "How to use:"
+echo "  sudo easyckan <command>"
+echo ""
+echo "List of commands below:"
+echo "  help       Show this help content."
+echo "  update     Update Easy CKAN command line tools"
+echo "  install    Install latest CKAN platform compatible with your system."
+echo "  server     Start server over port 5000 for development."
+echo "  deploy     Deploy your CKAN installation over port 80 for production."
