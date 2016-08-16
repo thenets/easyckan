@@ -14,7 +14,8 @@ fi
 if [[ $os_version == *"16.04"* ]]
 then
 	os_version_compatible=1
-	/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer.sh
+	chmod +x /etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer_legacy.sh
+	/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer_legacy.sh
 fi
 
 # No distro compatible
