@@ -1,4 +1,4 @@
-# Easy-CKAN v0.2
+# Easy-CKAN v0.2 Beta
 Easiest way to install CKAN platform.
 
 ## What have inside the Easy CKAN?
@@ -11,7 +11,7 @@ Easiest way to install CKAN platform.
 Pay attention if you have the follow requirements.
 
 - Clean distro installation
-- Ubuntu 14.04 or Ubuntu 16.04
+- Ubuntu 14.04 (beta) or Ubuntu 16.04 (alpha / not recommended)
 - Nothing running over ports: 8080, 8888, 8800, 80, 5000
 - No Apache2 or NGINX previously installed
 
