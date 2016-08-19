@@ -104,7 +104,7 @@ fi
 # ===============================================
 if [[ $1 == "paster" ]]
 then
-	sudo su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster $2 $3 $4 $5 $6 $7 $8"
+	sudo su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plugin=ckan $2 $3 $4 $5 $6 $7 $8 -c /etc/ckan/default/development.ini"
 fi
 
 
