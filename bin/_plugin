@@ -25,3 +25,10 @@ if [[ $1 == "harvest" ]]
 then
 	/etc/easyckan/helpers/harvest.sh $2
 fi
+
+
+# DataPusher
+if [[ $1 == "datapusher" ]]
+then
+	/etc/easyckan/helpers/datapusher.sh $2
+fi
