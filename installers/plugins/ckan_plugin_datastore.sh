@@ -95,3 +95,21 @@ chown -R www-data /usr/lib/ckan/datapusher/
 # Enable DataPusher Apache site
 a2ensite datapusher
 service apache2 restart
+
+
+# Install Supervisor
+# ==============================================
+apt-get install -y supervisor
+
+# Log dir
+mkdir -p /var/log/ckan/std/
+
+# Supervisor config
+cp /etc/easyckan/conf/supervisor/ckan_datapusher.conf /etc/supervisor/conf.d/ckan_datapusher.conf
+
+# Active Supervisor jobs
+sudo supervisorctl reread
+sudo supervisorctl add ckan_datapusher
+sudo supervisorctl start ckan_datapusher
+
+service supervisor restart

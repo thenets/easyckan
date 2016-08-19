@@ -44,7 +44,7 @@ echo    "| Install supervisor to manage harvest background process"
 apt-get install -y supervisor
 
 # Add Supervisor configuration
-cp /etc/easyckan/conf/ckan_harvesting.conf /etc/supervisor/conf.d/ckan_harvesting.conf
+cp /etc/easyckan/conf/supervisor/ckan_harvesting.conf /etc/supervisor/conf.d/ckan_harvesting.conf
 
 # Create log dir
 mkdir -p /var/log/ckan/std/
@@ -57,7 +57,5 @@ sudo supervisorctl add ckan_run_jobs
 sudo supervisorctl start ckan_gather_consumer
 sudo supervisorctl start ckan_fetch_consumer
 sudo supervisorctl start ckan_run_jobs
-
-
 
 echo    "# Harvest was installed! #"
