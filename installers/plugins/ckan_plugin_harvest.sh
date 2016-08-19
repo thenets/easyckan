@@ -9,7 +9,9 @@ cd /tmp
 # Redis database
 # ==============================================
 echo    "| Install Redis Server"
+apt-get update
 apt-get install -y redis-server
+sed -i 's/ckan.harvest.mq.type = redis/ /g' /etc/ckan/default/development.ini # FIX DUPLICATE ON SECOND INSTALLATION
 sed -i "s/## Plugins Settings/## Plugins Settings\n\n# Harvest plugin dependence\nckan.harvest.mq.type = redis\n/g" /etc/ckan/default/development.ini
 
 
@@ -33,34 +35,28 @@ echo    "| Install Harvest modifications on database"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plugin=ckanext-harvest harvester initdb --config=/etc/ckan/default/development.ini"
 
 
-# Creating helper (deprecated on version 0.2)
+# Install Supervisor
 # ==============================================
-# echo    "| Creating Helper"
-# mkdir -p /root/easy_ckan/
-# cp /tmp/Easy-CKAN/helpers/harvest.sh /root/easy_ckan/harvest.sh
-# cp /tmp/Easy-CKAN/helpers/harvest_background.sh /root/easy_ckan/harvest_background.sh
+echo    "| Install supervisor to manage harvest background process"
 
+# Install from apt-get
+apt-get install -y supervisor
 
-# Install on startup (init.d)
-# ==============================================
-# rm -f /etc/init.d/easyckan_harvest
-# rm -f /etc/rc0.d/easyckan_harvest
-# cp /etc/easyckan/helpers/harvest_background /etc/init.d/easyckan_harvest
-# ln -s /etc/init.d/easyckan_harvest /etc/rc0.d/easyckan_harvest
-# chmod +x /etc/easyckan/helpers/harvest_background
-# chmod +x /etc/init.d/easyckan_harvest
-# chmod +x /etc/rc0.d/easyckan_harvest
+# Add Supervisor configuration
+cp /etc/easyckan/conf/ckan_harvesting.conf /etc/supervisor/conf.d/ckan_harvesting.conf
 
+# Create log dir
+mkdir -p /var/log/ckan/std/
 
-# Crontab
-# ==============================================
-chmod +x /etc/easyckan/helpers/harvest_background
-echo "@reboot /etc/easyckan/helpers/harvest_background" > /tmp/cron_harvest
-crontab -u root /tmp/cron_harvest
+# Active Supervisor jobs
+sudo supervisorctl reread
+sudo supervisorctl add ckan_gather_consumer
+sudo supervisorctl add ckan_fetch_consumer
+sudo supervisorctl add ckan_run_jobs
+sudo supervisorctl start ckan_gather_consumer
+sudo supervisorctl start ckan_fetch_consumer
+sudo supervisorctl start ckan_run_jobs
 
-
-echo    "| Starting Harvest daemon...#"
-/etc/easyckan/helpers/harvest_background
 
 
 echo    "# Harvest was installed! #"

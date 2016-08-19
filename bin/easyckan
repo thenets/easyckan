@@ -2,12 +2,23 @@
 
 # Set vars
 # ===============================================
-EASYCKAN_VERSION="v0.2 Alpha"
+EASYCKAN_VERSION="v0.2.1 Alpha"
 
 
 
+# ===============================================
 # Check if is root user
 # ===============================================
+
+# Init
+FILE="/tmp/out.$$"
+GREP="/bin/grep"
+
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+   echo "EasyCKAN must be run as root...\nExiting..." 1>&2
+   exit 1
+fi
 
 
 
@@ -73,7 +84,7 @@ fi
 if [[ $1 == *"plugin"* ]]
 then
 	chmod +x /etc/easyckan/bin/_plugin
-	/etc/easyckan/bin/_plugin
+	/etc/easyckan/bin/_plugin $2 $3 $4 $5
 fi
 
 
@@ -130,6 +141,6 @@ then
 	cp -R ./installers/ /etc/easyckan/installers/
 
 	echo ""
-	echo "Easy CKAN version: "$EASYCKAN_VERSION
 	echo "Command line tools update success! õ/"
+	/etc/easyckan/bin/easyckan version
 fi
