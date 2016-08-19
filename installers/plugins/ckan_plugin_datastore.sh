@@ -10,8 +10,6 @@ read v_password
 
 # Set-up the database
 su postgres -c "psql --command \"CREATE USER datastore_default WITH PASSWORD '"$v_password"';\""
-#echo    "| Insert the SAME password two more times..."
-#: $(su postgres -c "createuser -S -D -R -P -l datastore_default")
 su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
 
 # Activating plugin

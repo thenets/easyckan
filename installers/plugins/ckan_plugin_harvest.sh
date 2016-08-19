@@ -11,8 +11,9 @@ cd /tmp
 echo    "| Install Redis Server"
 apt-get update
 apt-get install -y redis-server
+sed -i 's/# Plugin Harvest/ /g' /etc/ckan/default/development.ini # FIX DUPLICATE ON SECOND INSTALLATION
 sed -i 's/ckan.harvest.mq.type = redis/ /g' /etc/ckan/default/development.ini # FIX DUPLICATE ON SECOND INSTALLATION
-sed -i "s/## Plugins Settings/## Plugins Settings\n\n# Harvest plugin dependence\nckan.harvest.mq.type = redis\n/g" /etc/ckan/default/development.ini
+sed -i "s/## Plugins Settings/## Plugins Settings\n\n# Plugin Harvest\nckan.harvest.mq.type = redis\n/g" /etc/ckan/default/development.ini
 
 
 # Install Harvest plugin
