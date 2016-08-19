@@ -13,7 +13,7 @@ su postgres -c "psql --command \"CREATE USER datastore_default WITH PASSWORD '"$
 su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
 
 # Activating plugin
-sed -i 's/ckan.plugins = /ckan.plugins = datastore /g' /etc/ckan/default/development.ini
+sed -i 's/ckan.plugins = /ckan.plugins = datastore datapusher resource_proxy /g' /etc/ckan/default/development.ini
 
 # Set-up database configuration access
 sed -i "s/ckan_default:pass@localhost/ckan_default:$v_password@localhost/g" /etc/ckan/default/development.ini
@@ -75,6 +75,11 @@ cp /usr/lib/ckan/datapusher/src/datapusher/deployment/datapusher.wsgi /etc/ckan/
 #copy the standard DataPusher settings.
 rm -f /etc/ckan/datapusher_settings.py
 cp /usr/lib/ckan/datapusher/src/datapusher/deployment/datapusher_settings.py /etc/ckan/datapusher_settings.py
+
+# Active on develoment.ini
+sed -i 's/#ckan.datapusher.formats/ckan.datapusher.formats/g' /etc/ckan/default/development.ini
+sed -i 's/#ckan.datapusher.url/ckan.datapusher.url/g' /etc/ckan/default/development.ini
+
 
 #open up port 8800 on Apache where the DataPusher accepts connections.
 #make sure you only run these 2 functions once otherwise you will need
