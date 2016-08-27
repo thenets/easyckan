@@ -53,6 +53,10 @@ su -c ". /usr/lib/ckan/datapusher/bin/activate && pip install --upgrade html5lib
 mkdir /usr/lib/ckan/datapusher/src
 cd /usr/lib/ckan/datapusher/src
 
+# Active on develoment.ini
+sed -i 's/#ckan.datapusher.formats/ckan.datapusher.formats/g' /etc/ckan/default/development.ini
+sed -i 's/#ckan.datapusher.url/ckan.datapusher.url/g' /etc/ckan/default/development.ini
+
 #clone the source (always target the stable branch)
 git clone -b stable https://github.com/ckan/datapusher.git
 
@@ -75,10 +79,6 @@ cp /usr/lib/ckan/datapusher/src/datapusher/deployment/datapusher.wsgi /etc/ckan/
 #copy the standard DataPusher settings.
 rm -f /etc/ckan/datapusher_settings.py
 cp /usr/lib/ckan/datapusher/src/datapusher/deployment/datapusher_settings.py /etc/ckan/datapusher_settings.py
-
-# Active on develoment.ini
-sed -i 's/#ckan.datapusher.formats/ckan.datapusher.formats/g' /etc/ckan/default/development.ini
-sed -i 's/#ckan.datapusher.url/ckan.datapusher.url/g' /etc/ckan/default/development.ini
 
 
 #open up port 8800 on Apache where the DataPusher accepts connections.
