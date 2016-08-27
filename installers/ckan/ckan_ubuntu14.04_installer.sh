@@ -39,7 +39,6 @@ echo    "# ======================================================== #"
 su -c "sleep 2"
 cd /tmp
 apt-get update
-apt-get upgrade -y
 
 
 
