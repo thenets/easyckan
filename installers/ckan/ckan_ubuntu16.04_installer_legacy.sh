@@ -32,6 +32,18 @@ apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv 
 mkdir /usr/java
 ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
 
+# HARD FIX POSTGRES
+service postgresql restart
+
+su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
+
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
+su postgres -c "psql -d template0 -c \"drop database template1;\""
+su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
+
+su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
+# HARD FIX POSTGRES
 
 
 
