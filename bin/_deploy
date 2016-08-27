@@ -1,47 +1,75 @@
 #!/bin/bash
 
-# Stop services if already installed
-service apache2 stop
-service nginx stop
+# Update deploy if packages already installed
+if [ -x "$(command -v nginx)" ]; then
+    echo "Deploy packages identified. Updating files..."
+    su -c "sleep 1"
+    
+    # Create CKAN production.ini
+    rm -f /etc/ckan/default/production.ini
+    cp /etc/ckan/default/development.ini /etc/ckan/default/production.ini
+    sed -i 's/debug = true/debug = false/g' /etc/ckan/default/production.ini # Disable debug mode
+    
+    # Set permissions
+    chown ckan.www-data -R /etc/ckan/
+    chmod 775 -R /etc/ckan/
 
-# Install dependences
-apt-get update
-apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
+    service apache2 restart
+    service nginx restart
+    
+    
 
-# Remove old files
-rm -f /etc/apache2/sites-available/ckan_default.conf
-rm -f /etc/nginx/sites-available/ckan
-rm -f /etc/ckan/default/production.ini
+# Install deploy packages if NGINX doesn't exist
+else:
+    echo "No deploy packages identified. Starting installation..."
+    su -c "sleep 2"
+    
+    
+    # Stop services if already installed
+    service apache2 stop
+    service nginx stop
+    
+    # Install dependences
+    apt-get update
+    apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
+    
+    # Remove old files
+    rm -f /etc/apache2/sites-available/ckan_default.conf
+    rm -f /etc/nginx/sites-available/ckan
+    rm -f /etc/ckan/default/production.ini
+    
+    # Create CKAN production.ini
+    cp /etc/ckan/default/development.ini /etc/ckan/default/production.ini
+    sed -i 's/debug = true/debug = false/g' /etc/ckan/default/production.ini # Disable debug mode
+    
+    # Install Apache WSGI for Python application
+    cp /etc/easyckan/conf/apache.wsgi /etc/ckan/default/apache.wsgi
+    
+    # Install Apache HTTP Server Virtual Host
+    cp /etc/easyckan/conf/apache2/ckan_default.conf /etc/apache2/sites-available/ckan_default.conf
+    
+    # Install NGINX Server Site Config
+    cp /etc/easyckan/conf/nginx/ckan /etc/nginx/sites-available/ckan
+    
+    # Open port 8888 for Apache HTTP Server
+    sed -i 's/Listen 80/Listen 8888/g' /etc/apache2/ports.conf
+    
+    # Set permissions
+    chown ckan.www-data -R /var/lib/ckan/
+    chmod 775 -R /var/lib/ckan/
+    chown ckan.www-data -R /etc/ckan/
+    chmod 775 -R /etc/ckan/
+    
+    # Enable CKAN services
+    a2ensite ckan_default
+    a2dissite 000-default
+    rm -vif /etc/nginx/sites-enabled/default
+    ln -s /etc/nginx/sites-available/ckan /etc/nginx/sites-enabled/ckan_default
+    service apache2 restart
+    service nginx restart
+fi
 
-# Create CKAN production.ini
-cp /etc/ckan/default/development.ini /etc/ckan/default/production.ini
-sed -i 's/debug = true/debug = false/g' /etc/ckan/default/production.ini # Disable debug mode
 
-# Install Apache WSGI for Python application
-cp /etc/easyckan/conf/apache.wsgi /etc/ckan/default/apache.wsgi
-
-# Install Apache HTTP Server Virtual Host
-cp /etc/easyckan/conf/apache2/ckan_default.conf /etc/apache2/sites-available/ckan_default.conf
-
-# Install NGINX Server Site Config
-cp /etc/easyckan/conf/nginx/ckan /etc/nginx/sites-available/ckan
-
-# Open port 8888 for Apache HTTP Server
-sed -i 's/Listen 80/Listen 8888/g' /etc/apache2/ports.conf
-
-# Set permissions
-chown ckan.www-data -R /var/lib/ckan/
-chmod 775 -R /var/lib/ckan/
-chown ckan.www-data -R /etc/ckan/
-chmod 775 -R /etc/ckan/
-
-# Enable CKAN services
-a2ensite ckan_default
-a2dissite 000-default
-rm -vif /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/ckan /etc/nginx/sites-enabled/ckan_default
-service apache2 restart
-service nginx restart
 
 # Send emails TODO
 # https://www.howtoforge.com/tutorial/configure-postfix-to-use-gmail-as-a-mail-relay/

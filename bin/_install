@@ -1,27 +1,38 @@
 #!/bin/bash
 
-os_version=$(lsb_release -r) # Get OS version
-os_version_compatible=1
-
-# Run Ubuntu 14.04 installer
-if [[ $os_version == *"14.04"* ]]
-then
+# Check installation exist
+if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
+	echo "CKAN installation identified! Please remove old CKAN installation before try to install again."
+	echo "Aborting...\n"
+	echo -n "CKAN platform version: "
+    cat /usr/lib/ckan/default/src/ckan/CHANGELOG.rst | grep v2 -m 1 --color=never -s
+    
+    
+# Try to install if no installation was identified
+else:
+	os_version=$(lsb_release -r) # Get OS version
 	os_version_compatible=1
-	/etc/easyckan/installers/ckan/ckan_ubuntu14.04_installer.sh
-fi
-
-# Run Ubuntu 16.04 installer
-if [[ $os_version == *"16.04"* ]]
-then
-	os_version_compatible=1
-	chmod +x /etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer_legacy.sh
-	/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer.sh
-fi
-
-# No distro compatible
-if [[ $os_version_compatible == 0 ]]
-then
-	echo "Your Linux distro is not compatible! :/"
-	echo "Check the GitHub repository for supported versions\n or request for other distros versions."
-	echo "   GitHub URL: https://github.com/thenets/Easy-CKAN"
+	
+	# Run Ubuntu 14.04 installer
+	if [[ $os_version == *"14.04"* ]]
+	then
+		os_version_compatible=1
+		/etc/easyckan/installers/ckan/ckan_ubuntu14.04_installer.sh
+	fi
+	
+	# Run Ubuntu 16.04 installer
+	if [[ $os_version == *"16.04"* ]]
+	then
+		os_version_compatible=1
+		chmod +x /etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer_legacy.sh
+		/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer.sh
+	fi
+	
+	# No distro compatible
+	if [[ $os_version_compatible == 0 ]]
+	then
+		echo "Your Linux distro is not compatible! :/"
+		echo "Check the GitHub repository for supported versions\n or request for other distros versions."
+		echo "   GitHub URL: https://github.com/thenets/Easy-CKAN"
+	fi	
 fi
