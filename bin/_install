@@ -9,7 +9,7 @@ if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
     
     
 # Try to install if no installation was identified
-else:
+else
 	os_version=$(lsb_release -r) # Get OS version
 	os_version_compatible=1
 	

@@ -20,7 +20,7 @@ if [ -x "$(command -v nginx)" ]; then
     
 
 # Install deploy packages if NGINX doesn't exist
-else:
+else
     echo "No deploy packages identified. Starting installation..."
     su -c "sleep 2"
     
