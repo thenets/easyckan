@@ -35,7 +35,11 @@ su postgres -c "cat /etc/ckan/default/_plugin_datastore.sql | psql --set ON_ERRO
 # ========================================
 
 # install requirements for the DataPusher
-apt-get install python-dev python-virtualenv build-essential libxslt1-dev libxml2-dev git
+apt-get install -y python-dev python-virtualenv build-essential libxslt1-dev libxml2-dev git
+
+# Active on develoment.ini
+sed -i 's/#ckan.datapusher.formats/ckan.datapusher.formats/g' /etc/ckan/default/development.ini
+sed -i 's/#ckan.datapusher.url/ckan.datapusher.url/g' /etc/ckan/default/development.ini
 
 # Remove old installation
 cd ~
@@ -52,10 +56,6 @@ su -c ". /usr/lib/ckan/datapusher/bin/activate && pip install --upgrade html5lib
 #create a source directory and switch to it
 mkdir /usr/lib/ckan/datapusher/src
 cd /usr/lib/ckan/datapusher/src
-
-# Active on develoment.ini
-sed -i 's/#ckan.datapusher.formats/ckan.datapusher.formats/g' /etc/ckan/default/development.ini
-sed -i 's/#ckan.datapusher.url/ckan.datapusher.url/g' /etc/ckan/default/development.ini
 
 #clone the source (always target the stable branch)
 git clone -b stable https://github.com/ckan/datapusher.git
