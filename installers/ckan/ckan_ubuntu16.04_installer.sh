@@ -50,7 +50,7 @@ echo    "# ======================================================== #"
 echo    "# == 3. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
+apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk sudo
 mkdir /usr/java
 ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
 
