@@ -31,6 +31,13 @@ su postgres -c "cat /etc/ckan/default/_plugin_datastore.sql | psql --set ON_ERRO
 
 
 # ========================================
+# Deploy
+# ========================================
+/etc/easyckan/bin/easyckan deploy
+
+
+
+# ========================================
 # DataPusher
 # ========================================
 
@@ -104,10 +111,6 @@ chown -R www-data /usr/lib/ckan/datapusher/
 a2ensite datapusher
 service apache2 restart
 
-
-# Deploy
-# ==============================================
-/etc/easyckan/bin/easyckan deploy
 
 
 # Install Supervisor
