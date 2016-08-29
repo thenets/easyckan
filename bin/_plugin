@@ -1,3 +1,34 @@
 #!/bin/bash
 
-echo "Will be added on future release... :("
+if [[ $1 == "" ]]
+then
+	echo "You must need to enter a argument:"
+	echo "Examples:"
+	echo "  sudo easyckan plugin install <plugin_name>"
+	echo "  sudo easyckan plugin harvest sources"
+fi
+
+
+# Install a plugin
+if [[ $1 == "install" ]]
+then
+	if [ -f /etc/easyckan/installers/plugins/ckan_plugin_$2.sh ]; then
+		/etc/easyckan/installers/plugins/ckan_plugin_$2.sh
+	else
+	    echo "File not found!"
+	fi
+fi
+
+
+# Harvest
+if [[ $1 == "harvest" ]]
+then
+	/etc/easyckan/helpers/harvest.sh $2
+fi
+
+
+# DataPusher
+if [[ $1 == "datapusher" ]]
+then
+	/etc/easyckan/helpers/datapusher.sh $2
+fi

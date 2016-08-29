@@ -1,4 +1,4 @@
-# Easy-CKAN v0.2 Beta
+# Easy-CKAN v0.3 Beta
 Easiest way to install CKAN platform.
 
 ## What have inside the Easy CKAN?
@@ -47,6 +47,54 @@ sudo easyckan deploy # Avaliable over port 80
 
 ## 4. Have questions?
 Just let me know here, on "Issues", or send me an email: luiz@thenets.org
+
+
+## Other commands
+Some features not organized yet.
+
+```
+# Plugins
+# ================================================================
+easyckan plugin install {PLUGIN_NAME}
+   - harvest
+   - datastore
+   
+   # Example: easyckan plugin install harvest
+
+
+# DataPusher (from https://github.com/ckan/datapusher )
+# ================================================================
+easyckan plugin datapusher {COMMAND}
+   - update
+     Update all files on DataStore.
+   
+   # Example: easyckan plugin datapusher update
+
+
+
+# Harvest (from https://github.com/ckan/ckanext-harvest )
+#
+# You can check all usage documentation official plugin page.
+# ================================================================
+easyckan plugin harvest {COMMAND}
+    - harvester source {name} {url} {type} [{title}] [{active}] [{owner_org}] [{frequency}] [{config}]
+    - harvester source {source-id/name}
+    - harvester rmsource {source-id/name}
+    - harvester clearsource {source-id/name}
+    - harvester sources [all]
+    - harvester job {source-id/name}
+    - harvester jobs
+    - harvester job_abort {source-id/name}
+    - harvester run
+    - harvester run_test {source-id/name}
+    - harvester gather_consumer
+    - harvester fetch_consumer
+    - harvester purge_queues
+    - harvester job-all
+    - harvester reindex
+
+```
+
 
 
 ## For future

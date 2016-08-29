@@ -39,7 +39,6 @@ echo    "# ======================================================== #"
 su -c "sleep 2"
 cd /tmp
 apt-get update
-apt-get upgrade -y
 
 
 
@@ -50,10 +49,23 @@ echo    "# ======================================================== #"
 echo    "# == 3. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
+apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk sudo
 mkdir /usr/java
 ln -s /usr/lib/jvm/java-7-openjdk-amd64 /usr/java/default
 
+
+# HARD FIX POSTGRES
+service postgresql restart
+
+su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
+
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
+su postgres -c "psql -d template0 -c \"drop database template1;\""
+su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
+su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
+
+su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
+# HARD FIX POSTGRES
 
 
 
@@ -208,16 +220,6 @@ echo    "# == Plugins (optional)                                 == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 
-# PLUGIN DataStore Installer
-echo    "# PLUGIN DataStore"
-echo -n "# You want to install? [y/N]: "
-read plugin_datastore
-if [[ $plugin_datastore == "y" ]]
-then
-	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
-fi
-echo    ""
-
 # PLUGIN Harvest Installer
 echo    "# PLUGIN Harvest"
 echo -n "# You want to install? [y/N]: "
@@ -227,6 +229,16 @@ then
 	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
 fi
 
+
+# PLUGIN DataStore Installer
+echo    "# PLUGIN DataStore"
+echo -n "# You want to install? [y/N]: "
+read plugin_datastore
+if [[ $plugin_datastore == "y" ]]
+then
+	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
+fi
+echo    ""
 
 
 

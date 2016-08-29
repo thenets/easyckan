@@ -1,0 +1,25 @@
+#!/bin/bash
+
+echo "| Trying to repair your CKAN installation..."
+
+
+# Set permissions
+# ==============================================
+echo "|- Set permissions"
+chown -R ckan.33 /var/lib/ckan
+chown -R ckan.33 /etc/ckan/default
+
+
+# Clear tmp files
+# ==============================================
+echo "|- Clear tmp content"
+rm -Rf /tmp/default
+
+
+# Deploy
+# ==============================================
+echo "|- Update production config file"
+/etc/easyckan/bin/easyckan deploy
+
+
+echo "... done"
