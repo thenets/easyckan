@@ -105,6 +105,11 @@ a2ensite datapusher
 service apache2 restart
 
 
+# Deploy
+# ==============================================
+/etc/easyckan/bin/easyckan deploy
+
+
 # Install Supervisor
 # ==============================================
 apt-get install -y supervisor
