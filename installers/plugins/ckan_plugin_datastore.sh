@@ -13,7 +13,7 @@ su postgres -c "psql --command \"CREATE USER datastore_default WITH PASSWORD '"$
 su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
 
 # Activating plugin
-sed -i 's/ckan.plugins = /ckan.plugins = datastore datapusher resource_proxy /g' /etc/ckan/default/development.ini
+sed -i 's/ckan.plugins = /ckan.plugins = datastore resource_proxy /g' /etc/ckan/default/development.ini
 
 # Set-up database configuration access
 sed -i "s/ckan_default:pass@localhost/ckan_default:$v_password@localhost/g" /etc/ckan/default/development.ini
@@ -36,6 +36,9 @@ su postgres -c "cat /etc/ckan/default/_plugin_datastore.sql | psql --set ON_ERRO
 
 # install requirements for the DataPusher
 apt-get install -y python-dev python-virtualenv build-essential libxslt1-dev libxml2-dev git
+
+# Activating plugin
+sed -i 's/ckan.plugins = /ckan.plugins = datapusher /g' /etc/ckan/default/development.ini
 
 # Active on develoment.ini
 sed -i 's/#ckan.datapusher.formats/ckan.datapusher.formats/g' /etc/ckan/default/development.ini
