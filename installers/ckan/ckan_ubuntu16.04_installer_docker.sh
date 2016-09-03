@@ -1,6 +1,7 @@
 clear
 echo    "# ======================================================== #"
-echo    "# == Easy CKAN installation for Ubuntu 16.04            == #"
+echo    "# == Easy CKAN installation for Docker                  == #"
+Ubuntu 16.04
 echo    "#                                                          #"
 echo    "# Special thanks to:                                       #"
 echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
@@ -10,7 +11,7 @@ su -c "sleep 3"
 
 
 
-# Get parameters from user
+# Check if has all parameters
 # ==============================================
 echo    ""
 echo    "# ======================================================== #"
@@ -20,16 +21,8 @@ echo    ""
 
 # No arguments sent. Interactive input.
 if [ -z "$1" ] || [ -z "$2" ]; then
-	echo    "# 1.1. Set site URL"
-	echo    "| You site URL must be like http://localhost"
-	echo -n "| Type the domain: http://"
-	read v_siteurl
-
-	echo    ""
-	echo    "# 1.2. Set Password PostgreSQL (database)"
-	echo    "| Enter a password to be used on installation process. "
-	echo -n "| Type a password: "
-	read v_password
+   echo "You most give all parameters...\nExample: easyckan install [domain_name] [password]\nExiting..." 1>&2
+   exit 1
 
 # Set from arguments
 else

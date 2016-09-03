@@ -3,8 +3,13 @@ Easiest way to install CKAN platform.
 
 ## What have inside the Easy CKAN?
 - CKAN 2.5.2
-- [[Plugin] DataStore (version for CKAN base installation)](http://docs.ckan.org/en/latest/maintaining/datastore.html)
-- [[Plugin] Harvest 0.5](https://github.com/ckan/ckanext-harvest)
+- Plugins
++ [[Plugin] DataStore (version for CKAN base installation)](http://docs.ckan.org/en/latest/maintaining/datastore.html)
++ [[Plugin] Harvest (v0.5)](https://github.com/ckan/ckanext-harvest)
++ [[Plugin] Scheming (latest) - Thanks to @timgiles](https://github.com/ckan/ckanext-scheming)
+
+https://github.com/ckan/ckanext-scheming
+
 - Easy CKAN command line (NEW!)
 
 ## 1. Requirements
@@ -58,6 +63,7 @@ Some features not organized yet.
 easyckan plugin install {PLUGIN_NAME}
    - harvest
    - datastore
+   - scheming
    
    # Example: easyckan plugin install harvest
 
