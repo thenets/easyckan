@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Set permissions
+chmod +x /etc/easyckan/installers/plugins/*
+
+
 if [[ $1 == "" ]]
 then
 	echo "You must need to enter a argument:"

@@ -6,7 +6,6 @@ echo    "| If you have any question or need support, just open an   |"
 echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
 echo    "# ======================================================== #"
 echo ""
-su -c "sleep 3"
 
 
 
@@ -20,7 +19,7 @@ chmod +x ./*/*.sh
 echo    "# ======================================================== #"
 echo    "# == Installing Easy CKAN command line tools            == #"
 echo    "# ======================================================== #"
-su -c "sleep 2"
+su -c "sleep 1"
 mkdir -p /etc/easyckan/
 
 # Copying folders
@@ -36,7 +35,6 @@ chmod +x /etc/easyckan/bin/easyckan
 ln -s /etc/easyckan/bin/easyckan /usr/bin/easyckan
 
 echo "... done!"
-su -c "sleep 1"
 
 
 
