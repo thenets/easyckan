@@ -2,6 +2,11 @@
 
 echo "| Trying to repair your CKAN installation..."
 
+# Dependences
+# ==============================================
+apt-get install libffi libffi-dev
+su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install nesoni"
+
 
 # Set permissions
 # ==============================================
@@ -16,17 +21,17 @@ echo "|- Clear tmp content"
 rm -Rf /tmp/default
 
 
-# Deploy
-# ==============================================
-echo "|- Update production config file"
-/etc/easyckan/bin/easyckan deploy
-
-
 # FIX securety
 # ==============================================
 apt-get install python-dev libffi-dev libssl-dev
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install requests[security]"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install --upgrade ndg-httpsclient"
+
+
+# Deploy
+# ==============================================
+echo "|- Update production config file"
+/etc/easyckan/bin/easyckan deploy
 
 
 echo "... done"
