@@ -17,16 +17,26 @@ echo    "# ======================================================== #"
 echo    "# == 1. Set main config variables                       == #"
 echo    "# ======================================================== #"
 echo    ""
-echo    "# 1.1. Set site URL"
-echo    "| You site URL must be like http://localhost"
-echo -n "| Type the domain: http://"
-read v_siteurl
 
-echo    ""
-echo    "# 1.2. Set Password PostgreSQL (database)"
-echo    "| Enter a password to be used on installation process. "
-echo -n "| Type a password: "
-read v_password
+# No arguments sent. Interactive input.
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo    "# 1.1. Set site URL"
+	echo    "| You site URL must be like http://localhost"
+	echo -n "| Type the domain: http://"
+	read v_siteurl
+
+	echo    ""
+	echo    "# 1.2. Set Password PostgreSQL (database)"
+	echo    "| Enter a password to be used on installation process. "
+	echo -n "| Type a password: "
+	read v_password
+
+# Set from arguments
+else
+	v_siteurl=$1
+	v_password=$2
+fi
+
 
 
 
@@ -212,32 +222,36 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 
 
 # PLUGINS
+# 
+# Just if installation doesn't have args
 # ==============================================
-echo    ""
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == Plugins (optional)		                         == #"
-echo    "# ======================================================== #"
-su -c "sleep 2"
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo    ""
+	echo    ""
+	echo    "# ======================================================== #"
+	echo    "# == Plugins (optional)                                 == #"
+	echo    "# ======================================================== #"
+	su -c "sleep 2"
 
-# PLUGIN Harvest Installer
-echo    "# PLUGIN Harvest"
-echo -n "# You want to install? [y/N]: "
-read plugin_harvest
-if [[ $plugin_harvest == "y" ]]
-then
-	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_harvest.sh"
-fi
+	# PLUGIN Harvest Installer
+	echo    "# PLUGIN Harvest"
+	echo -n "# You want to install? [y/N]: "
+	read plugin_harvest
+	if [[ $plugin_harvest == "y" ]]
+	then
+		su -c "easyckan plugin install harvest"
+	fi
 
-# PLUGIN DataStore Installer
-echo    "# PLUGIN DataStore"
-echo -n "# You want to install? [y/N]: "
-read plugin_datastore
-if [[ $plugin_datastore == "y" ]]
-then
-	su -c "/tmp/Easy-CKAN/installers/plugins/ckan_plugin_datastore.sh"
+	# PLUGIN DataStore Installer
+	echo    "# PLUGIN DataStore"
+	echo -n "# You want to install? [y/N]: "
+	read plugin_datastore
+	if [[ $plugin_datastore == "y" ]]
+	then
+		su -c "easyckan plugin install datastore"
+	fi
+	echo    ""
 fi
-echo    ""
 
 
 

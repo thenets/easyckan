@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Set permissions
+chmod +x /etc/easyckan/installers/plugins/*
+
+
 if [[ $1 == "" ]]
 then
 	echo "You must need to enter a argument:"
@@ -20,6 +24,16 @@ then
 fi
 
 
+# Install all plugins
+if [[ $1 == "--all" ]]
+then
+	for file in /etc/easyckan/installers/plugins/*
+	do
+	  $file
+	done
+fi
+
+
 # Harvest
 if [[ $1 == "harvest" ]]
 then
@@ -31,4 +45,11 @@ fi
 if [[ $1 == "datapusher" ]]
 then
 	/etc/easyckan/helpers/datapusher.sh $2
+fi
+
+
+# Scheming
+if [[ $1 == "scheming" ]]
+then
+	nano /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/ckan_dataset.json
 fi

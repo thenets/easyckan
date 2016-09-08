@@ -9,7 +9,6 @@ EASYCKAN_VERSION="v0.3.0 Alpha"
 # ===============================================
 # Check if is root user
 # ===============================================
-
 # Init
 FILE="/tmp/out.$$"
 GREP="/bin/grep"
@@ -27,6 +26,8 @@ fi
 # ===============================================
 if [[ $1 == "version" ]]
 then
+	lsb_release -d
+	
 	echo "Easy CKAN version: "$EASYCKAN_VERSION
 
 	if [ -x "$(command -v apachectl)" ]; then
@@ -51,7 +52,7 @@ fi
 if [[ $1 == "install" ]]
 then
 	chmod +x /etc/easyckan/bin/_install
-	/etc/easyckan/bin/_install
+	/etc/easyckan/bin/_install $2 $3 $4 $5
 fi
 
 
