@@ -9,25 +9,26 @@ ENV POTSGRESQL_DB $DB_ENV_POSTGRES_DB
 ENV SOLR_IP $SOLR_PORT_8983_TCP_ADDR 
 
 # Install dependences
-RUN apt-get install apt-utils libffi libffi-dev -y
+RUN apt-get install -y apt-utils libffi-dev 
+RUN apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx supervisor
 
 # Update Easy CKAN
-RUN easyckan update dev
+CMD ["easyckan","update","dev"]
 
 # Reconfigure environment
-RUN easyckan docker
+CMD ["easyckan","docker"]
 
 # Copy "who.ini" file
-RUN ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
+CMD ["ln","-s","/usr/lib/ckan/default/src/ckan/who.ini","/etc/ckan/default/who.ini"]
 
 # Initialize databases
-RUN su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
+CMD ["su","-s","/bin/bash","-","ckan","-c","'. /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini'"]
 
 # FIX many problems (permissions, security) and Deploy
-RUN easyckan fix
+CMD ["easyckan","fix"]
 
 # Create admin account (user: admin / password: password)
-RUN easyckan create user admin password
+CMD ["easyckan","create","user","admin","password"]
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
