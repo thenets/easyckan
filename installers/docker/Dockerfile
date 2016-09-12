@@ -13,19 +13,7 @@ RUN apt-get install -y apt-utils libffi-dev
 RUN apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx supervisor
 
 # Update Easy CKAN
-CMD ["easyckan","update","dev"]
-
-# Reconfigure environment
-CMD ["easyckan","docker"]
-
-# Initialize databases
-CMD ["easyckan","create","database"]
-
-# FIX many problems (permissions, security) and Deploy
-CMD ["easyckan","fix"]
-
-# Create admin account (user: admin / password: password)
-CMD ["easyckan","create","user","admin","password"]
+RUN easyckan update dev
 
 # Volumes
 VOLUME ["/etc/ckan/default"]

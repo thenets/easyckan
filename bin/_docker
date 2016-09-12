@@ -1,50 +1,78 @@
 #!/bin/bash
 
-if [[ $POTSGRESQL_USER == "" ]]
+
+# =================================================
+# Start docker, create config file and create user
+# =================================================
+if [[ $1 == "start" ]]
 then
-    export CKAN_DOMAIN="localhost"
-    export POTSGRESQL_USER=$DB_ENV_POSTGRES_USER 
-    export POTSGRESQL_PASS=$DB_ENV_POSTGRES_PASS 
-    export POSTGRESQL_IP_PORT=$DB_PORT_5432_TCP_ADDR 
-    export POTSGRESQL_DB=$DB_ENV_POSTGRES_DB 
-    export SOLR_IP=$SOLR_PORT_8983_TCP_ADDR 
+    easyckan update dev
+    easyckan docker update
+    easyckan create database
+    easyckan create user admin admin
 fi
 
-echo "# Environment Variables"
-echo "CKAN_DOMAIN:        " $CKAN_DOMAIN
-echo "POTSGRESQL_USER:    " $POTSGRESQL_USER
-echo "POTSGRESQL_PASS:    " $POTSGRESQL_PASS
-echo "POSTGRESQL_IP_PORT: " $POSTGRESQL_IP_PORT
-echo "POTSGRESQL_DB:      " $POTSGRESQL_DB
-echo "SOLR_IP:            " $SOLR_IP
 
-echo ""
-echo "# Remove previously configuration files if exists"
-rm -f /etc/ckan/default/development.ini
 
-echo "# Create configuration file"
-mkdir -p /etc/ckan/default
-chown -R ckan.ckan /etc/ckan
-su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
+# =================================================
+# Generate configuration file for docker container
+# =================================================
+if [[ $1 == "update" ]] || [[ $1 == "" ]]
+then
+    if [[ $POTSGRESQL_USER == "" ]]
+    then
+        export CKAN_DOMAIN="localhost"
+        export POTSGRESQL_USER=$DB_ENV_POSTGRES_USER 
+        export POTSGRESQL_PASS=$DB_ENV_POSTGRES_PASS 
+        export POSTGRESQL_IP_PORT=$DB_PORT_5432_TCP_ADDR 
+        export POTSGRESQL_DB=$DB_ENV_POSTGRES_DB 
+        export SOLR_IP=$SOLR_PORT_8983_TCP_ADDR 
+    fi
+    
+    echo "# Environment Variables"
+    echo "CKAN_DOMAIN:        " $CKAN_DOMAIN
+    echo "POTSGRESQL_USER:    " $POTSGRESQL_USER
+    echo "POTSGRESQL_PASS:    " $POTSGRESQL_PASS
+    echo "POSTGRESQL_IP_PORT: " $POSTGRESQL_IP_PORT
+    echo "POTSGRESQL_DB:      " $POTSGRESQL_DB
+    echo "SOLR_IP:            " $SOLR_IP
+    
+    echo ""
+    echo "# Remove previously configuration files if exists"
+    rm -f /etc/ckan/default/development.ini
+    
+    echo "# Create configuration file"
+    mkdir -p /etc/ckan/default
+    chown -R ckan.ckan /etc/ckan
+    su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
+    
+    echo "# Set domain"
+    sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$CKAN_DOMAIN/g" /etc/ckan/default/development.ini
+    
+    echo "# PostgreSQL"
+    sed -i "s/ckan_default:pass@localhost\/ckan_default/$POTSGRESQL_USER:$POTSGRESQL_PASS@$POSTGRESQL_IP_PORT\/$POTSGRESQL_DB/g" /etc/ckan/default/development.ini
+    chown ckan.33 -R /etc/ckan/default
+    
+    echo "# Solr"
+    sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
+    sed -i "s/127.0.0.1:8983\/solr/"$SOLR_IP":8983\/solr\/ckan/g" /etc/ckan/default/development.ini
+    
+    echo "# Setup storage path for upload support"
+    mkdir -p /var/lib/ckan
+    chown -R ckan.33 /var/lib/ckan
+    sed -i "s/#ckan.storage_path/ckan.storage_path/g" /etc/ckan/default/development.ini
+    
+    echo "# Set DEBUB mode"
+    sed -i "s/debug = false/debug = true/g" /etc/ckan/default/development.ini
+    
+    echo "# Set 'who.ini'..."
+    ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
+fi
 
-echo "# Set domain"
-sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$CKAN_DOMAIN/g" /etc/ckan/default/development.ini
 
-echo "# PostgreSQL"
-sed -i "s/ckan_default:pass@localhost\/ckan_default/$POTSGRESQL_USER:$POTSGRESQL_PASS@$POSTGRESQL_IP_PORT\/$POTSGRESQL_DB/g" /etc/ckan/default/development.ini
-chown ckan.33 -R /etc/ckan/default
 
-echo "# Solr"
-sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
-sed -i "s/127.0.0.1:8983\/solr/"$SOLR_IP":8983\/solr\/ckan/g" /etc/ckan/default/development.ini
 
-echo "# Setup storage path for upload support"
-mkdir -p /var/lib/ckan
-chown -R ckan.33 /var/lib/ckan
-sed -i "s/#ckan.storage_path/ckan.storage_path/g" /etc/ckan/default/development.ini
-
-echo "# Set DEBUB mode"
-sed -i "s/debug = false/debug = true/g" /etc/ckan/default/development.ini
-
-echo "# Set 'who.ini'..."
-ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
+# =================================================
+# FIX and Deploy
+# =================================================
+easyckan fix
