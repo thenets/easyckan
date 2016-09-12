@@ -19,7 +19,7 @@ CMD ["easyckan","update","dev"]
 CMD ["easyckan","docker"]
 
 # Initialize databases
-CMD ["su","-s","/bin/bash","-","ckan","-c","'. /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini'"]
+CMD ["easyckan","create","database"]
 
 # FIX many problems (permissions, security) and Deploy
 CMD ["easyckan","fix"]
