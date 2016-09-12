@@ -127,7 +127,7 @@ fi
 if [[ $1 == "docker" ]]
 then
 	chmod +x /etc/easyckan/bin/_docker
-	/etc/easyckan/bin/_docker $2 $3 $4 $5 $6 $7 $8 
+	/etc/easyckan/bin/_docker $2 $3 $4 $5 $6 $7 $8
 fi
 
 
@@ -137,7 +137,7 @@ fi
 if [[ $1 == "create" ]]
 then
 	chmod +x /etc/easyckan/bin/_create 
-	/etc/easyckan/bin/_create $2 $3 $4 $5 $6 $7 $8 
+	/etc/easyckan/bin/_create $2 $3 $4 $5 $6 $7 $8
 fi
 
 

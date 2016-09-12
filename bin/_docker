@@ -76,3 +76,6 @@ fi
 # FIX and Deploy
 # =================================================
 easyckan fix
+
+# Prevent to exit HACK
+tail -f /dev/null
