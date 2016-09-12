@@ -1,12 +1,16 @@
 #!/bin/bash
 
 
+# Update EasyCKAN Command Line Tools
+easyckan update dev
+
+
+
 # =================================================
 # Start docker, create config file and create user
 # =================================================
 if [[ $1 == "start" ]]
 then
-    easyckan update dev
     easyckan docker update
     easyckan create database
     easyckan create user admin admin
