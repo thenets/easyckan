@@ -18,9 +18,6 @@ CMD ["easyckan","update","dev"]
 # Reconfigure environment
 CMD ["easyckan","docker"]
 
-# Copy "who.ini" file
-CMD ["ln","-s","/usr/lib/ckan/default/src/ckan/who.ini","/etc/ckan/default/who.ini"]
-
 # Initialize databases
 CMD ["su","-s","/bin/bash","-","ckan","-c","'. /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini'"]
 

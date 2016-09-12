@@ -45,3 +45,6 @@ sed -i "s/#ckan.storage_path/ckan.storage_path/g" /etc/ckan/default/development.
 
 echo "# Set DEBUB mode"
 sed -i "s/debug = false/debug = true/g" /etc/ckan/default/development.ini
+
+echo "# Set 'who.ini'..."
+ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
