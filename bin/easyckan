@@ -127,7 +127,7 @@ fi
 if [[ $1 == "docker" ]]
 then
 	chmod +x /etc/easyckan/bin/_docker
-	/etc/easyckan/bin/_docker
+	/etc/easyckan/bin/_docker $2 $3 $4 $5 $6 $7 $8 
 fi
 
 
