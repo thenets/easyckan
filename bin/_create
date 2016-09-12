@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $1 == "user" ]]
+then
+
+su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster sysadmin add admin -c /etc/ckan/default/development.ini" <<'END'
+y
+$2
+$3
+END
+
+fi

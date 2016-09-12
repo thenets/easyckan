@@ -21,10 +21,13 @@ RUN easyckan docker
 RUN ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
 # Initialize databases
-# RUN su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
+RUN su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
 
-# FIX many problems (permissions, security)
+# FIX many problems (permissions, security) and Deploy
 RUN easyckan fix
+
+# Create admin account (user: admin / password: password)
+RUN easyckan create user admin password
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
