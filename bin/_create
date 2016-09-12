@@ -13,6 +13,8 @@ y
 $3
 $3
 END
+echo "User: "$2
+echo "Pass: "$3
 
 fi
 
