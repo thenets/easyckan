@@ -121,6 +121,17 @@ fi
 
 
 
+# ===============================================
+# Docker
+# ===============================================
+if [[ $1 == "docker" ]]
+then
+	chmod +x /etc/easyckan/bin/_docker
+	/etc/easyckan/bin/_docker
+fi
+
+
+
 
 
 

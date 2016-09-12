@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Create configuration file
+mkdir -p /etc/ckan/default
+chown -R ckan.ckan /etc/ckan
+su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
+
+# Set domain
+sed -i 's/ckan.site_url =/ckan.site_url = http:\/\/$CKAN_DOMAIN/g' /etc/ckan/default/development.ini
+
+# PostgreSQL
+sed -i 's/ckan_default:pass@localhost\/ckan_default/'$POTSGRESQL_USER':'$POTSGRESQL_PASS'@'$POSTGRESQL_IP_PORT
+chown ckan.33 -R /etc/ckan/default
+
+# Solr
+sed -i 's/#solr_url/solr_url/g' /etc/ckan/default/development.ini
+sed -i 's/127.0.0.1:8983\/solr/'$SOLR_IP':8983\/solr\/ckan/g' /etc/ckan/default/development.ini
+
+# Setup storage path for upload support
+mkdir -p /var/lib/ckan
+chown -R ckan.33 /var/lib/ckan
+sed -i 's/#ckan.storage_path/ckan.storage_path/g' /etc/ckan/default/development.ini
+
+# Set DEBUB mode
+sed -i 's/debug = false/debug = true/g' /etc/ckan/default/development.ini
