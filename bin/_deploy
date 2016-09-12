@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update deploy if packages already installed
-if [ -x "$(command -v nginx)" ]; then
+if [ -f /etc/apache2/sites-available/ckan_default.conf ]; then
     echo "Deploy packages identified. Updating files..."
     su -c "sleep 1"
     

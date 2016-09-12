@@ -28,6 +28,8 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install r
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install --upgrade ndg-httpsclient"
 
 
+
+
 # Deploy
 # ==============================================
 echo "|- Update production config file"
