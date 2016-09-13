@@ -79,7 +79,7 @@ su -c ". /usr/lib/ckan/datapusher/bin/activate && /usr/lib/ckan/datapusher/bin/p
 #copy the standard Apache config file
 # (use deployment/datapusher.apache2-4.conf if you are running under Apache 2.4)
 rm -f /etc/apache2/sites-available/datapusher.conf
-cp /usr/lib/ckan/datapusher/src/datapusher/deployment/datapusher.conf /etc/apache2/sites-available/datapusher.conf
+cp /etc/easyckan/conf/apache2/datapusher.conf /etc/apache2/sites-available/datapusher.conf
 
 #copy the standard DataPusher wsgi file
 #(see note below if you are not using the default CKAN install location)

@@ -19,19 +19,23 @@ then
 	if [ -f /etc/easyckan/installers/plugins/ckan_plugin_$2.sh ]; then
 		/etc/easyckan/installers/plugins/ckan_plugin_$2.sh
 	else
-	    echo "File not found!"
+		
+		# Install all plugins
+		if [[ $2 == "--all" ]]
+		then
+			for file in /etc/easyckan/installers/plugins/*
+			do
+			  $file
+			done
+		
+		# Not found
+		else
+	    	echo "File not found!"
+	    fi
 	fi
 fi
 
 
-# Install all plugins
-if [[ $1 == "--all" ]]
-then
-	for file in /etc/easyckan/installers/plugins/*
-	do
-	  $file
-	done
-fi
 
 
 # Harvest
