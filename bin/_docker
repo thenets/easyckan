@@ -7,18 +7,6 @@ easyckan update dev
 
 
 # =================================================
-# Start docker, create config file and create user
-# =================================================
-if [[ $1 == "start" ]]
-then
-    easyckan docker update
-    easyckan create database
-    easyckan create user admin admin
-fi
-
-
-
-# =================================================
 # Generate configuration file for docker container
 # =================================================
 if [[ $1 == "update" ]] || [[ $1 == "" ]]
@@ -71,6 +59,17 @@ then
     
     echo "# Set 'who.ini'..."
     ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
+fi
+
+
+
+# =================================================
+# Start docker, create config file and create user
+# =================================================
+if [[ $1 == "start" ]]
+then
+    easyckan create database
+    easyckan create user admin admin
 fi
 
 
