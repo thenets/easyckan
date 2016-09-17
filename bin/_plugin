@@ -6,7 +6,7 @@ chmod +x /etc/easyckan/installers/plugins/*
 
 if [[ $1 == "" ]]
 then
-	echo "You must need to enter a argument:"
+	echo "You must need to enter an argument:"
 	echo "Examples:"
 	echo "  sudo easyckan plugin install <plugin_name>"
 	echo "  sudo easyckan plugin harvest sources"

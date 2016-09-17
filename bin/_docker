@@ -2,11 +2,9 @@
 
 
 function generate_config_files {
-    echo ""
-    echo ""
-    echo "# ======================================================== #"
-    echo "# == Generate configuration file for docker container   == #"
-    echo "# ======================================================== #"
+    printf "\n\n# ======================================================== #"
+    printf "# == Generate configuration file for docker container   == #"
+    printf "# ======================================================== #"
     if [[ $POTSGRESQL_USER == "" ]]
     then
         export CKAN_DOMAIN="localhost"
@@ -60,20 +58,18 @@ function generate_config_files {
 
 
 
-echo "# ======================================================== #"
-echo "# == Update EasyCKAN Command Line Tools                 == #"
-echo "# ======================================================== #"
+printf "\n\n# ======================================================== #"
+printf "# == Update EasyCKAN Command Line Tools                 == #"
+printf "# ======================================================== #"
 easyckan update dev
 
 
 
 if [[ $1 == "start" ]]
 then
-    echo ""
-    echo ""
-    echo "# ======================================================== #"
-    echo "# == Initilize database and create user                 == #"
-    echo "# ======================================================== #"
+    printf "\n\n# ======================================================== #"
+    printf "# == Initilize database and create user                 == #"
+    printf "# ======================================================== #"
     easyckan create database
     easyckan create user admin admin
 fi
@@ -96,29 +92,30 @@ touch /etc/ckan/default/docker.conf
 # ============================================================
 if [[ $1 == "config" ]]
 then
-    generate_config_files
+    
+    if ! [ -f /etc/ckan/default/docker.conf ]; then
+        generate_config_files
+    fi
 
 
 # ============================================================
 # Generate config file and deploy
 # ============================================================
 else
-    generate_config_files
+    if ! [ -f /etc/ckan/default/docker.conf ]; then
+        generate_config_files
+    fi
 
-    echo ""
-    echo ""
-    echo "# ======================================================== #"
-    echo "# == FIX and Deploy                                     == #"
-    echo "# ======================================================== #"
+    printf "\n\n# ======================================================== #"
+    printf "# == FIX and Deploy                                     == #"
+    printf "# ======================================================== #"
     easyckan fix
     
     
-    echo ""
-    echo ""
-    echo "# ======================================================== #"
-    echo "# == CKAN started                                       == #"
-    echo "#                                                       == #"
-    echo "# == Watching CKAN log...                               == #"
-    echo "# ======================================================== #"
+    printf "\n\n# ======================================================== #"
+    printf "# == CKAN started                                       == #"
+    printf "#                                                       == #"
+    printf "# == Watching CKAN log...                               == #"
+    printf "# ======================================================== #"
     tail -f /var/log/apache2/ckan_default.*
 fi

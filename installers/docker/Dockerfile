@@ -19,7 +19,7 @@ RUN easyckan update dev
 ENTRYPOINT easyckan docker config
 
 # Fix and Deploy by default when start
-CMD easyckan fix
+CMD /etc/easyckan/bin/easyckan update dev && /etc/easyckan/bin/easyckan docker
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
