@@ -93,7 +93,7 @@ touch /etc/ckan/default/docker.conf
 if [[ $1 == "config" ]]
 then
     
-    if ! [ -f /etc/ckan/default/docker.conf ]; then
+    if ! [ -f /etc/ckan/default/development.ini ]; then
         generate_config_files
     fi
 
@@ -102,7 +102,7 @@ then
 # Generate config file and deploy
 # ============================================================
 else
-    if ! [ -f /etc/ckan/default/docker.conf ]; then
+    if ! [ -f /etc/ckan/default/development.ini ]; then
         generate_config_files
     fi
 
