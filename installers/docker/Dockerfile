@@ -12,8 +12,11 @@ ENV SOLR_IP $SOLR_PORT_8983_TCP_ADDR
 RUN apt-get install -y apt-utils libffi-dev 
 RUN apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx supervisor
 
-# Update Easy CKAN and Run Docker
-ENTRYPOINT easyckan update dev && easyckan docker
+# Update Easy CKAN and take a snapshot
+RUN easyckan update dev
+
+# Generate a config files for Docker and Deploy with fixes
+ENTRYPOINT easyckan docker config && easyckan fix
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
