@@ -55,5 +55,5 @@ fi
 # Scheming
 if [[ $1 == "scheming" ]]
 then
-	nano /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/ckan_dataset.json
+	nano /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/dataset.json
 fi

@@ -78,11 +78,17 @@ then
     easyckan create user admin admin
 fi
 
+# ============================================================
+# Create Docker config
+# ============================================================
+mkdir -p /etc/ckan/default
+touch /etc/ckan/default/docker.conf
+
 
 # ============================================================
 # Restart supervisor
 # ============================================================
-service supervisor restart
+/usr/bin/supervisord
 
 
 # ============================================================
