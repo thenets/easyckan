@@ -13,10 +13,10 @@ RUN apt-get install -y apt-utils libffi-dev
 RUN apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx supervisor
 
 # Update Easy CKAN and take a snapshot
-RUN easyckan update dev
+RUN easyckan update dev; sync
 
 # Fix and Deploy by default when start
-CMD ["/etc/easyckan/bin/easyckan","docker"]
+CMD sync ; /etc/easyckan/bin/easyckan docker ; sync
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
