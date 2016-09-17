@@ -25,10 +25,10 @@ function generate_config_files {
     echo "POTSGRESQL_DB:      " $POTSGRESQL_DB
     echo "SOLR_IP:            " $SOLR_IP
     
-    echo ""
-    echo "# Remove previously configuration files if exists"
-    rm -f /etc/ckan/default/development.ini
-    rm -f /etc/ckan/default/production.ini
+    #echo ""
+    #echo "# Remove previously configuration files if exists"
+    #rm -f /etc/ckan/default/development.ini
+    #rm -f /etc/ckan/default/production.ini
     
     echo "# Create configuration file"
     mkdir -p /etc/ckan/default

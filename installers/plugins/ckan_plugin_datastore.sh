@@ -8,6 +8,7 @@ echo    "# == Setup Postgres for DataStore"
 echo -n "| Type DataStore password: "
 read v_password
 
+
 # Set-up the database
 su postgres -c "psql --command \"CREATE USER datastore_default WITH PASSWORD '"$v_password"';\""
 su postgres -c "createdb -O ckan_default datastore_default -E utf-8"
