@@ -16,7 +16,7 @@ RUN apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx sup
 RUN easyckan update dev; sync
 
 # Fix and Deploy by default when start
-CMD sync ; /etc/easyckan/bin/easyckan docker ; sync
+CMD sync ; bash /etc/easyckan/bin/easyckan docker ; sync
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
