@@ -15,8 +15,11 @@ RUN apt-get install -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx sup
 # Update Easy CKAN and take a snapshot
 RUN easyckan update dev
 
-# Generate a config files for Docker and Deploy with fixes
-ENTRYPOINT easyckan docker config && easyckan fix
+# Generate a config files for Docker
+ENTRYPOINT easyckan docker config
+
+# Fix and Deploy by default when start
+CMD easyckan fix
 
 # Volumes
 VOLUME ["/etc/ckan/default"]
