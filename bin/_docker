@@ -2,9 +2,11 @@
 
 
 function generate_config_files {
-    printf "\n\n# ======================================================== #"
-    printf "# == Generate configuration file for docker container   == #"
-    printf "# ======================================================== #"
+    echo ""
+    echo ""
+    echo "# ======================================================== #"
+    echo "# == Generate configuration file for docker container   == #"
+    echo "# ======================================================== #"
     if [[ $POTSGRESQL_USER == "" ]]
     then
         export CKAN_DOMAIN="localhost"
@@ -58,18 +60,22 @@ function generate_config_files {
 
 
 
-printf "\n\n# ======================================================== #"
-printf "# == Update EasyCKAN Command Line Tools                 == #"
-printf "# ======================================================== #"
+echo ""
+echo ""
+echo "# ======================================================== #"
+echo "# == Update EasyCKAN Command Line Tools                 == #"
+echo "# ======================================================== #"
 easyckan update dev
 
 
 
 if [[ $1 == "start" ]]
 then
-    printf "\n\n# ======================================================== #"
-    printf "# == Initilize database and create user                 == #"
-    printf "# ======================================================== #"
+    echo ""
+    echo ""
+    echo "# ======================================================== #"
+    echo "# == Initilize database and create user                 == #"
+    echo "# ======================================================== #"
     easyckan create database
     easyckan create user admin admin
 fi
@@ -106,16 +112,20 @@ else
         generate_config_files
     fi
 
-    printf "\n\n# ======================================================== #"
-    printf "# == FIX and Deploy                                     == #"
-    printf "# ======================================================== #"
+    echo ""
+    echo ""
+    echo "# ======================================================== #"
+    echo "# == FIX and Deploy                                     == #"
+    echo "# ======================================================== #"
     easyckan fix
     
     
-    printf "\n\n# ======================================================== #"
-    printf "# == CKAN started                                       == #"
-    printf "#                                                       == #"
-    printf "# == Watching CKAN log...                               == #"
-    printf "# ======================================================== #"
+    echo ""
+    echo ""
+    echo "# ======================================================== #"
+    echo "# == CKAN started                                       == #"
+    echo "#                                                       == #"
+    echo "# == Watching CKAN log...                               == #"
+    echo "# ======================================================== #"
     tail -f /var/log/apache2/ckan_default.*
 fi

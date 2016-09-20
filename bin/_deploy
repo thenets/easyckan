@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Main dependences
+apt install -y supervisor
+
+
+
 # Update deploy if packages already installed
 if [ -f /etc/apache2/sites-available/ckan_default.conf ]; then
     echo "Deploy packages identified. Updating files..."
