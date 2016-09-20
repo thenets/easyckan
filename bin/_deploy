@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo ""
+echo "# ======================================================== #"
+echo "# == Install dependences, if necessary                  == #"
+echo "# ======================================================== #"
 # Main dependences
 apt install -y supervisor
 
@@ -7,6 +11,11 @@ apt install -y supervisor
 
 # Update deploy if packages already installed
 if [ -f /etc/apache2/sites-available/ckan_default.conf ]; then
+    echo ""
+    echo "# ======================================================== #"
+    echo "# == Configuring Apache2, Supervisor and nginx          == #"
+    echo "# ======================================================== #"
+    
     echo "Deploy packages identified. Updating files..."
     su -c "sleep 1"
     
@@ -27,7 +36,11 @@ if [ -f /etc/apache2/sites-available/ckan_default.conf ]; then
 
 # Install deploy packages if NGINX doesn't exist
 else
-    echo "No deploy packages identified. Starting installation..."
+    echo ""
+    echo "# ======================================================== #"
+    echo "# == No deploy packages identified.                     == #"
+    echo "# == Starting installation...                           == #"
+    echo "# ======================================================== #"
     su -c "sleep 2"
     
     
@@ -73,9 +86,15 @@ else
     ln -s /etc/nginx/sites-available/ckan /etc/nginx/sites-enabled/ckan_default
     service apache2 restart
     service nginx restart
-    service supervisorctl restart
+    #service supervisorctl restart
+    /usr/bin/supervisord 2>/dev/null
 fi
 
+
+echo ""
+echo "# ======================================================== #"
+echo "# == Deploy complete!                                   == #"
+echo "# ======================================================== #"
 
 
 # Send emails TODO
