@@ -30,7 +30,8 @@ if [ -f /etc/apache2/sites-available/ckan_default.conf ]; then
 
     service apache2 restart
     service nginx restart
-    service supervisorctl restart
+    service supervisorctl restart 2>/dev/null
+    /usr/bin/supervisord 2>/dev/null
     
     
 
@@ -86,7 +87,7 @@ else
     ln -s /etc/nginx/sites-available/ckan /etc/nginx/sites-enabled/ckan_default
     service apache2 restart
     service nginx restart
-    #service supervisorctl restart
+    service supervisorctl restart 2>/dev/null
     /usr/bin/supervisord 2>/dev/null
 fi
 
