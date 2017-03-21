@@ -114,6 +114,11 @@ I want to add some additional improvements:
 - Improvement: Better bash interface
 
 
+## Special thanks
+- @mohnjatthews : Improve README documentation
+- @vladimirghetau : Create plugin installer
+
+
 ## Developer Installer
 If you want the lastest Easy CKAN version, use following lines to your installation.
 !IMPORTANT! This version will most likely contain bugs, so use at your own risk.
