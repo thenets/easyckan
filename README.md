@@ -115,8 +115,8 @@ I want to add some additional improvements:
 
 
 ## Special thanks
-- @mohnjatthews : Improve README documentation
-- @vladimirghetau : Create plugin installer
+- @mohnjatthews : Improved README documentation
+- @vladimirghetau : New plugins installers
 
 
 ## Developer Installer
