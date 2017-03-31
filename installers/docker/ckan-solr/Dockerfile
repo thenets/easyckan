@@ -1,14 +1,29 @@
-FROM solr:5.5.3
+FROM ubuntu:14.04
+MAINTAINER thenets.org
 
-# Thanks to 6aika ( https://github.com/6aika/sixodp-solr )
+# --TAG: spacelis/ckan-docker-solr
 
-VOLUME ["/opt/solr/server/solr/configsets"]
+env CKAN_HOME /usr/lib/ckan/default
+
+# Install Java
+RUN apt-get -q -y update
+RUN DEBIAN_FRONTEND=noninteractive apt-get -q -y install default-jre-headless
+
+# Install Solr
+ENV SOLR_HOME /opt/solr/example/solr
+ENV SOLR_VERSION 4.10.3
+ENV SOLR solr-$SOLR_VERSION
+RUN mkdir -p /opt/solr
+ADD https://archive.apache.org/dist/lucene/solr/$SOLR_VERSION/$SOLR.tgz /opt/$SOLR.tgz
+RUN tar zxf /opt/$SOLR.tgz -C /opt/solr --strip-components 1
+
+# Install CKAN Solr core
+RUN mv $SOLR_HOME/collection1/ $SOLR_HOME/ckan/
+RUN echo name=ckan > $SOLR_HOME/ckan/core.properties
+ADD https://raw.githubusercontent.com/ckan/ckan/release-v2.6-latest/ckan/config/solr/schema.xml $CKAN_HOME/src/ckan/ckan/config/solr/schema.xml
+RUN rm $SOLR_HOME/ckan/conf/schema.xml
+RUN ln -s $CKAN_HOME/src/ckan/ckan/config/solr/schema.xml $SOLR_HOME/ckan/conf/schema.xml
 
 EXPOSE 8983
-
-COPY ckan_configs /opt/solr/server/solr/configsets/ckan_configs
-USER root
-RUN chown -R solr:solr /opt/solr/server/solr/configsets/ckan_configs
-USER solr
-
-CMD ["/opt/solr/bin/solr", "-f"]
+WORKDIR /opt/solr/example
+CMD ["java", "-jar", "start.jar"]

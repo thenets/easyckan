@@ -23,7 +23,7 @@ echo    "# ======================================================== #"
 
 
 
-if [ ! -d "/var" ]; then # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+##if [ ! -d "/var" ]; then # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -123,7 +123,7 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == 3. Install Docker                                  == #"
 echo    "# ======================================================== #"
-curl -sSL https://get.docker.com/ | sh
+#curl -sSL https://get.docker.com/ | sh
 usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
 
 
@@ -195,35 +195,20 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == 5. Docker: Setup Apache Solr container             == #"
 echo    "# ======================================================== #"
-#su -c "sleep 2"
 
 # Set variables
 v_docker_solr_name="ckan-solr"				# Container name
-v_docker_solr_path="/var/easyckan/solr"		# Host persistent data path
-v_docker_solr_p="8983:8983"					# Port
+v_docker_solr_p="8983:8080"					# Port
 
 # Remove old container if exists
 echo "Removing old container if exists..."
 docker rm -f $v_docker_solr_name
 
-# Create persistent data dir
-mkdir -p $v_docker_solr_path
-
-# Download Solr schema for a specific CKAN version
-wget -q -O "$v_docker_solr_path/ckan_schema.xml" https://raw.githubusercontent.com/ckan/ckan/release-v$V_CKAN_BASE_VERSION-latest/ckan/config/solr/schema.xml
-
 # Create container as daemon
-docker run --name $v_docker_solr_name -p $v_docker_solr_p -d solr:$V_SOLR_VERSION
-
-# Setup core and schema
-docker cp $v_docker_solr_path/ckan_schema.xml $v_docker_solr_name:/opt/solr/ckan_schema.xml
-sleep 1
-docker exec -it --user=solr $v_docker_solr_name bin/solr create_core -c ckan_default
-sleep 1
-docker exec -it --user=solr $v_docker_solr_name bin/post -c ckan_default ckan_schema.xml
+docker run --name $v_docker_solr_name -p $v_docker_solr_p -d ckan/solr
 
 
-# docker exec -it --user=solr ckan-solr bin/post -c ckan_default ckan_schema.xml
+
 
 
 
@@ -280,7 +265,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -
 
 
 
-fi # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#fi # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -303,7 +288,7 @@ mkdir -p /etc/ckan/default
 chown -R ckan.ckan /etc/ckan
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
 sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$v_siteurl/g" /etc/ckan/default/development.ini
-sed -i "s/ckan_default:pass@localhost/ckan_default:$v_password@localhost/g" /etc/ckan/default/development.ini
+sed -i "s/ckan_default:pass@localhost/postgres:$v_password@localhost/g" /etc/ckan/default/development.ini
 sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
 sed -i "s/127.0.0.1:8983/127.0.0.1:8983/g" /etc/ckan/default/development.ini
 chown ckan.33 -R /etc/ckan/default
