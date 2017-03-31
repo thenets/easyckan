@@ -5,11 +5,69 @@ echo    "#                                                          #"
 echo    "# Special thanks to:                                       #"
 echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
 echo    "#   Adrien GRIMAL                                          #"
-echo    "# ======================================================== #"
-#su -c "sleep 3"
+echo    "#                                                          #"
 
-# DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
-if [ ! -d "/var" ]; then
+# Main parameters
+# ==============================================
+V_CKAN_BASE_VERSION="2.6"
+V_CKAN_VERSION="2.6.2"
+V_POSTGRESQL_VERSION="9.6.2"
+V_SOLR_VERSION="6.5.0-alpine"
+
+
+echo    "# Versions:                                                #"
+echo    "#   CKAN        : $V_CKAN_VERSION                                    #"
+echo    "#   PostgreSQL  : $V_POSTGRESQL_VERSION                                    #"
+echo    "#   Apache Solr : $V_SOLR_VERSION                             #"
+echo    "# ======================================================== #"
+
+
+
+if [ ! -d "/var" ]; then # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+# Check if already installed
+# ==============================================
+if [ -d "/usr/lib/ckan/default/src/ckan" ]; then
+	echo 	""
+	echo 	"An CKAN installation was found!"
+	echo    "Do you want to remove old installation?"
+	echo -n "(extensions will not be removed) [y/N] : "
+	read V_REMOVE_OLD_INSTALLATION
+
+	if [[ $(echo "$V_REMOVE_OLD_INSTALLATION" | perl -ne 'print lc') == "y" ]]
+	then
+		echo "Removing /usr/lib/ckan/default/src/ckan directory..."
+		rm -R /usr/lib/ckan/default/src/ckan
+	else
+		echo "Aborting installation!"
+		echo ""
+		exit
+	fi
+fi
+if [ -f /etc/ckan/default/development.ini ]; then
+	echo 	""
+	echo 	"An CKAN setting file was found!"
+	echo -n "Do you want to remove '/etc/ckan/default/development.ini' ? [y/N] : "
+	read V_REMOVE_OLD_SETTING_FILE
+
+	if [[ $(echo "$V_REMOVE_OLD_SETTING_FILE" | perl -ne 'print lc') == "y" ]]
+	then
+		echo "Removing '/etc/ckan/default/development.ini'..."
+		rm /etc/ckan/default/development.ini
+	else
+		echo "Aborting installation!"
+		echo ""
+		exit
+	fi
+fi
+
+
+
+
+
+
 
 # Get parameters from user
 # ==============================================
@@ -39,15 +97,24 @@ else
 fi
 
 
+
+
+
+
+
 # Preparations
 # ==============================================
 echo    ""
 echo    "# ======================================================== #"
 echo    "# == 2. Update Ubuntu packages                          == #"
 echo    "# ======================================================== #"
-su -c "sleep 2"
 cd /tmp
 apt-get update
+
+
+
+
+
 
 
 # Docker
@@ -60,6 +127,12 @@ curl -sSL https://get.docker.com/ | sh
 usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
 
 
+
+
+
+
+
+
 # Main dependences
 # ==============================================
 echo    ""
@@ -67,16 +140,22 @@ echo    "# ======================================================== #"
 echo    "# == 3. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-apt-get install -y python-dev libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk sudo
-if [ ! -d "/usr/java" ]; then
-	# Create link to Java JDK on default path
-	mkdir /usr/java
-	ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
-fi
+apt-get install -y python-dev libpq-dev python-pip python-virtualenv python-paste git-core sudo
+apt-get install -y libmemcached-dev zlib1g-dev # FIX for CKAN 2.6.0
+
+# Used by Apache Solr. No more needed.
+# if [ ! -d "/usr/java" ]; then
+# 	apt-get install -y openjdk-8-jdk
+# 	# Create link to Java JDK on default path
+# 	mkdir /usr/java
+# 	ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
+# fi
 
 
-# DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
-fi
+
+
+
+
 
 
 # Setup a PostgreSQL database
@@ -87,50 +166,64 @@ echo    "# == 3. Docker: Setup PostgreSQL container              == #"
 echo    "# ======================================================== #"
 
 # Set variables
-v_docker_postgres_path="/var/easyckan/database"							# Host persistent data path
 v_docker_postgres_name="ckan-postgres"									# Container name
+v_docker_postgres_path="/var/easyckan/database"							# Host persistent data path
 v_docker_postgres_v="$v_docker_postgres_path:/var/lib/postgresql/data"	# Volume path
 v_docker_postgres_p="5432:5432"											# Port
-v_docker_postgres_i="postgres:9.6.2"									# Image and tag
+v_docker_postgres_i="postgres:$V_POSTGRESQL_VERSION"					# Image and tag
 
 # Remove old container if exists
-if [ ! "$(docker ps -q -f name=$v_docker_postgres_name)" ]; then
-    if [ "$(docker ps -aq -f status=exited -f name=$v_docker_postgres_name)" ]; then
-        # cleanup
-        docker rm $v_docker_postgres_name
-    fi
-fi
+echo "Removing old container if exists..."
+docker rm -f $v_docker_postgres_name
 
 # Create persistent data dir
 mkdir -p $v_docker_postgres_path
 
 # Create container as daemon
-docker run --name $v_docker_postgres_name -v $v_docker_postgres_v -e POSTGRES_PASSWORD=$v_password -p $v_docker_postgres_p -d $v_docker_postgres_i
+docker run --name $v_docker_postgres_name -v $v_docker_postgres_v -e POSTGRES_DB="ckan_default" -e POSTGRES_PASSWORD=$v_password -p $v_docker_postgres_p -d $v_docker_postgres_i
 	   
 
-exit
 
 
 
-# HARD FIX POSTGRES
-service postgresql restart
-
-su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
-
-su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
-su postgres -c "psql -d template0 -c \"drop database template1;\""
-su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
-su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
-
-su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
-# HARD FIX POSTGRES
 
 
-#echo    "| Insert the SAME password two more times..."
-#: $(su postgres -c "createuser -S -D -R -P ckan_default")
-su postgres -c "psql --command \"CREATE USER ckan_default WITH PASSWORD '"$v_password"';\""
-su postgres -c "createdb -O ckan_default ckan_default -E utf-8"
+# Install Solr
+# ==============================================
+echo    ""
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == 5. Docker: Setup Apache Solr container             == #"
+echo    "# ======================================================== #"
+#su -c "sleep 2"
 
+# Set variables
+v_docker_solr_name="ckan-solr"				# Container name
+v_docker_solr_path="/var/easyckan/solr"		# Host persistent data path
+v_docker_solr_p="8983:8983"					# Port
+
+# Remove old container if exists
+echo "Removing old container if exists..."
+docker rm -f $v_docker_solr_name
+
+# Create persistent data dir
+mkdir -p $v_docker_solr_path
+
+# Download Solr schema for a specific CKAN version
+wget -q -O "$v_docker_solr_path/ckan_schema.xml" https://raw.githubusercontent.com/ckan/ckan/release-v$V_CKAN_BASE_VERSION-latest/ckan/config/solr/schema.xml
+
+# Create container as daemon
+docker run --name $v_docker_solr_name -p $v_docker_solr_p -d solr:$V_SOLR_VERSION
+
+# Setup core and schema
+docker cp $v_docker_solr_path/ckan_schema.xml $v_docker_solr_name:/opt/solr/ckan_schema.xml
+sleep 1
+docker exec -it --user=solr $v_docker_solr_name bin/solr create_core -c ckan_default
+sleep 1
+docker exec -it --user=solr $v_docker_solr_name bin/post -c ckan_default ckan_schema.xml
+
+
+# docker exec -it --user=solr ckan-solr bin/post -c ckan_default ckan_schema.xml
 
 
 
@@ -143,47 +236,76 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == 4. Setup CKAN                                      == #"
 echo    "# ======================================================== #"
-su -c "sleep 2"
 
-# Create user
-echo    "# 4.1. Creating CKAN user..."
-useradd -m -s /sbin/nologin -d /usr/lib/ckan -c "CKAN User" ckan
-sudo usermod -a -G staff ckan
-chmod 775 -R /usr/local/lib/python2.7
-chmod 755 /usr/lib/ckan
-chown ckan.33 -R /usr/lib/ckan
+# Create user if doesn't exist
+if id "ckan" >/dev/null 2>&1; then
+	echo    "# 4.1. CKAN user already exist. Skipping..."
+	echo 	""
+else
+	echo    "# 4.1. Creating CKAN user..."
+	useradd -m -d /usr/lib/ckan -c "CKAN User" ckan
+	sudo usermod -a -G staff ckan
+	chmod 775 -R /usr/local/lib/python2.7
+	chmod 755 /usr/lib/ckan
+	chown ckan.33 -R /usr/lib/ckan
+fi
 
 # Python Virtual Environment
 echo    "# 4.2. Creating Python Virtual Environment..."
-su -c "sleep 2"
-apt-get install -y  python-paste
 su -s /bin/bash - ckan -c "mkdir -p /usr/lib/ckan/default"
 su -s /bin/bash - ckan -c "virtualenv --no-site-packages /usr/lib/ckan/default"
+
+# Update mainly pip packages
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install --upgrade pip"		# HARD FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install setuptools==20.4"	# HARD FIX for CKAN 2.6.0
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install html5lib==0.999"		# HARD FIX
 
-# Installing CKAN and dependences
-echo    "# 4.3. Installing CKAN and dependences..."
-apt-get install -y libmemcached-dev zlib1g-dev # FIX for CKAN 2.6.0
-su -c "sleep 2"
-su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.6.2#egg=ckan'"
+# Download CKAN as cache
+if [ ! -f "/usr/lib/ckan/cache/ckan-$V_CKAN_VERSION.zip" ]; then
+	su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/cache/ && pip download 'git+https://github.com/ckan/ckan.git@ckan-$V_CKAN_VERSION#egg=ckan'"
+fi
+
+# Installing CKAN
+echo    "# 4.3. Installing CKAN..."
+su -s /bin/bash - ckan -c "cd /usr/lib/ckan/cache && unzip ckan-$V_CKAN_VERSION.zip"
+su -s /bin/bash - ckan -c "mv /usr/lib/ckan/cache/ckan /usr/lib/ckan/default/src/ckan"
+su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && python setup.py develop"
+
+# Installing CKAN dependences
+echo    "# 4.3. Installing CKAN dependences..."
+su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install /usr/lib/ckan/cache/ckan-$V_CKAN_VERSION.zip -t /usr/lib/ckan/default/src"
 sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
 
 
 
 
+fi # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+# Setup CKAN
+# ==============================================
+echo    ""
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == 4. Create CKAN settings file                       == #"
+echo    "#                                                       == #"
+echo    "#       /etc/ckan/default/development.ini               == #"
+echo    "# ======================================================== #"
+
 # Create main CKAN config files
+echo    ""
 echo    "# 4.4. Creating main configuration file at /etc/ckan/default/development.ini ..."
-su -c "sleep 2"
+rm /etc/ckan/default/development.ini
 mkdir -p /etc/ckan/default
 chown -R ckan.ckan /etc/ckan
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
 sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$v_siteurl/g" /etc/ckan/default/development.ini
 sed -i "s/ckan_default:pass@localhost/ckan_default:$v_password@localhost/g" /etc/ckan/default/development.ini
 sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
-sed -i "s/127.0.0.1:8983/127.0.0.1:8080/g" /etc/ckan/default/development.ini
+sed -i "s/127.0.0.1:8983/127.0.0.1:8983/g" /etc/ckan/default/development.ini
 chown ckan.33 -R /etc/ckan/default
 
 # Setup a storage path
@@ -198,27 +320,6 @@ sed -i 's/#ckan.storage_path/ckan.storage_path/g' /etc/ckan/default/development.
 
 
 
-# Install Solr
-# ==============================================
-echo    ""
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == 5. Install Apache Solr                             == #"
-echo    "# ======================================================== #"
-su -c "sleep 2"
-echo    "# 5.1. Installing from 'apt-get'..."
-apt-get -y install solr-tomcat
-mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-cp /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-
-# Restarting services
-echo    "# 5.2. Restarting Solr..."
-service tomcat7 restart
-
-
-
-
-
 # Last configurations
 # ==============================================
 echo    ""
@@ -226,34 +327,17 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == 6. Finishing                                       == #"
 echo    "# ======================================================== #"
-su -c "sleep 2"
-
-# HARD FIX POSTGRES
-service postgresql restart
-
-su postgres -c "psql -c \"update pg_database set datallowconn = TRUE where datname = 'template0';\""
-
-su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = FALSE where datname = 'template1';\""
-su postgres -c "psql -d template0 -c \"drop database template1;\""
-su postgres -c "psql -d template0 -c \"create database template1 with template = template0 encoding = 'UTF8';\""
-su postgres -c "psql -d template0 -c \"update pg_database set datistemplate = TRUE where datname = 'template1';\""
-
-su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FALSE where datname = 'template0';\""
-service postgresql restart
-# HARD FIX POSTGRES
+#su -c "sleep 2"
 
 echo    "# 6.1. Initilize CKAN database..."
-service tomcat7 restart
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
 
 echo    "# 6.2. Set 'who.ini'..."
+rm /etc/ckan/default/who.ini
 ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
-echo    "# 6.3. Enable Tomcat6 and PostgreSQL on startup..."
-sudo update-rc.d postgresql enable
-sudo update-rc.d tomcat7 enable
 
-
+exit
 
 
 
@@ -270,39 +354,6 @@ echo    "| Your account name will be 'admin'."
 echo    "| Type the admin password:"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster sysadmin add admin -c /etc/ckan/default/development.ini"
 
-
-
-# PLUGINS
-#
-# Just if installation doesn't have args
-# ==============================================
-if [ -z "$1" ] || [ -z "$2" ]; then
-	echo    ""
-	echo    ""
-	echo    "# ======================================================== #"
-	echo    "# == Plugins (optional)                                 == #"
-	echo    "# ======================================================== #"
-	su -c "sleep 2"
-
-	# PLUGIN Harvest Installer
-	echo    "# PLUGIN Harvest"
-	echo -n "# You want to install? [y/N]: "
-	read plugin_harvest
-	if [[ $plugin_harvest == "y" ]]
-	then
-		su -c "easyckan plugin install harvest"
-	fi
-
-	# PLUGIN DataStore Installer
-	echo    "# PLUGIN DataStore"
-	echo -n "# You want to install? [y/N]: "
-	read plugin_datastore
-	if [[ $plugin_datastore == "y" ]]
-	then
-		su -c "easyckan plugin install datastore"
-	fi
-	echo    ""
-fi
 
 
 
