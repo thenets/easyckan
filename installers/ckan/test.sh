@@ -198,14 +198,14 @@ echo    "# ======================================================== #"
 
 # Set variables
 v_docker_solr_name="ckan-solr"				# Container name
-v_docker_solr_p="8983:8080"					# Port
+v_docker_solr_p="8983:8983"					# Port
 
 # Remove old container if exists
 echo "Removing old container if exists..."
 docker rm -f $v_docker_solr_name
 
 # Create container as daemon
-docker run --name $v_docker_solr_name -p $v_docker_solr_p -d ckan/solr
+docker run --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/solr
 
 
 
@@ -290,7 +290,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-c
 sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$v_siteurl/g" /etc/ckan/default/development.ini
 sed -i "s/ckan_default:pass@localhost/postgres:$v_password@localhost/g" /etc/ckan/default/development.ini
 sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
-sed -i "s/127.0.0.1:8983/127.0.0.1:8983/g" /etc/ckan/default/development.ini
+sed -i "s/127.0.0.1:8983\/solr/127.0.0.1:8983\/solr\/ckan/g" /etc/ckan/default/development.ini
 chown ckan.33 -R /etc/ckan/default
 
 # Setup a storage path
