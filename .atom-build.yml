@@ -1,0 +1,1 @@
+cmd: {docker-machine images, docker images}
