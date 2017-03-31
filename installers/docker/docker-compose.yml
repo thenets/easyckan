@@ -1,19 +1,42 @@
-version: '2'
+version: '3'
+
 services:
-  ckan:
-    container_name: ckan
-    image: easyckan/easyckan
-    depends_on:
-      - db
-      - solr
-    links:
+   db:
+     image: easyckan/ckan-postgres:2.6.0
+     volumes:
+       - ./db_data:/var/lib/postgresql/data
+     restart: always
+     environment:
+       POSTGRES_USER: ckan
+       POSTGRES_PASS: ckan
+       POSTGRES_DB: ckan
+       PGDATA: /var/lib/postgresql/data
+     networks:
+       - easyckan
+
+   solr:
+     image: easyckan/ckan-solr:2.6.0
+     volumes:
+       - ./sorl_data:/opt/solr/server/solr/configsets/
+     restart: always
+     networks:
+       - easyckan
+
+   ckan:
+     depends_on:
        - db
        - solr
-    ports:
-       - "80:80"
-  db:
-    container_name: db
-    image: ckan/postgresql:latest
-  solr:
-    container_name: solr
-    image: ckan/solr:latest
+     image: easyckan/ckan:2.6.0
+     ports:
+       - "5000:5000"
+     restart: always
+     volumes:
+       - ./ckan_config:/etc/ckan/default/
+       - ./ckan_extensions:/usr/lib/ckan/default/src/
+       - ./ckan_data:/var/data/ckan/
+     networks:
+       - easyckan
+
+
+networks:
+  easyckan:

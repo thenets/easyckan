@@ -6,9 +6,10 @@ echo    "# Special thanks to:                                       #"
 echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
 echo    "#   Adrien GRIMAL                                          #"
 echo    "# ======================================================== #"
-su -c "sleep 3"
+#su -c "sleep 3"
 
-
+# DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+if [ ! -d "/var" ]; then
 
 # Get parameters from user
 # ==============================================
@@ -38,8 +39,6 @@ else
 fi
 
 
-
-
 # Preparations
 # ==============================================
 echo    ""
@@ -51,17 +50,67 @@ cd /tmp
 apt-get update
 
 
+# Docker
+# ==============================================
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == 3. Install Docker                                  == #"
+echo    "# ======================================================== #"
+curl -sSL https://get.docker.com/ | sh
+usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
 
 
 # Main dependences
 # ==============================================
+echo    ""
 echo    "# ======================================================== #"
 echo    "# == 3. Install CKAN dependences from 'apt-get'         == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
-apt-get install -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk sudo
-mkdir /usr/java
-ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
+apt-get install -y python-dev libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk sudo
+if [ ! -d "/usr/java" ]; then
+	# Create link to Java JDK on default path
+	mkdir /usr/java
+	ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
+fi
+
+
+# DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+fi
+
+
+# Setup a PostgreSQL database
+# ==============================================
+echo    ""
+echo    "# ======================================================== #"
+echo    "# == 3. Docker: Setup PostgreSQL container              == #"
+echo    "# ======================================================== #"
+
+# Set variables
+v_docker_postgres_path="/var/easyckan/database"							# Host persistent data path
+v_docker_postgres_name="ckan-postgres"									# Container name
+v_docker_postgres_v="$v_docker_postgres_path:/var/lib/postgresql/data"	# Volume path
+v_docker_postgres_p="5432:5432"											# Port
+v_docker_postgres_i="postgres:9.6.2"									# Image and tag
+
+# Remove old container if exists
+if [ ! "$(docker ps -q -f name=$v_docker_postgres_name)" ]; then
+    if [ "$(docker ps -aq -f status=exited -f name=$v_docker_postgres_name)" ]; then
+        # cleanup
+        docker rm $v_docker_postgres_name
+    fi
+fi
+
+# Create persistent data dir
+mkdir -p $v_docker_postgres_path
+
+# Create container as daemon
+docker run --name $v_docker_postgres_name -v $v_docker_postgres_v -e POSTGRES_PASSWORD=$v_password -p $v_docker_postgres_p -d $v_docker_postgres_i
+	   
+
+exit
+
+
 
 # HARD FIX POSTGRES
 service postgresql restart
@@ -77,8 +126,6 @@ su postgres -c "psql -d template1 -c \"update pg_database set datallowconn = FAL
 # HARD FIX POSTGRES
 
 
-# Setup a PostgreSQL database
-# ==============================================
 #echo    "| Insert the SAME password two more times..."
 #: $(su postgres -c "createuser -S -D -R -P ckan_default")
 su postgres -c "psql --command \"CREATE USER ckan_default WITH PASSWORD '"$v_password"';\""
@@ -109,7 +156,7 @@ chown ckan.33 -R /usr/lib/ckan
 # Python Virtual Environment
 echo    "# 4.2. Creating Python Virtual Environment..."
 su -c "sleep 2"
-apt-get install -y  python-pastescript
+apt-get install -y  python-paste
 su -s /bin/bash - ckan -c "mkdir -p /usr/lib/ckan/default"
 su -s /bin/bash - ckan -c "virtualenv --no-site-packages /usr/lib/ckan/default"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install --upgrade pip"		# HARD FIX
