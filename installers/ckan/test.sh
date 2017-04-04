@@ -23,8 +23,6 @@ echo    "# ======================================================== #"
 
 
 
-##if [ ! -d "/var" ]; then # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 
 
 # Check if already installed
@@ -123,7 +121,7 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == 3. Install Docker                                  == #"
 echo    "# ======================================================== #"
-#curl -sSL https://get.docker.com/ | sh
+curl -sSL https://get.docker.com/ | sh
 usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
 
 
@@ -265,9 +263,6 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -
 
 
 
-#fi # DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 
 
 # Setup CKAN
@@ -312,7 +307,6 @@ echo    ""
 echo    "# ======================================================== #"
 echo    "# == 6. Finishing                                       == #"
 echo    "# ======================================================== #"
-#su -c "sleep 2"
 
 echo    "# 6.1. Initilize CKAN database..."
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
@@ -322,7 +316,7 @@ rm /etc/ckan/default/who.ini
 ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini
 
 
-exit
+
 
 
 
