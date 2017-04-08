@@ -6,129 +6,30 @@ echo    "# Special thanks to:                                       #"
 echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
 echo    "#   Adrien GRIMAL                                          #"
 echo    "#                                                          #"
-
-# Main parameters
-# ==============================================
-V_CKAN_BASE_VERSION="2.6"
-V_CKAN_VERSION="2.6.2"
-V_POSTGRESQL_VERSION="9.6.2"
-V_SOLR_VERSION="6.5.0-alpine"
-
-
-echo    "# Versions:                                                #"
-echo    "#   CKAN        : $V_CKAN_VERSION                                    #"
-echo    "#   PostgreSQL  : $V_POSTGRESQL_VERSION                                    #"
-echo    "#   Apache Solr : $V_SOLR_VERSION                             #"
 echo    "# ======================================================== #"
 
 
 
 
 
-# Check if already installed
-# ==============================================
-if [ -d "/usr/lib/ckan/default/src/ckan" ]; then
-	echo 	""
-	echo 	"An CKAN installation was found!"
-	echo    "Do you want to remove old installation?"
-	echo -n "(extensions will not be removed) [y/N] : "
-	read V_REMOVE_OLD_INSTALLATION
 
-	if [[ $(echo "$V_REMOVE_OLD_INSTALLATION" | perl -ne 'print lc') == "y" ]]
-	then
-		echo "Removing /usr/lib/ckan/default/src/ckan directory..."
-		rm -R /usr/lib/ckan/default/src/ckan
-	else
-		echo "Aborting installation!"
-		echo ""
-		exit
-	fi
-fi
-if [ -f /etc/ckan/default/development.ini ]; then
-	echo 	""
-	echo 	"An CKAN setting file was found!"
-	echo -n "Do you want to remove '/etc/ckan/default/development.ini' ? [y/N] : "
-	read V_REMOVE_OLD_SETTING_FILE
-
-	if [[ $(echo "$V_REMOVE_OLD_SETTING_FILE" | perl -ne 'print lc') == "y" ]]
-	then
-		echo "Removing '/etc/ckan/default/development.ini'..."
-		rm /etc/ckan/default/development.ini
-	else
-		echo "Aborting installation!"
-		echo ""
-		exit
-	fi
-fi
-
-
-
-
-
-
-
-# Get parameters from user
+# Get parameters
 # ==============================================
 echo    ""
 echo    "# ======================================================== #"
-echo    "# == 1. Set main config variables                       == #"
+echo    "# == 1. Getting parameters                              == #"
 echo    "# ======================================================== #"
-echo    ""
 
-# No arguments sent. Interactive input.
-if [ -z "$1" ] || [ -z "$2" ]; then
-	echo    "# 1.1. Set site URL"
-	echo    "| You site URL must be like http://localhost"
-	echo -n "| Type the domain: http://"
-	read v_siteurl
+v_siteurl=$1
+v_password=$(date +%s | sha256sum | base64 | head -c 24 ; echo)
 
-	echo    ""
-	echo    "# 1.2. Set Password PostgreSQL (database)"
-	echo    "| Enter a password to be used on installation process. "
-	echo -n "| Type a password: "
-	read v_password
+echo "  Site URL: "$v_siteurl
+echo "  PostgreSQL Password: "$v_password
+sleep 1
 
-# Set from arguments
-else
-	v_siteurl=$1
-	v_password=$2
-fi
-
-
-
-
-
-
-
-# Preparations
-# ==============================================
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == 2. Update Ubuntu packages                          == #"
-echo    "# ======================================================== #"
-cd /tmp
-apt-get update
-
-
-
-
-
-
-
-# Docker
-# ==============================================
-echo    ""
-echo    "# ======================================================== #"
-echo    "# == 3. Install Docker                                  == #"
-echo    "# ======================================================== #"
-apt-get install -y curl sudo
-curl -sSL https://get.docker.com/ | sh
-usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
-
-
-
-
-
+# Save PostgreSQL password
+mkdir -p /etc/easyckan/conf/
+echo $v_password > /etc/easyckan/conf/postgresql.conf
 
 
 
@@ -141,20 +42,6 @@ echo    "# ======================================================== #"
 su -c "sleep 2"
 apt-get install -y python-dev libpq-dev python-pip python-virtualenv python-paste git-core sudo
 apt-get install -y libmemcached-dev zlib1g-dev # FIX for CKAN 2.6.0
-
-# Used by Apache Solr. No more needed.
-# if [ ! -d "/usr/java" ]; then
-# 	apt-get install -y openjdk-8-jdk
-# 	# Create link to Java JDK on default path
-# 	mkdir /usr/java
-# 	ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/java/default
-# fi
-
-
-
-
-
-
 
 
 # Setup a PostgreSQL database
@@ -231,7 +118,7 @@ else
 	sudo usermod -a -G staff ckan
 	chmod 775 -R /usr/local/lib/python2.7
 	chmod 755 /usr/lib/ckan
-	chown ckan.33 -R /usr/lib/ckan
+	chown 5000.33 -R /usr/lib/ckan
 fi
 
 # Python Virtual Environment
@@ -245,7 +132,7 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install s
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install html5lib==0.999"		# HARD FIX
 
 # Download CKAN as cache
-mkdir -p /usr/lib/ckan/cache/
+su -s /bin/bash - ckan -c "mkdir -p /usr/lib/ckan/cache/"
 if [ ! -f "/usr/lib/ckan/cache/ckan-$V_CKAN_VERSION.zip" ]; then
 	su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/cache/ && pip download 'git+https://github.com/ckan/ckan.git@ckan-$V_CKAN_VERSION#egg=ckan'"
 fi
@@ -282,19 +169,19 @@ echo    ""
 echo    "# 4.4. Creating main configuration file at /etc/ckan/default/development.ini ..."
 rm /etc/ckan/default/development.ini
 mkdir -p /etc/ckan/default
-chown -R ckan.ckan /etc/ckan
+chown -R 5000.5000 /etc/ckan
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
 sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$v_siteurl/g" /etc/ckan/default/development.ini
 sed -i "s/ckan_default:pass@localhost/postgres:$v_password@localhost/g" /etc/ckan/default/development.ini
 sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
 sed -i "s/127.0.0.1:8983\/solr/127.0.0.1:8983\/solr\/ckan/g" /etc/ckan/default/development.ini
-chown ckan.33 -R /etc/ckan/default
+chown 5000.33 -R /etc/ckan/default
 
 # Setup a storage path
 echo    "# 4.5 Setting a storage path for upload support..."
 su -c "sleep 2"
 mkdir -p /var/lib/ckan
-chown -R ckan.33 /var/lib/ckan
+chown -R 5000.33 /var/lib/ckan
 sed -i 's/#ckan.storage_path/ckan.storage_path/g' /etc/ckan/default/development.ini
 
 

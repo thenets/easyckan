@@ -1,38 +1,37 @@
 #!/bin/bash
 
-# Check installation exist
-if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
-	echo "CKAN installation identified! Please remove old CKAN installation before try to install again."
-	echo "Aborting...\n"
-	echo -n "CKAN platform version: "
-    cat /usr/lib/ckan/default/src/ckan/CHANGELOG.rst | grep v2 -m 1 --color=never -s
-    
-    
-# Try to install if no installation was identified
-else
-	os_version=$(lsb_release -r) # Get OS version
-	os_version_compatible=1
-	
-	# Run Ubuntu 14.04 installer
-	if [[ $os_version == *"14.04"* ]]
+# Check if already installed
+# ==============================================
+if [ -d "/usr/lib/ckan/default/src/ckan" ]; then
+	echo 	""
+	echo 	"An CKAN installation was found!"
+	echo    "Do you want to remove old installation?"
+	echo -n "(extensions will not be removed) [y/N] : "
+	read V_REMOVE_OLD_INSTALLATION
+
+	if [[ $(echo "$V_REMOVE_OLD_INSTALLATION" | perl -ne 'print lc') == "y" ]]
 	then
-		os_version_compatible=1
-		/etc/easyckan/installers/ckan/ckan_ubuntu14.04_installer.sh
+		echo "Removing /usr/lib/ckan/default/src/ckan directory..."
+		rm -R /usr/lib/ckan/default/src/ckan
+	else
+		echo "Aborting installation!"
+		echo ""
+		exit
 	fi
-	
-	# Run Ubuntu 16.04 installer
-	if [[ $os_version == *"16.04"* ]]
+fi
+if [ -f /etc/ckan/default/development.ini ]; then
+	echo 	""
+	echo 	"An CKAN setting file was found!"
+	echo -n "Do you want to remove '/etc/ckan/default/development.ini' ? [y/N] : "
+	read V_REMOVE_OLD_SETTING_FILE
+
+	if [[ $(echo "$V_REMOVE_OLD_SETTING_FILE" | perl -ne 'print lc') == "y" ]]
 	then
-		os_version_compatible=1
-		chmod +x /etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer_legacy.sh
-		/etc/easyckan/installers/ckan/ckan_ubuntu16.04_installer.sh
+		echo "Removing '/etc/ckan/default/development.ini'..."
+		rm /etc/ckan/default/development.ini
+	else
+		echo "Aborting installation!"
+		echo ""
+		exit
 	fi
-	
-	# No distro compatible
-	if [[ $os_version_compatible == 0 ]]
-	then
-		echo "Your Linux distro is not compatible! :/"
-		echo "Check the GitHub repository for supported versions\n or request for other distros versions."
-		echo "   GitHub URL: https://github.com/thenets/Easy-CKAN"
-	fi	
 fi

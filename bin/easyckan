@@ -40,8 +40,19 @@ then
 	
 	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
 		echo -n "CKAN platform version: "
-	    cat /usr/lib/ckan/default/src/ckan/CHANGELOG.rst | grep v2 -m 1 --color=never -s
+	    echo $(cd /usr/lib/ckan/default/src/ckan/ && git name-rev --name-only HEAD)
 	fi
+fi
+
+
+
+# ===============================================
+# Dev
+# ===============================================
+if [[ $1 == "dev" ]]
+then	
+	chmod +x /etc/easyckan/bin/_dev
+	/etc/easyckan/bin/_dev
 fi
 
 
@@ -189,3 +200,5 @@ then
 	echo "Command line tools update success! õ/"
 	/etc/easyckan/bin/easyckan version
 fi
+
+
