@@ -38,15 +38,16 @@ echo    "# ======================================================== #"
 echo    "# == Installing Easy CKAN command line tools            == #"
 echo    "# ======================================================== #"
 su -c "sleep 1"
-mkdir -p /etc/easyckan/
+
+# Remove old content
+rm -Rf /etc/easyckan/ 2> /dev/null
+rm -Rf /usr/bin/easyckan 2> /dev/null
 
 # Copying folders
-cp -R ./bin/ /etc/easyckan/bin/
-cp -R ./helpers/ /etc/easyckan/helpers/
-cp -R ./installers/ /etc/easyckan/installers/
-
-# Set permissions
-chmod +x /etc/easyckan/bin/easyckan
+cd /tmp 
+rm -rf ./Easy-CKAN 
+git clone -b dev https://github.com/thenets/Easy-CKAN.git 
+mv /tmp/Easy-CKAN /etc/easyckan
 
 # Add easyckan to path
 ln -s /etc/easyckan/bin/easyckan /usr/bin/easyckan
