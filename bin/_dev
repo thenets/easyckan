@@ -1,62 +1,21 @@
 #!/bin/bash
 
 
-# Setup a PostgreSQL database
-# ==============================================
-function ckan-postgresql {
-    # Set variables
-    v_docker_postgres_name="ckan-postgres"									# Container name
-    v_docker_postgres_path="/var/easyckan/database"							# Host persistent data path
-    v_docker_postgres_v="$v_docker_postgres_path:/var/lib/postgresql/data"	# Volume path
-    v_docker_postgres_p="5432:5432"											# Port
-    v_docker_postgres_i="postgres:$V_POSTGRESQL_VERSION"					# Image and tag
-
-    # Remove old container if exists
-    docker rm -f $v_docker_postgres_name 2> /dev/null
-
-    # Create persistent data dir
-    mkdir -p $v_docker_postgres_path
-
-    # Create container as daemon
-    docker run --net=easyckan --name $v_docker_postgres_name -v $v_docker_postgres_v \
-                -e POSTGRES_DB="ckan_default" -e POSTGRES_PASSWORD=$v_password \
-                -p $v_docker_postgres_p -d $v_docker_postgres_i
-}
-
-
-
-# Install Solr
-# ==============================================
-function ckan-solr {
-    # Set variables
-    v_docker_solr_name="ckan-solr"				# Container name
-    v_docker_solr_p="8983:8983"					# Port
-
-    # Remove old container if exists
-    docker rm -f $v_docker_solr_name 2> /dev/null
-
-    # Create container as daemon
-    docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/solr
-}
-
-
-# Create network
-# ==============================================
-function ckan-create-network {
-    docker network rm easyckan 2> /dev/null
-    docker network create -d bridge easyckan 2> /dev/null
-}
-
-
 # Start server
 # ==============================================
 chown -R 5000.5000 /usr/lib/ckan/ /etc/ckan/ /var/lib/ckan/
 
+# Import env
+SCRIPT_HOME=`dirname $0 | while read a; do cd $a && pwd && break; done`
+source $SCRIPT_HOME/_tools
+
+# Start CKAN containers dependences
 echo "# Create network and start PostgreSQL & Solr..."
 ckan-create-network
 ckan-postgresql
 ckan-solr
 
+# Start server
 echo ""
 echo "# Start EasyCKAN server..."
 docker run --net=easyckan --rm -it \

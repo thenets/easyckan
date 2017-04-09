@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#rm -R /etc/ckan/ /usr/lib/ckan/ /var/lib/ckan/ # DEBUG
+
+
 # Check if already installed
 # ==============================================
 if [ -d "/usr/lib/ckan/default/src/ckan" ]; then
@@ -12,6 +15,7 @@ if [ -d "/usr/lib/ckan/default/src/ckan" ]; then
 	if [[ $(echo "$V_REMOVE_OLD_INSTALLATION" | perl -ne 'print lc') == "y" ]]
 	then
 		echo "Removing /usr/lib/ckan/default/src/ckan directory..."
+	echo 	""
 		rm -R /usr/lib/ckan/default/src/ckan
 	else
 		echo "Aborting installation!"
@@ -29,9 +33,38 @@ if [ -f /etc/ckan/default/development.ini ]; then
 	then
 		echo "Removing '/etc/ckan/default/development.ini'..."
 		rm /etc/ckan/default/development.ini
+		rm /etc/ckan/default/who.ini
+		echo 	""
 	else
 		echo "Aborting installation!"
 		echo ""
 		exit
 	fi
 fi
+
+
+# Import env
+SCRIPT_HOME=`dirname $0 | while read a; do cd $a && pwd && break; done`
+source $SCRIPT_HOME/_tools
+
+# Create dirs and set permissions
+mkdir -p /etc/ckan/ /usr/lib/ckan/ /var/lib/ckan/
+chown -R 5000.5000 /etc/ckan/ /usr/lib/ckan/ /var/lib/ckan/
+
+# Start CKAN containers dependences
+echo    "# ======================================================== #"
+echo    "# == Create network and start PostgreSQL & Solr         == #"
+echo    "# ======================================================== #"
+ckan-create-network
+ckan-postgresql
+ckan-solr
+echo    ""
+
+# Install CKAN
+docker run --net=easyckan --rm -it \
+        -v /usr/lib/ckan:/usr/lib/ckan \
+        -v /etc/ckan:/etc/ckan \
+        -v /var/lib/ckan:/var/lib/ckan \
+        ckan:latest /install.sh
+
+

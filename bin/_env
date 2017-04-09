@@ -1,7 +1,0 @@
-#!/bin/bash
-
-v_password="ragnarok"
-V_CKAN_BASE_VERSION="2.6"
-V_CKAN_VERSION="2.6.2"
-V_POSTGRESQL_VERSION="9.6.2"
-V_SOLR_VERSION="6.5.0-alpine"

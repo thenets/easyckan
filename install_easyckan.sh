@@ -1,14 +1,35 @@
 echo    "# ======================================================== #"
 echo    "# == Welcome to Easy CKAN installation                  == #"
 echo    "# ======================================================== #"
-echo    "| If you have any question or need support, open an        |"
-echo    "| issue on: https://github.com/thenets/Easy-CKAN           |"
-echo    "# ======================================================== #"
 echo    ""
 
 
-# Fix bash permissions
-chmod +x ./*/*.sh
+
+# Install Docker and main dependences
+# ==============================================
+echo    "# ======================================================== #"
+echo    "# == Installing Docker and main dependences             == #"
+echo    "# ======================================================== #"
+
+# Envs for package manager
+YUM_CMD=$(which yum)
+APT_GET_CMD=$(which apt-get)
+
+if [[ ! -z $YUM_CMD ]]; then
+    yum install -y      curl sudo git
+elif [[ ! -z $APT_GET_CMD ]]; then
+    apt-get update
+    apt-get install -y  curl sudo git
+else
+    echo "Your distro is not compatible! Check https://github.com/thenets/Easy-CKAN"
+    echo "Exiting..."
+    exit 1;
+fi
+
+curl -sSL https://get.docker.com/ | sh
+usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
+
+
 
 
 # Install command line tools

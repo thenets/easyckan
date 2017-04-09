@@ -27,7 +27,7 @@ RUN groupadd -r -g 5000 ckan && \
 RUN apt-get install -y sudo gcc git-core postgresql-client libpq-dev python-pip \
             python-virtualenv python-dev python-paste libmemcached-dev zlib1g-dev && \
     apt-get clean all && apt-get autoclean && \
-    pip install --force-reinstall --upgrade pip setuptools
+    apt-get autoremove -y
 
 # Create CKAN dirs
 RUN mkdir -p $CKAN_CONFIG $CKAN_LOG $CKAN_DATA
@@ -35,7 +35,9 @@ RUN mkdir -p $CKAN_CONFIG $CKAN_LOG $CKAN_DATA
 # DEBUG
 RUN apt-get install -y links htop nano vim libnet-ifconfig-wrapper-perl
 
-USER ckan
+# Add CKAN installer
+ADD ./install.sh /
+RUN chmod +x ./install.sh
 
 VOLUME [$CKAN_CONFIG, $CKAN_LOG, $CKAN_DATA]
 #ENTRYPOINT ["/entrypoint.sh"]

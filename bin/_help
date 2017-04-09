@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "| If you have any question or need support, talk with me "
-echo "| at https://webchat.freenode.net at channel #easyckan. "
+echo "|    at https://webchat.freenode.net at channel #easyckan. "
+echo "| If you find bugs, please open a issue on: "
+echo "|    https://github.com/thenets/Easy-CKAN "
 echo ""
 echo "  How to use:"
 echo "   sudo easyckan <command>"

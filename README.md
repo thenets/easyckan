@@ -1,23 +1,21 @@
-<a href="https://koding.com/"> <img src="https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_RectangleColor.png" srcset="https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_RectangleColor.png 1x, https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_RectangleColor@2x.png 2x" alt="Made with Koding" /> </a>
-
-# Easy-CKAN v0.3 Beta
+# EasyCKAN v2.6 Beta.1
 Easiest way to install the CKAN platform.
+Compatible with all Linux x64 distros.
 
 ## What Is Included In Easy CKAN?
-- CKAN 2.5.2
+- EasyCKAN CLI
+- CKAN 2.6.2
 - Plugins
   + [[Plugin] DataStore (version for CKAN base installation)](http://docs.ckan.org/en/latest/maintaining/datastore.html)
   + [[Plugin] Harvest (v0.5)](https://github.com/ckan/ckanext-harvest)
-  + [[Plugin] Scheming (latest) - Thanks to @timgiles](https://github.com/ckan/ckanext-scheming)
-
-- Easy CKAN command line (NEW!)
 
 ## 1. Requirements
 Your server / virtual machine must meet the following requirements:
 
-- Ubuntu 14.04 (beta) or Ubuntu 16.04 (alpha is not recommended)
-- Nothing running over ports: 8080, 8888, 8800, 80, 5000
-- No Apache2 or NGINX previously installed
+- Linux x64 kernel version 3.10 or higher
+- 2.00 GB of RAM
+- 6.00 GB of available disk space
+- Nothing running over ports: 80, 5000
 
 It is generally better to have a completely clean install of Ubuntu to work from.
 
@@ -115,8 +113,11 @@ I want to add some additional improvements:
 
 
 ## Special thanks
+- @alersonluz : Help with first installer for Ubuntu
 - @mohnjatthews : Improved README documentation
+- @timgiles : New plugins installers
 - @vladimirghetau : New plugins installers
+- @samisnunu : Test for CKAN 2.6
 
 
 ## Developer Installer

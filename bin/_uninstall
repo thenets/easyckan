@@ -1,2 +1,18 @@
 #!/bin/bash
 
+# Remove all CKAN data
+rm -Rf /etc/ckan/ /usr/lib/ckan/ /var/lib/ckan/
+
+# Remove Docker containers
+docker rm -f ckan
+docker rm -f ckan-postgres
+docker rm -f ckan-solr
+docker rm -f ckan-dev
+docker rm -f ckan-production
+
+# Clean Docker images
+docker image rm -f /easyckan/ckan
+docker image rm -f /easyckan/ckan-postgres
+docker image rm -f /easyckan/ckan-solr
+docker image rm -f /easyckan/ckan-dev
+docker image rm -f /easyckan/ckan-production
