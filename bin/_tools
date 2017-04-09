@@ -3,7 +3,7 @@
 
 # Environment variables
 # ==============================================
-EASYCKAN_VERSION="v0.2.6 Beta.1"
+EASYCKAN_VERSION="v2.6 Beta.1"
 V_CKAN_BASE_VERSION="2.6"
 V_CKAN_VERSION="2.6.2"
 v_password=$(cat /var/lib/ckan/default/postgresql.conf)
@@ -44,7 +44,7 @@ function ckan-solr {
     docker rm -f $v_docker_solr_name 2> /dev/null
 
     # Create container as daemon
-    docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/solr:$V_CKAN_BASE_VERSION
+    docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
 }
 
 

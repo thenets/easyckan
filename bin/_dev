@@ -23,4 +23,4 @@ docker run --net=easyckan --rm -it \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
         -p 5000:5000 \
-        ckan-dev:latest /bin/bash
+        easyckan/ckan-dev:$V_CKAN_BASE_VERSION /bin/bash
