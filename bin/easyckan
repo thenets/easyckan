@@ -15,7 +15,8 @@ GREP="/bin/grep"
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
-   echo "EasyCKAN must be run as root...\nExiting..." 1>&2
+   echo "EasyCKAN must be run as root..."
+   echo "Exiting..."
    exit 1
 fi
 

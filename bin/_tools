@@ -3,10 +3,9 @@
 
 # Environment variables
 # ==============================================
+EASYCKAN_VERSION="v0.2.6 Beta.1"
 V_CKAN_BASE_VERSION="2.6"
 V_CKAN_VERSION="2.6.2"
-V_POSTGRESQL_VERSION="9.6.2"
-V_SOLR_VERSION="6.5.0-alpine"
 v_password=$(cat /var/lib/ckan/default/postgresql.conf)
 
 
@@ -19,7 +18,6 @@ function ckan-postgresql {
     v_docker_postgres_path="/var/easyckan/database"							# Host persistent data path
     v_docker_postgres_v="$v_docker_postgres_path:/var/lib/postgresql/data"	# Volume path
     v_docker_postgres_p="5432:5432"											# Port
-    v_docker_postgres_i="postgres:$V_POSTGRESQL_VERSION"					# Image and tag
 
     # Remove old container if exists
     docker rm -f $v_docker_postgres_name 2> /dev/null
@@ -30,7 +28,7 @@ function ckan-postgresql {
     # Create container as daemon
     docker run --net=easyckan --name $v_docker_postgres_name -v $v_docker_postgres_v \
                 -e POSTGRES_DB="ckan_default" -e POSTGRES_PASSWORD=$v_password \
-                -p $v_docker_postgres_p -d $v_docker_postgres_i
+                -p $v_docker_postgres_p -d easyckan/ckan-postgres:$V_CKAN_BASE_VERSION
 }
 
 
@@ -46,7 +44,7 @@ function ckan-solr {
     docker rm -f $v_docker_solr_name 2> /dev/null
 
     # Create container as daemon
-    docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/solr
+    docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/solr:$V_CKAN_BASE_VERSION
 }
 
 

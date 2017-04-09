@@ -1,0 +1,1 @@
+FROM easyckan/ckan:2.6

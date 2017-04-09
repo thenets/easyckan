@@ -1,4 +1,4 @@
-FROM easyckan/ckan:latest
+FROM easyckan/ckan:2.6
 
 # Metadata
 LABEL vendor="TheNets.org EasyCKAN"

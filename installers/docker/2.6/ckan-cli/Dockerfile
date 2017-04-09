@@ -1,4 +1,4 @@
-FROM easyckan/ckan:latest
+FROM easyckan/ckan:2.6
 
 USER root
 
