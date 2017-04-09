@@ -91,6 +91,8 @@ You need to instal 'curl' and run the command below.
 
 ```
 curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | sudo bash
+sudo easyckan install
+sudo easyckan dev
 ```
 
 To update the Easy CKAN command line tools with the DEV version, just run:
