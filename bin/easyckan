@@ -2,7 +2,7 @@
 
 # Set vars
 # ===============================================
-SCRIPT_HOME=`dirname $0 | while read a; do cd $a && pwd && break; done`
+SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_tools
 
 
@@ -124,7 +124,7 @@ then
 	then
 		curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | bash
 	else
-		# nothing...
+		echo "Not avaliable" # nothing...
 	fi
 
 	echo ""

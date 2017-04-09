@@ -6,7 +6,10 @@
 EASYCKAN_VERSION="v2.6 Beta.1"
 V_CKAN_BASE_VERSION="2.6"
 V_CKAN_VERSION="2.6.2"
-v_password=$(cat /var/lib/ckan/default/postgresql.conf)
+if [ -f /tmp/foo.txt ]; then
+    v_password=$(cat /var/lib/ckan/default/postgresql.conf)
+fi
+
 
 
 
