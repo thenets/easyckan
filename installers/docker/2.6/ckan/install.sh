@@ -22,8 +22,8 @@ echo    "# ======================================================== #"
 v_siteurl="http://localhost"
 v_password=$(date +%s | sha256sum | base64 | head -c 24 ; echo)
 
-echo "  Site URL: "$v_siteurl
-echo "  PostgreSQL Password: "$v_password
+echo "  Site URL            : "$v_siteurl
+echo "  PostgreSQL Password : "$v_password
 sleep 1
 
 # Save PostgreSQL password
@@ -107,7 +107,7 @@ rm /etc/ckan/default/development.ini
 mkdir -p /etc/ckan/default
 chown -R 5000.5000 /etc/ckan
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster make-config ckan /etc/ckan/default/development.ini"
-sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/$v_siteurl/g" /etc/ckan/default/development.ini
+sed -i "s/ckan.site_url =/ckan.site_url = http:\/\/localhost/g" /etc/ckan/default/development.ini
 sed -i "s/ckan_default:pass@localhost/postgres:$v_password@ckan-postgres/g" /etc/ckan/default/development.ini
 sed -i "s/#solr_url/solr_url/g" /etc/ckan/default/development.ini
 sed -i "s/127.0.0.1:8983\/solr/ckan-solr:8983\/solr\/ckan/g" /etc/ckan/default/development.ini

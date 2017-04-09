@@ -61,6 +61,7 @@ ckan-solr
 echo    ""
 
 # Install CKAN
+sleep 4 # Waitng PostgreSQL and Solr start
 docker run --net=easyckan --rm -it \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \

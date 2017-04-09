@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Import env
+SCRIPT_HOME="/etc/easyckan/bin"
+source $SCRIPT_HOME/_tools
+
+# Start CKAN containers dependences
+echo    "loading..."
+ckan-create-network >/dev/null
+ckan-postgresql >/dev/null
+ckan-solr >/dev/null
+
+# Enter on CKAN container
+docker run --net=easyckan --rm -it \
+        -v /usr/lib/ckan:/usr/lib/ckan \
+        -v /etc/ckan:/etc/ckan \
+        -v /var/lib/ckan:/var/lib/ckan \
+        easyckan/ckan:$V_CKAN_BASE_VERSION /bin/bash
