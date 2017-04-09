@@ -81,7 +81,6 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/c
 
 # Installing CKAN dependences
 echo    "# 3.3. Installing CKAN dependences..."
-su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install /usr/lib/ckan/cache/ckan-$V_CKAN_VERSION.zip -t /usr/lib/ckan/default/src"
 sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
 
