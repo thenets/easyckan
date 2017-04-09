@@ -120,26 +120,12 @@ fi
 if [[ $1 == *"update"* ]]
 then
 	# Download Easy CKAN from GitHub
-	cd /tmp 
-	rm -rf ./Easy-CKAN
 	if [[ $2 == *"dev"* ]] # Check if will use dev version
 	then
-		git clone -b dev https://github.com/thenets/Easy-CKAN.git
+		curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | bash
 	else
-		git clone https://github.com/thenets/Easy-CKAN.git
+		# nothing...
 	fi
-	cd ./Easy-CKAN
-
-	# Update Easy CKAN files
-	mkdir -p /etc/easyckan/
-	rm -Rf /etc/easyckan/bin/
-	rm -Rf /etc/easyckan/conf/
-	rm -Rf /etc/easyckan/helpers/
-	rm -Rf /etc/easyckan/installers/
-	cp -R ./bin/ /etc/easyckan/bin/
-	cp -R ./conf/ /etc/easyckan/conf/
-	cp -R ./helpers/ /etc/easyckan/helpers/
-	cp -R ./installers/ /etc/easyckan/installers/
 
 	echo ""
 	echo "Command line tools update success! õ/"

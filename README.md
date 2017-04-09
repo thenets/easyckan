@@ -84,11 +84,13 @@ I want to add some additional improvements:
 If you want the lastest Easy CKAN version, use following lines to your installation.
 !IMPORTANT! This version will most likely contain bugs, so use at your own risk.
 
+You need to instal 'curl' and run the command below.
+
+- For Ubuntu/Debian: sudo apt-get install -y curl
+- For Fedora/CentOS: sudo yum install -y curl
+
 ```
-sudo su -c "apt-get update && apt-get upgrade -y"
-sudo su -c "apt-get install git-core"
-sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone -b dev https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
-sudo su -c "easyckan install"
+curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | sudo bash
 ```
 
 To update the Easy CKAN command line tools with the DEV version, just run:
