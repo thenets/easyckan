@@ -13,6 +13,7 @@ fi
 
 
 
+
 # Setup a PostgreSQL database
 # ==============================================
 function ckan-postgresql {
@@ -22,16 +23,23 @@ function ckan-postgresql {
     v_docker_postgres_v="$v_docker_postgres_path:/var/lib/postgresql/data"	# Volume path
     v_docker_postgres_p="5432:5432"											# Port
 
-    # Remove old container if exists
-    docker rm -f $v_docker_postgres_name 2> /dev/null
+    if [[ $(docker container ls | grep -i $v_docker_postgres_name) ]]; then
+        echo "ckan-postgres was found..."
+    else
+        # Remove old container if exists
+        docker rm -f $v_docker_postgres_name 2> /dev/null
 
-    # Create persistent data dir
-    mkdir -p $v_docker_postgres_path
+        # Create persistent data dir
+        mkdir -p $v_docker_postgres_path
 
-    # Create container as daemon
-    docker run --net=easyckan --name $v_docker_postgres_name -v $v_docker_postgres_v \
-                -e POSTGRES_DB="ckan_default" -e POSTGRES_PASSWORD=$v_password \
-                -p $v_docker_postgres_p -d easyckan/ckan-postgres:$V_CKAN_BASE_VERSION
+        # Create container as daemon
+        docker run --net=easyckan --name $v_docker_postgres_name -v $v_docker_postgres_v \
+                    -e POSTGRES_DB="ckan_default" -e POSTGRES_PASSWORD=$v_password \
+                    -p $v_docker_postgres_p -d easyckan/ckan-postgres:$V_CKAN_BASE_VERSION
+        
+        # Wait application start
+        sleep 2
+    fi
 }
 
 
@@ -43,18 +51,43 @@ function ckan-solr {
     v_docker_solr_name="ckan-solr"				# Container name
     v_docker_solr_p="8983:8983"					# Port
 
-    # Remove old container if exists
-    docker rm -f $v_docker_solr_name 2> /dev/null
 
-    # Create container as daemon
-    docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
+    if [[ $(docker container ls | grep -i $v_docker_solr_name) ]]; then
+        echo "ckan-solr was found..."
+    else
+        # Remove old container if exists
+        docker rm -f $v_docker_solr_name 2> /dev/null
+
+        # Create container as daemon
+        docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
+
+        # Wait application start
+        sleep 8
+    fi
 }
 
 
 
-# Create network
+# Create network if not exist
 # ==============================================
 function ckan-create-network {
-    docker network rm easyckan 2> /dev/null
-    docker network create -d bridge easyckan 2> /dev/null
+    if [[ $(docker network ls | grep -i easyckan) ]]; then
+        echo "EasyCKAN network was found..."
+    else
+        docker network rm easyckan 2> /dev/null
+        docker network create -d bridge easyckan 2> /dev/null
+    fi
+}
+
+
+
+# Other dependences and plugins activated
+# ==============================================
+function ckan-dependences {
+    # Plugins
+    mkdir -p /etc/ckan/easyckan/plugins
+
+    for file in /etc/ckan/easyckan/plugins/*; do
+        [ -f "$file" ] && [ -x "$file" ] && "$file run"
+    done
 }

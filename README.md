@@ -48,6 +48,18 @@ Once you have finished development and are ready to push your changes into a pro
 sudo easyckan deploy # Avaliable over port 80
 ```
 
+### 3.3. Create admin user
+Replace "my_username" with the username you want.
+```
+easyckan exec paster sysadmin add my_username --config=/etc/ckan/default/development.ini
+```
+
+### 3.4. Enter on VirtualEnv
+If you want to run custom commands and use bash on CKAN VirtualEnv.
+```
+easyckan exec
+```
+
 ## 4. Questions? Support?
 If you have any question or need support, talk with me at https://webchat.freenode.net at channel #easyckan. 
 

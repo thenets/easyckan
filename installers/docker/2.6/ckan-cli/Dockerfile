@@ -2,12 +2,14 @@ FROM easyckan/ckan:2.6
 
 USER root
 
-ADD ./entrypoint.sh /
-RUN chown ckan.ckan /entrypoint.sh
+# Additional tools
+RUN apt-get install -y wget unzip zip htop fish-dbg
+
+WORKDIR /usr/lib/ckan
+
+ADD ./.bashrc /usr/lib/ckan/.bashrc
+RUN chown 5000.5000 /usr/lib/ckan/.bashrc
 
 USER ckan
 
-WORKDIR /usr/lib/ckan/default
-
-ENTRYPOINT ["bash", "&&", ". bin/activate", "&&", "/entrypoint.sh"]
-CMD ["--help"]
+#ENTRYPOINT ["bash"]

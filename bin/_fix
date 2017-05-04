@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo ""
+echo "Fix permissions"
+echo "=============================================="
+chown -R 5000.5000 /usr/lib/ckan/ /etc/ckan/ /var/lib/ckan/
+
+
+echo ""
+echo "Remove all containers and network"
+echo "=============================================="
+docker container rm -f ckan-solr ckan-postgres ckan-datastore
+docker network rm easyckan
+
+
+echo ""
+echo "Do all migrations pendents"
+echo "=============================================="
+easyckan exec paster --plugin=ckan db clean --config=/etc/ckan/default/development.ini
+easyckan exec paster --plugin=ckan db upgrade --config=/etc/ckan/default/development.ini
+
+
+echo ""
+echo "Rebuild search index"
+echo "=============================================="
+easyckan exec paster --plugin=ckan search-index rebuild_fast --config=/etc/ckan/default/development.ini

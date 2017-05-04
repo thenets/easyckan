@@ -29,7 +29,17 @@ fi
 if [[ $1 == "exec" ]]
 then
 	chmod +x /etc/easyckan/bin/_exec
-	/etc/easyckan/bin/_exec $2 $3 $4 $5
+	/etc/easyckan/bin/_exec "$@"
+fi
+
+
+# ===============================================
+# FIX
+# ===============================================
+if [[ $1 == "fix" ]]
+then
+	chmod +x /etc/easyckan/bin/_fix
+	/etc/easyckan/bin/_fix
 fi
 
 
