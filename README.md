@@ -60,6 +60,12 @@ If you want to run custom commands and use bash on CKAN VirtualEnv.
 easyckan exec
 ```
 
+### 3.5. Enter on PostgreSQL CLI
+Enter on psql.
+```
+easyckan exec psql -h ckan-postgres -Upostgres
+```
+
 ## 4. Questions? Support?
 If you have any question or need support, talk with me at https://webchat.freenode.net at channel #easyckan. 
 

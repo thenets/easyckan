@@ -20,7 +20,7 @@ easyckan exec paster --plugin=ckan search-index rebuild -r --config=/etc/ckan/de
 # Start server
 echo ""
 echo "# Start EasyCKAN server..."
-docker run --net=easyckan --rm -it \
+docker run --net=easyckan --name "ckan-main" --rm -it \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \

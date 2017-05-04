@@ -20,7 +20,7 @@ RUN mkdir -p $DATAPUSHER_HOME/src
 WORKDIR $DATAPUSHER_HOME/src
 
 #Clone the source
-RUN git clone -b stable https://github.com/ckan/datapusher.git
+RUN git clone -b '0.0.10' https://github.com/ckan/datapusher.git
 
 #Install the dependencies
 WORKDIR datapusher
