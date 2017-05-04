@@ -24,8 +24,7 @@ chmod +x /usr/lib/ckan/custom_cmd.sh
 # Custom commands
 shift
 if [[ $(echo $1) ]]; then
-        CUSTOM_COMMANDS="/usr/lib/ckan/ckan-paster-cli.sh $@"
-        # CUSTOM_COMMANDS="echo $PATH"
+        CUSTOM_COMMANDS="/usr/lib/ckan/custom_cmd.sh $@"
 fi
 
 # Enter on CKAN container
