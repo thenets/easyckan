@@ -28,6 +28,8 @@ ADD https://raw.githubusercontent.com/ckan/ckan/release-v$CKAN_BASE_VERSION-late
 RUN rm $SOLR_HOME/ckan/conf/schema.xml
 RUN ln -s $CKAN_HOME/src/ckan/ckan/config/solr/schema.xml $SOLR_HOME/ckan/conf/schema.xml
 
+VOLUME ["$SOLR_HOME/ckan/conf"]
 EXPOSE 8983
 WORKDIR /opt/solr/example
 CMD ["java", "-jar", "start.jar"]
+

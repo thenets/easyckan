@@ -47,10 +47,16 @@ function ckan-postgresql {
 # Install Solr
 # ==============================================
 function ckan-solr {
-    # Set variables
-    v_docker_solr_name="ckan-solr"				# Container name
-    v_docker_solr_p="8983:8983"					# Port
+    # Copy default Solr schema if not exist
+    mkdir -p /etc/ckan/default/solr
+    if [ ! -f /etc/ckan/default/solr/schema.xml ]; then
+        wget -O /etc/ckan/default/solr/schema.xml https://raw.githubusercontent.com/ckan/ckan/release-v$V_CKAN_BASE_VERSION-latest/ckan/config/solr/schema.xml
+    fi
 
+    # Set variables
+    v_docker_solr_name="ckan-solr"				                                                # Container name
+    v_docker_solr_p="8983:8983"					                                                # Port
+    v_docker_solr_v="/etc/ckan/default/solr:/usr/lib/ckan/default/src/ckan/ckan/config/solr"	# Volume path
 
     if [[ $(docker container ls | grep -i $v_docker_solr_name) ]]; then
         echo "ckan-solr was found..."
@@ -59,7 +65,9 @@ function ckan-solr {
         docker rm -f $v_docker_solr_name 2> /dev/null
 
         # Create container as daemon
-        docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
+        docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p \
+                   -v $v_docker_solr_v \
+                   -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
 
         # Wait application start
         sleep 8
