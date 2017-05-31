@@ -12,12 +12,12 @@ ckan-solr >/dev/null
 
 # Copy .bashrc
 rm -f /usr/lib/ckan/.bashrc 2>/dev/null
-cp $SCRIPT_HOME/../installers/docker/$V_CKAN_BASE_VERSION/ckan-cli/.bashrc /usr/lib/ckan/.bashrc
+cp $SCRIPT_HOME/../src/docker/$V_CKAN_BASE_VERSION/ckan-cli/.bashrc /usr/lib/ckan/.bashrc
 chown 5000.5000 /usr/lib/ckan/.bashrc
 
 # Copy Custom CMD
 rm -f /usr/lib/ckan/custom_cmd.sh 2>/dev/null
-cp $SCRIPT_HOME/../installers/docker/$V_CKAN_BASE_VERSION/ckan-cli/custom_cmd.sh /usr/lib/ckan/custom_cmd.sh
+cp $SCRIPT_HOME/../src/docker/$V_CKAN_BASE_VERSION/ckan-cli/custom_cmd.sh /usr/lib/ckan/custom_cmd.sh
 chown 5000.5000 /usr/lib/ckan/custom_cmd.sh
 chmod +x /usr/lib/ckan/custom_cmd.sh
 

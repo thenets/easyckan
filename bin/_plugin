@@ -5,7 +5,7 @@ exit
 
 
 # Set permissions
-chmod +x /etc/easyckan/installers/plugins/*
+chmod +x /etc/easyckan/src/plugins/*
 
 
 if [[ $1 == "" ]]
@@ -20,14 +20,14 @@ fi
 # Install a plugin
 if [[ $1 == "install" ]]
 then
-	if [ -f /etc/easyckan/installers/plugins/ckan_plugin_$2.sh ]; then
-		/etc/easyckan/installers/plugins/ckan_plugin_$2.sh
+	if [ -f /etc/easyckan/src/plugins/ckan_plugin_$2.sh ]; then
+		/etc/easyckan/src/plugins/ckan_plugin_$2.sh
 	else
 		
 		# Install all plugins
 		if [[ $2 == "--all" ]]
 		then
-			for file in /etc/easyckan/installers/plugins/*
+			for file in /etc/easyckan/src/plugins/*
 			do
 			  $file
 			done

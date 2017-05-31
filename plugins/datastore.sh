@@ -12,6 +12,20 @@ source $SCRIPT_HOME/_tools
 # GRANT ALL ON DATABASE datastore_default TO datastore_default;
 
 
+
+# EVENT install
+# Commands on plugin installation process
+# =====================================
+if [[ $1 == "install" ]]
+then
+
+fi
+
+
+
+# EVENT run
+# Commands on CKAN startup
+# =====================================
 if [[ $1 == "run" ]]
 then
     # Set variables

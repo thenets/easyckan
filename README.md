@@ -4,16 +4,22 @@ Easiest way to install the CKAN platform.
 
 Compatible with all Linux x64 distros.
 
+## Who should use EasyCKAN?
+The EasyCKAN project is create for **single node portals** and **development environmet**. If you need load balancer or other advanced features, consider create your environment manually from the [CKAN Source Installation](http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html).
+
+
 ## What Is Included In Easy CKAN?
 - EasyCKAN CLI
 - CKAN 2.6.2
-- Plugins
+- Plugins (officially supported)
   + [[Plugin] DataStore (version for CKAN base installation)](http://docs.ckan.org/en/latest/maintaining/datastore.html)
 
 ## 1. Requirements
 Your server / virtual machine must meet the following requirements:
 
 - Linux x64 kernel version 3.10 or higher
+  - Distributions supported with simple installer: Ubuntu, Fedora, CentOS, openSUSE.
+  - Other distros will require manual installation.
 - 2.00 GB of RAM
 - 6.00 GB of available disk space
 - Nothing running over ports: 80, 5000
@@ -66,8 +72,40 @@ Enter on psql.
 easyckan exec psql -h ckan-postgres -Upostgres
 ```
 
+### 3.6. Create additional config file
+Let's considering you're setuping the production environment from the beggining. In this case, it's better create a clean configuration file.
+The follow command allow you to do it:
+```
+easyckan exec paster make-config ckan /etc/ckan/default/production.ini
+```
+
+### 3.7. Create plugin from scratch
+CKAN allow you to create a simple plugin base from a scrath. You need to create the main structure and than compile for development. You can learn more at [Customizing CKAN’s templates](http://docs.ckan.org/en/latest/theming/templates.html)
+
+First, enter on "virtualenv" and create the base template. Pay attention to change "my_plugin" by your plugin name. It's recommended to keep "ckanext-" prefix.
+
+At the end, build your plugin.
+```
+# Enable virtual env and go to plugins dir
+easyckan exec
+cd /usr/lib/ckan/default/src
+
+# Create the plugin from scratch
+paster --plugin=ckan create -t ckanext ckanext-my_plugin
+
+# Build
+cd ./ckanext-my_plugin
+python setup.py develop
+
+# Close container
+exit
+```
+Now add the plugin to your config file, on "ckan.plugins = my_plugin ..." at /etc/ckan/default/development.ini
+
+
+
 ## 4. Questions? Support?
-If you have any question or need support, talk with me at https://webchat.freenode.net at channel #easyckan. 
+**IRC: If you have any question or need support, talk with me at [Freenode.net](webchat.freenode.net/?channels=easyckan) at channel #easyckan. Not need an account, just enter and type "thenets" and I'll answer you if I'm online.**
 
 If you have any questions, either [raise an issue here on GitHub](https://github.com/thenets/Easy-CKAN/issues) or send me an email: [luiz@thenets.org](mailto:luiz@thenets.org)
 
@@ -88,6 +126,7 @@ I want to add some additional improvements:
 - Feature: Uninstaller
 - Feature: Interface plugin installations
 - Improvement: Better bash interface
+- Plugin: Harvester
 
 
 ## Special thanks
@@ -100,12 +139,13 @@ I want to add some additional improvements:
 
 ## Developer Installer
 If you want the lastest Easy CKAN version, use following lines to your installation.
-!IMPORTANT! This version will most likely contain bugs, so use at your own risk.
+
+**!IMPORTANT! This version will most likely contain bugs, so use at your own risk.**
 
 You need to instal 'curl' and run the command below.
 
-- For Ubuntu/Debian: sudo apt-get install -y curl
-- For Fedora/CentOS: sudo yum install -y curl
+- For Ubuntu/Debian: ```sudo apt-get install -y curl```
+- For Fedora/CentOS: ```sudo yum install -y curl```
 
 ```
 curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | sudo bash
