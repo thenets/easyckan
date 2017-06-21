@@ -18,7 +18,7 @@ source $SCRIPT_HOME/_tools
 # =====================================
 if [[ $1 == "install" ]]
 then
-
+    echo "nothing"
 fi
 
 
@@ -28,17 +28,42 @@ fi
 # =====================================
 if [[ $1 == "run" ]]
 then
-    # Set variables
-    v_docker_datapusher="ckan-datapusher"									# Container name
 
+    # Database container
+    # ===============================
+    v_docker_datapusher_db_name="ckan-datapusher-db"							# Container name
+    v_docker_datapusher_db_path="/var/easyckan/datapusher"						# Host persistent data path
+    v_docker_datapusher_db_v="$v_docker_datapusher_db_path:/var/lib/postgresql/data"	# Volume path
+
+    if [[ $(docker container ls | grep -i $v_docker_datapusher_db_name) ]]; then
+        echo "ckan-postgres was found..."
+    else
+        # Remove old container if exists
+        docker rm -f $v_docker_datapusher_db_name 2> /dev/null
+
+        # Create persistent data dir
+        mkdir -p $v_docker_datapusher_db_path
+
+        # Create container as daemon
+        docker run --net=easyckan --name $v_docker_datapusher_db_name -v $v_docker_datapusher_db_v \
+                    -e POSTGRES_DB="ckan_datapusher" -e POSTGRES_PASSWORD=$v_password \
+                    -d easyckan/ckan-postgres:$V_CKAN_BASE_VERSION
+        
+        # Wait application start
+        sleep 2
+    fi
+
+
+    # Main datapusher container
+    # ===============================
+    v_docker_datapusher="ckan-datapusher" # Container name
     if [[ $(docker container ls | grep -i $v_docker_datapusher) ]]; then
         echo "ckan-datapusher was found..."
     else
-        # Remove old container if exists
         docker rm -f $v_docker_datapusher 2> /dev/null
-
-        # Create container as daemon
+        
         docker run --net=easyckan --name $v_docker_datapusher \
                     -p 8800:8800 -d easyckan/ckan-datapusher:$V_CKAN_BASE_VERSION
     fi
+
 fi

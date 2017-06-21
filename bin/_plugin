@@ -1,11 +1,24 @@
 #!/bin/bash
 
+
+# Install a plugin
+if [[ $1 == "add" ]]
+then
+	ln -s /etc/easyckan/plugins/$2.sh /etc/ckan/easyckan/plugins/$2.sh
+	echo "added"
+	exit
+fi
+
+# Remove a plugin
+if [[ $1 == "remove" ]]
+then
+	rm -f /etc/ckan/easyckan/plugins/$2.sh
+	echo "removed"
+	exit
+fi
+
 echo "Not avaliable yet..."
 exit
-
-
-# Set permissions
-chmod +x /etc/easyckan/src/plugins/*
 
 
 if [[ $1 == "" ]]
@@ -38,4 +51,3 @@ then
 	    fi
 	fi
 fi
-

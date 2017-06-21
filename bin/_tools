@@ -75,6 +75,30 @@ function ckan-solr {
 }
 
 
+# Supervisor
+# ==============================================
+function ckan-supervisor {
+    # Create supervisor config dir if not exist
+    mkdir -p /etc/ckan/default/supervisor
+
+    # Set variables
+    v_docker_supervisor_name="ckan-supervisor"	                                # Container name
+    v_docker_supervisor_v="/etc/ckan/default/supervisor:/etc/supervisor/conf.d"	# Volume path
+
+    if [[ $(docker container ls | grep -i $v_docker_supervisor_name) ]]; then
+        echo "ckan-supervisor was found..."
+    else
+        # Remove old container if exists
+        docker rm -f $v_docker_supervisor_name 2> /dev/null
+
+        # Create container as daemon
+        docker run --net=easyckan --name $v_docker_supervisor_name \
+                   -p 9001:9011 \
+                   -v $v_docker_supervisor_v \
+                   -d easyckan/ckan-supervisor:$V_CKAN_BASE_VERSION
+    fi
+}
+
 
 # Create network if not exist
 # ==============================================
@@ -92,10 +116,18 @@ function ckan-create-network {
 # Other dependences and plugins activated
 # ==============================================
 function ckan-dependences {
-    # Plugins
-    mkdir -p /etc/ckan/easyckan/plugins
+    # Start Supervisor
+    ckan-supervisor
 
-    for file in /etc/ckan/easyckan/plugins/*; do
-        [ -f "$file" ] && [ -x "$file" ] && "$file run"
+    # Plugins
+    PLUGINS_DIR="/etc/ckan/easyckan/plugins/"
+    mkdir -p $PLUGINS_DIR
+    PLUGINS=$(ls $PLUGINS_DIR)
+    PLUGINS=($PLUGINS)
+    
+    for file in $PLUGINS
+    do
+        file=$PLUGINS_DIR$file
+        [ -f "$file" ] && [ -x "$file" ] && "$file" run
     done
 }
