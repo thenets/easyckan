@@ -80,6 +80,7 @@ function ckan-solr {
 function ckan-supervisor {
     # Create supervisor config dir if not exist
     mkdir -p /etc/ckan/default/supervisor
+    chown -R 5000.5000 /etc/ckan/default/supervisor
 
     # Set variables
     v_docker_supervisor_name="ckan-supervisor"	                                # Container name
@@ -93,7 +94,7 @@ function ckan-supervisor {
 
         # Create container as daemon
         docker run --net=easyckan --name $v_docker_supervisor_name \
-                   -p 9001:9011 \
+                   -p 9001:9001 \
                    -v $v_docker_supervisor_v \
                    -d easyckan/ckan-supervisor:$V_CKAN_BASE_VERSION
     fi

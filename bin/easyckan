@@ -36,10 +36,10 @@ fi
 # ===============================================
 # FIX
 # ===============================================
-if [[ $1 == "fix" ]]
+if [[ $1 == "fix" ]] || [[ $1 == "repair" ]]
 then
-	chmod +x /etc/easyckan/bin/_fix
-	/etc/easyckan/bin/_fix
+	chmod +x /etc/easyckan/bin/_repair
+	/etc/easyckan/bin/_repair
 fi
 
 

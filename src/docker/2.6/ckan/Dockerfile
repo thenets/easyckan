@@ -25,7 +25,7 @@ RUN groupadd -r -g 5000 ckan && \
 
 # Install CKAN dependences
 RUN apt-get install -y sudo gcc git-core postgresql-client libpq-dev python-pip \
-            python-virtualenv python-dev python-paste libmemcached-dev zlib1g-dev && \
+            python-virtualenv python-dev python-paste libmemcached-dev zlib1g-dev redis-server && \
     apt-get clean all && apt-get autoclean && \
     apt-get autoremove -y
 

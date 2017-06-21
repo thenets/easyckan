@@ -1,22 +1,23 @@
 #!/bin/bash
-
-echo ""
-echo "Fix permissions"
+echo "EasyCKAN Repair"
 echo "=============================================="
-chown -R 5000.5000 /usr/lib/ckan/ /etc/ckan/ /var/lib/ckan/
 
 
 echo ""
 echo "Remove all containers and network"
 echo "=============================================="
-docker container rm -f ckan-solr ckan-postgres ckan-datastore
+EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | sed 's/"Name": "//g' | sed 's/",//g')
+for container in $EASYCKAN_CONTAINERS
+do
+    docker container rm -f $container
+done
+echo $EASYCKAN_CONTAINERS
 docker network rm easyckan
 
 
 echo ""
 echo "Do all migrations pendents"
 echo "=============================================="
-easyckan exec paster --plugin=ckan db clean --config=/etc/ckan/default/development.ini
 easyckan exec paster --plugin=ckan db upgrade --config=/etc/ckan/default/development.ini
 
 

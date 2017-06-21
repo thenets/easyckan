@@ -79,7 +79,20 @@ The follow command allow you to do it:
 easyckan exec paster make-config ckan /etc/ckan/default/production.ini
 ```
 
-### 3.7. Create plugin from scratch
+### 3.7. Repair
+Most common problems can be solved with ["Have You Tried Turning It Off And On Again?"](https://www.youtube.com/watch?v=nn2FB1P_Mn8)
+
+The command below restart all Docker containers and create a fresh environment keepin all your CKAN data.
+```
+easyckan repair
+```
+
+Another common problem is wrong permission on CKAN dirs and files. To reset to default, run the following command:
+```
+sudo chown -R 5000.5000 /usr/lib/ckan/ /etc/ckan/ /var/lib/ckan/
+```
+
+### 3.8. Create plugin from scratch
 CKAN allow you to create a simple plugin base from a scrath. You need to create the main structure and than compile for development. You can learn more at [Customizing CKAN’s templates](http://docs.ckan.org/en/latest/theming/templates.html)
 
 First, enter on "virtualenv" and create the base template. Pay attention to change "my_plugin" by your plugin name. It's recommended to keep "ckanext-" prefix.
