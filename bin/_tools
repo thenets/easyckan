@@ -96,6 +96,8 @@ function ckan-supervisor {
         docker run --net=easyckan --name $v_docker_supervisor_name \
                    -p 9001:9001 \
                    -v $v_docker_supervisor_v \
+                   -v /etc/ckan/default:/etc/ckan/default \
+                   -v /usr/lib/ckan/default:/usr/lib/ckan/default \
                    -d easyckan/ckan-supervisor:$V_CKAN_BASE_VERSION
     fi
 }
