@@ -64,7 +64,7 @@ then
 	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
 		echo -n "CKAN platform version : "
 	    echo $(cd /usr/lib/ckan/default/src/ckan/ && git name-rev --name-only HEAD)
-		echo "Commit ID             : "$(git show --oneline -s | head -n1 | awk '{print $1;}')
+		echo "Commit ID / Date      : "$(cd /etc/easyckan && git log -n 1 --format="%h %ad%Creset")
 	fi
 fi
 
