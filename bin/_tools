@@ -82,6 +82,8 @@ function ckan-supervisor {
     rm -f /etc/ckan/default/supervisor/*
     
     # Update supervisor config files
+    mkdir -p /etc/ckan/easyckan/plugins
+    touch /etc/ckan/easyckan/plugins/nothing.sh
     for file in $(ls /etc/ckan/easyckan/plugins); do
         if [[ $file == *".supervisor" ]]; then
             cp /etc/ckan/easyckan/plugins/$file /etc/ckan/default/supervisor/$file.conf
