@@ -12,8 +12,6 @@ fi
 
 
 
-
-
 # Setup a PostgreSQL database
 # ==============================================
 function ckan-postgresql {
@@ -78,8 +76,19 @@ function ckan-solr {
 # Supervisor
 # ==============================================
 function ckan-supervisor {
-    # Create supervisor config dir if not exist
+    # Create supervisor config dir if not exist and/or clean
     mkdir -p /etc/ckan/default/supervisor
+    touch /etc/ckan/default/supervisor/nothing
+    rm -f /etc/ckan/default/supervisor/*
+    
+    # Update supervisor config files
+    for file in $(ls /etc/ckan/easyckan/plugins); do
+        if [[ $file == *".supervisor" ]]; then
+            cp /etc/ckan/easyckan/plugins/$file /etc/ckan/default/supervisor/$file.conf
+        fi
+    done
+    
+    # Set permissions
     chown -R 5000.5000 /etc/ckan/default/supervisor
 
     # Set variables
@@ -119,7 +128,10 @@ function ckan-create-network {
 # Other dependences and plugins activated
 # ==============================================
 function ckan-dependences {
-    # Start Supervisor
+    # Main modules
+    ckan-create-network
+    ckan-postgresql
+    ckan-solr
     ckan-supervisor
 
     # Plugins
@@ -127,6 +139,10 @@ function ckan-dependences {
     mkdir -p $PLUGINS_DIR
     PLUGINS=$(ls $PLUGINS_DIR)
     PLUGINS=($PLUGINS)
+
+    # Set permissions
+    chmod +x $PLUGINS_DIR*.sh
+    chown -R 5000.5000 $PLUGINS_DIR
     
     for file in $PLUGINS
     do

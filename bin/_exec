@@ -5,10 +5,7 @@ SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_tools
 
 # Start CKAN containers dependences
-#echo    "loading..."
-ckan-create-network >/dev/null
-ckan-postgresql >/dev/null
-ckan-solr >/dev/null
+ckan-dependences >/dev/null
 
 # Copy .bashrc
 rm -f /usr/lib/ckan/.bashrc 2>/dev/null

@@ -1,11 +1,14 @@
 #!/bin/bash
-echo "EasyCKAN Repair"
-echo "=============================================="
+echo "# =============================================="
+echo "# EasyCKAN Repair                              #"
+echo "# =============================================="
 
+# Import env
+SCRIPT_HOME="/etc/easyckan/bin"
+source $SCRIPT_HOME/_tools
 
 echo ""
-echo "Remove all containers and network"
-echo "=============================================="
+echo "# Remove all containers and network ========== #"
 EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | sed 's/"Name": "//g' | sed 's/",//g')
 for container in $EASYCKAN_CONTAINERS
 do
@@ -16,12 +19,15 @@ docker network rm easyckan
 
 
 echo ""
-echo "Do all migrations pendents"
-echo "=============================================="
+echo "# Restart all dependences ==================== #"
+ckan-dependences
+
+
+echo ""
+echo "# Do all migrations pendents ================= #"
 easyckan exec paster --plugin=ckan db upgrade --config=/etc/ckan/default/development.ini
 
 
 echo ""
-echo "Rebuild search index"
-echo "=============================================="
+echo "# Rebuild search index ======================= #"
 easyckan exec paster --plugin=ckan search-index rebuild_fast --config=/etc/ckan/default/development.ini
