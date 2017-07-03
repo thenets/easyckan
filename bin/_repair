@@ -17,7 +17,6 @@ done
 echo $EASYCKAN_CONTAINERS
 docker network rm easyckan
 
-
 echo ""
 echo "# Restart all dependences ==================== #"
 ckan-dependences
@@ -27,6 +26,9 @@ echo ""
 echo "# Do all migrations pendents ================= #"
 easyckan exec paster --plugin=ckan db upgrade --config=/etc/ckan/default/development.ini
 
+echo ""
+echo "# Rebuild translations ======================= #"
+easyckan exec paster trans js -c /etc/ckan/default/development.ini
 
 echo ""
 echo "# Rebuild search index ======================= #"
