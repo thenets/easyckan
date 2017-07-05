@@ -1,4 +1,4 @@
-FROM postgres:9.6.2
+FROM postgres:9.5.7
 
 # Metadata
 LABEL vendor="TheNets.org EasyCKAN"
