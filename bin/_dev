@@ -15,9 +15,6 @@ ckan-postgresql
 ckan-solr
 ckan-dependences
 
-# Refresh Solr index
-easyckan exec paster --plugin=ckan search-index rebuild -r --config=/etc/ckan/default/development.ini
-
 # Start server
 echo ""
 echo "# Start EasyCKAN server..."
