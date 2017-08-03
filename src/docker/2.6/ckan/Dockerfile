@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 # Metadata
 LABEL vendor="TheNets.org EasyCKAN"
@@ -14,7 +14,7 @@ ENV CKAN_VIRTUALENV default
 USER root
 
 # Set best mirror for Ubuntu packages
-RUN sed -i -e 's/http:\/\/archive/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
+#RUN sed -i -e 's/http:\/\/archive/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
 
 # Install Ubuntu updates
 RUN apt-get update && apt-get upgrade -y
@@ -32,12 +32,26 @@ RUN apt-get install -y sudo gcc git-core postgresql-client libpq-dev python-pip 
 # Create CKAN dirs
 RUN mkdir -p $CKAN_CONFIG $CKAN_LOG $CKAN_DATA
 
+# Upgrading Python to 2.7.13
+# RUN apt-get install -y build-essential checkinstall  && \
+#     apt-get install -y libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev && \
+#     apt-get autoremove -y && \
+#     cd /usr/src && \
+#     wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz && \
+#     tar xzf Python-2.7.13.tgz && \
+#     cd Python-2.7.13 && \
+#     sudo ./configure && \
+#     sudo make install
+
 # DEBUG
-RUN apt-get install -y links htop nano vim libnet-ifconfig-wrapper-perl
+RUN apt-get install -y links htop nano vim libnet-ifconfig-wrapper-perl && \
+    apt-get autoremove -y
 
 # Add CKAN installer
 ADD ./install.sh /
 RUN chmod +x ./install.sh
+
+RUN python --version
 
 VOLUME [$CKAN_CONFIG, $CKAN_LOG, $CKAN_DATA]
 #ENTRYPOINT ["/entrypoint.sh"]

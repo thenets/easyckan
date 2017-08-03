@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+# Start server
+# ==============================================
+
+# Import env
+SCRIPT_HOME="/etc/easyckan/bin"
+source $SCRIPT_HOME/_tools
+
+# # Start CKAN containers dependences
+# echo "# Create network and start PostgreSQL & Solr..."
+# ckan-create-network
+# ckan-postgresql
+# ckan-solr
+# ckan-dependences
+
+# # Refresh Solr index
+# easyckan exec paster --plugin=ckan search-index rebuild -r --config=/etc/ckan/default/development.ini
+
+# # Start server
+# echo ""
+# echo "# Start EasyCKAN server..."
+docker run --net=easyckan --name "ckan-main" --rm -it \
+        -v /usr/lib/ckan:/usr/lib/ckan \
+        -v /etc/ckan:/etc/ckan \
+        -v /var/lib/ckan:/var/lib/ckan \
+        -p 80:80 \
+        easyckan/ckan-production:$V_CKAN_BASE_VERSION /bin/bash

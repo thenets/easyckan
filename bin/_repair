@@ -9,7 +9,7 @@ source $SCRIPT_HOME/_tools
 
 echo ""
 echo "# Remove all containers and network ========== #"
-EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | sed 's/"Name": "//g' | sed 's/",//g')
+EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | grep -v easyckan |sed 's/"Name": "//g' | sed 's/",//g')
 for container in $EASYCKAN_CONTAINERS
 do
     docker container rm -f $container
@@ -20,7 +20,6 @@ docker network rm easyckan
 echo ""
 echo "# Restart all dependences ==================== #"
 ckan-dependences
-
 
 echo ""
 echo "# Do all migrations pendents ================= #"

@@ -33,6 +33,7 @@ then
 fi
 
 
+
 # ===============================================
 # FIX
 # ===============================================
@@ -62,8 +63,7 @@ if [[ $1 == "version" ]]
 then	
 	echo "Easy CKAN version     : "$EASYCKAN_VERSION
 	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
-		echo -n "CKAN platform version : "
-	    echo $(cd /usr/lib/ckan/default/src/ckan/ && git name-rev --name-only HEAD)
+		echo "CKAN platform version : "$(cd /usr/lib/ckan/default/src/ckan/ && git name-rev --name-only HEAD)
 		echo "Commit ID / Date      : "$(cd /etc/easyckan && git log -n 1 --format="%h %ad%Creset")
 	fi
 fi
@@ -86,16 +86,20 @@ then
 	/etc/easyckan/bin/easyckan dev
 fi
 
-
-
-
 # ===============================================
-# Deploy
+# Production mode
 # ===============================================
-if [[ $1 == *"deploy"* ]]
+if [[ $1 == "production" ]]
+then	
+	chmod +x /etc/easyckan/bin/_production
+	/etc/easyckan/bin/_production
+fi
+if [[ $1 == "deploy" ]]
 then
-	chmod +x /etc/easyckan/bin/_deploy
-	/etc/easyckan/bin/_deploy
+	echo "Alias for 'easyckan production'"
+	echo ""
+	chmod +x /etc/easyckan/bin/easyckan
+	/etc/easyckan/bin/easyckan dev
 fi
 
 

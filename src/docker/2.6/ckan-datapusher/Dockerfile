@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.4
+FROM ubuntu:16.04
 
 ENV DATAPUSHER_HOME /usr/lib/ckan/datapusher
 
@@ -22,6 +22,11 @@ WORKDIR $DATAPUSHER_HOME/src
 #Clone the source
 RUN git clone -b '0.0.10' https://github.com/ckan/datapusher.git
 
+#Install pip
+RUN apt-get install -y python-pip && \
+        apt-get autoremove -y && \
+        pip install -U pip
+        
 #Install the dependencies
 WORKDIR datapusher
 RUN pip install -r requirements.txt && \
