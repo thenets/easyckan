@@ -26,7 +26,7 @@ else
     exit 1;
 fi
 
-curl -sSL https://get.docker.com/ | sh
+su -c "curl -sSL https://get.docker.com/ | sh"
 usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
 
 
@@ -47,7 +47,7 @@ rm -Rf /usr/bin/easyckan 2> /dev/null
 cd /tmp 
 rm -rf ./Easy-CKAN 
 git clone -b dev https://github.com/thenets/Easy-CKAN.git 
-mv /tmp/Easy-CKAN /etc/easyckan
+mv /tmp/Easy-CKAN/ /etc/easyckan/
 
 # Add easyckan to path
 ln -s /etc/easyckan/bin/easyckan /usr/bin/easyckan
