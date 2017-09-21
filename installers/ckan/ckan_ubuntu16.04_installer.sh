@@ -1,11 +1,13 @@
 clear
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN installation for Ubuntu 16.04            == #"
-echo    "#   Updated by Timothy Giles                               #"
+echo    "#                                                          #"
+echo    "#   Updated by Timothy Giles @timgiles                     #"
 echo    "#       INSTALLS VERSION 2.5.6                             #"
+echo    "#                                                          #"
 echo    "#   Special thanks to:                                     #"
-echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
-echo    "#   Adrien GRIMAL                                          #"
+echo    "#      Alerson Luz @alersonluz                             #"
+echo    "#      Adrien GRIMAL                                       #"
 echo    "# ======================================================== #"
 su -c "sleep 3"
 
