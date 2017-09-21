@@ -1,8 +1,9 @@
 clear
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN installation for Ubuntu 16.04            == #"
-echo    "#                                                          #"
-echo    "# Special thanks to:                                       #"
+echo    "#   Updated by Timothy Giles                               #"
+echo    "#       INSTALLS VERSION 2.5.6                             #"
+echo    "#   Special thanks to:                                     #"
 echo    "#   Alerson Luz (GitHub: alersonluz)                       #"
 echo    "#   Adrien GRIMAL                                          #"
 echo    "# ======================================================== #"
@@ -103,8 +104,8 @@ echo    "# 4.1. Creating CKAN user..."
 useradd -m -s /sbin/nologin -d /usr/lib/ckan -c "CKAN User" ckan
 sudo usermod -a -G staff ckan
 chmod 775 -R /usr/local/lib/python2.7
-chmod 755 /usr/lib/ckan
-chown ckan.33 -R /usr/lib/ckan
+sudo chmod 755 /usr/lib/ckan
+sudo chown ckan.33 -R /usr/lib/ckan
 
 sudo mkdir -p ~/ckan/lib
 sudo ln -s ~/ckan/lib /usr/lib/ckan
@@ -147,8 +148,8 @@ chown ckan.33 -R /etc/ckan/default
 # Setup a storage path
 echo    "# 4.5 Setting a storage path for upload support..."
 su -c "sleep 2"
-mkdir -p /var/lib/ckan
-chown -R ckan.33 /var/lib/ckan
+sudo mkdir -p /var/lib/ckan
+sudo chown -R ckan.33 /var/lib/ckan
 sed -i 's/#ckan.storage_path/ckan.storage_path/g' /etc/ckan/default/development.ini
 
 
@@ -165,8 +166,8 @@ echo    "# == 5. Install Apache Solr                             == #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 echo    "# 5.1. Updating Jetty config"
-sed -i "s/#JETTY_HOST=$(uname -n)/JETTY_HOST=127.0.0.1/g" /etc/ckan/default/development.ini
-sed -i "s/#JETTY_PORT=8080/JETTY_PORT=8983/g" /etc/ckan/default/development.ini
+sed -i "s/#JETTY_HOST=$(uname -n)/JETTY_HOST=127.0.0.1/g" /etc/default/jetty8
+sed -i "s/#JETTY_PORT=8080/JETTY_PORT=8983/g" /etc/default/jetty8
 
 echo    "# 5.2. Restarting Jetty..."
 service jetty8 restart
