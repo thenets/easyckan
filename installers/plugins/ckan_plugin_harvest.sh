@@ -43,6 +43,15 @@ echo    "| Install supervisor to manage harvest background process"
 # Install from apt-get
 apt-get install -y supervisor
 
+
+# Active supervisor (FIX for Docker)
+if [ -f /etc/ckan/default/docker.conf ]; then
+    mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor
+    service supervisor restart
+    /usr/bin/supervisord
+fi
+
+
 # Add Supervisor configuration
 cp /etc/easyckan/conf/supervisor/ckan_harvesting.conf /etc/supervisor/conf.d/ckan_harvesting.conf
 
@@ -54,8 +63,8 @@ sudo supervisorctl reread
 sudo supervisorctl add ckan_gather_consumer
 sudo supervisorctl add ckan_fetch_consumer
 sudo supervisorctl add ckan_run_jobs
-sudo supervisorctl start ckan_gather_consumer
-sudo supervisorctl start ckan_fetch_consumer
-sudo supervisorctl start ckan_run_jobs
+#sudo supervisorctl start ckan_gather_consumer
+#sudo supervisorctl start ckan_fetch_consumer
+#sudo supervisorctl start ckan_run_jobs
 
 echo    "# Harvest was installed! #"

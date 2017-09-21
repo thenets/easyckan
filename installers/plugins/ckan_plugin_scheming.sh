@@ -1,6 +1,9 @@
 clear
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN : [PLUGIN] Scheming installation         == #"
+echo    "#                                                          #"
+echo    "# Installer created by:                                    #"
+echo    "#   Timothy (GitHub: timgiles)                             #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 
@@ -30,6 +33,18 @@ sed -i 's/scheming.dataset_fallback = false/ /g' /etc/ckan/default/development.i
 
 sed -i 's/## Front-End Settings/scheming.dataset_schemas = ckanext.scheming:dataset.json \n \nscheming.presets = ckanext.scheming:presets.json \n                   ckanext.repeating:presets.json \n                   ckanext.fluent:presets.json \n                   ckanext.composite:presets.json \n \nscheming.dataset_fallback = false \n \n## Front-End Settings /g' /etc/ckan/default/development.ini
 
-## Front-End Settings
 
-echo    "# Scheming plugins installed! #"
+# Copy default scheming file
+# ==============================================
+cp /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/ckan_dataset.json /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/dataset.json
+
+
+## Front-End Settings
+echo    ""
+echo    "# Scheming plugins installed!"
+echo    "#"
+echo    "# Set edit all datasets and resources fields, you should edit the file:"
+echo    "#     /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/dataset.json"
+echo    "#"
+echo    "# Or run the command:"
+echo    "#     easyckan plugin scheming"

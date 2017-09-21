@@ -1,6 +1,9 @@
 clear
 echo    "# ======================================================== #"
 echo    "# == Easy CKAN : [PLUGIN] Hierarchy installation        == #"
+echo    "#                                                          #"
+echo    "# Installer created by:                                    #"
+echo    "#   Timothy (GitHub: timgiles)                             #"
 echo    "# ======================================================== #"
 su -c "sleep 2"
 

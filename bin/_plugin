@@ -1,8 +1,12 @@
 #!/bin/bash
 
+# Set permissions
+chmod +x /etc/easyckan/installers/plugins/*
+
+
 if [[ $1 == "" ]]
 then
-	echo "You must need to enter a argument:"
+	echo "You must need to enter an argument:"
 	echo "Examples:"
 	echo "  sudo easyckan plugin install <plugin_name>"
 	echo "  sudo easyckan plugin harvest sources"
@@ -15,9 +19,23 @@ then
 	if [ -f /etc/easyckan/installers/plugins/ckan_plugin_$2.sh ]; then
 		/etc/easyckan/installers/plugins/ckan_plugin_$2.sh
 	else
-	    echo "File not found!"
+		
+		# Install all plugins
+		if [[ $2 == "--all" ]]
+		then
+			for file in /etc/easyckan/installers/plugins/*
+			do
+			  $file
+			done
+		
+		# Not found
+		else
+	    	echo "File not found!"
+	    fi
 	fi
 fi
+
+
 
 
 # Harvest
@@ -31,4 +49,11 @@ fi
 if [[ $1 == "datapusher" ]]
 then
 	/etc/easyckan/helpers/datapusher.sh $2
+fi
+
+
+# Scheming
+if [[ $1 == "scheming" ]]
+then
+	nano /usr/lib/ckan/default/src/ckanext-scheming/ckanext/scheming/dataset.json
 fi

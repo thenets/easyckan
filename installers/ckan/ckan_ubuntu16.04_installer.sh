@@ -126,9 +126,9 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install h
 
 # Installing CKAN and dependences
 echo    "# 4.3. Installing CKAN and dependences..."
-apt-get install -y libmemcached-dev zlib1g-dev # FIX for CKAN 2.5.6
+apt-get install -y libmemcached-dev zlib1g-dev # FIX for CKAN 2.6.0
 su -c "sleep 2"
-su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.5.6#egg=ckan'"
+su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-2.6.3#egg=ckan'"
 sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
 
