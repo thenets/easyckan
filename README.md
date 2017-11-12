@@ -31,8 +31,8 @@ It is generally better to have a completely clean install of Ubuntu to work from
 Run the following commands on your server / virtual machine:
 
 ```
-# Not avaliable yet...
-# Check dev mode below...
+curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/master/install_easyckan.sh | sudo bash
+sudo easyckan install
 ```
 
 ## 3. Easy CKAN Command Line
@@ -51,7 +51,7 @@ Once you have finished development and are ready to push your changes into a pro
 
 ```
 # Production enviroment
-sudo easyckan deploy # Avaliable over port 80
+sudo easyckan prodution # Avaliable over port 80
 ```
 
 ### 3.3. Create admin user
