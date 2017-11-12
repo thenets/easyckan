@@ -21,9 +21,9 @@ source $SCRIPT_HOME/_tools
 # # Start server
 # echo ""
 # echo "# Start EasyCKAN server..."
-docker run --net=easyckan --name "ckan-main" --rm -it \
+docker run --net=easyckan --name "ckan-production" --rm -it \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
-        -p 80:80 \
-        easyckan/ckan-production:$V_CKAN_BASE_VERSION /bin/bash
+        -p 80:8080 \
+        easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X -DFOREGROUND

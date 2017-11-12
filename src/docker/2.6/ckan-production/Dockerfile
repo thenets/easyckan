@@ -22,5 +22,13 @@ RUN rm -f /usr/lib/ckan/.bashrc /install.sh
 # USER ckan
 # WORKDIR /usr/lib/ckan
 
+ADD ./easyckan.conf /etc/apache2/sites-available/easyckan.conf
+ADD ./easyckan.wsgi /etc/apache2/easyckan.wsgi
+RUN rm -f /etc/apache2/sites-enabled/* && a2ensite easyckan && \
+    echo '' > /etc/apache2/ports.conf && \
+    chown 5000.5000 -R /var/log/apache2/ /var/run/apache2/ /etc/apache2/ /var/cache/mod_pagespeed/ /var/log/pagespeed/
 ADD ./ckan-entrypoint.sh /ckan-entrypoint.sh
+
+USER ckan
+
 CMD ["ckan-entrypoint.sh"]
