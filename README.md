@@ -1,6 +1,6 @@
 # EasyCKAN v2.6 Beta.1
 
-Easiest way to install the CKAN platform.
+The easiest way to install the CKAN platform.
 
 Compatible with all Linux x64 distros.
 
