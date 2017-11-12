@@ -3,7 +3,7 @@
 # Dependencies
 # ===========================================================
 echo "# Installing Mocha for front-end tests..."
-#npm install mocha-phantomjs@4.0
+npm install mocha-phantomjs@4.0
 
 
 # Test Front-end
