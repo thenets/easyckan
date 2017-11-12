@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+# Start server
+# ==============================================
+
+# Import env
+SCRIPT_HOME="/etc/easyckan/bin"
+source $SCRIPT_HOME/_dependencies
+
+# Start CKAN containers dependences
+echo "# Create network and start dependences..."
+ckan-dependences
+
+# Start server
+echo ""
+echo "# Start EasyCKAN server..."
+docker run --net=easyckan --name "ckan-main" --rm -it \
+        -v /usr/lib/ckan:/usr/lib/ckan \
+        -v /etc/ckan:/etc/ckan \
+        -v /var/lib/ckan:/var/lib/ckan \
+        -p 5000:5000 \
+        easyckan/ckan-dev:$V_CKAN_BASE_VERSION /bin/bash

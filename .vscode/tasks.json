@@ -1,0 +1,8 @@
+{
+    "version": "0.1.0",
+    "command": "bash",
+    "isShellCommand": true,
+    "args": ["./installers/docker/2.6/build.sh"],
+    "showOutput": "always"
+}
+

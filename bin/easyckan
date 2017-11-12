@@ -2,7 +2,8 @@
 
 # Set vars
 # ===============================================
-EASYCKAN_VERSION="v0.3.0 Alpha"
+SCRIPT_HOME="/etc/easyckan/bin"
+source $SCRIPT_HOME/_dependencies
 
 
 
@@ -15,33 +16,31 @@ GREP="/bin/grep"
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
-   echo "EasyCKAN must be run as root...\nExiting..." 1>&2
+   echo "EasyCKAN must be run as root..."
+   echo "Exiting..."
    exit 1
 fi
 
 
 
 # ===============================================
-# Version
+# Exec
 # ===============================================
-if [[ $1 == "version" ]]
+if [[ $1 == "exec" ]]
 then
-	lsb_release -d
-	
-	echo "Easy CKAN version: "$EASYCKAN_VERSION
+	chmod +x /etc/easyckan/bin/_exec
+	/etc/easyckan/bin/_exec "$@"
+fi
 
-	if [ -x "$(command -v apachectl)" ]; then
-		apachectl -v | grep Apache --color=never -s
-	fi
 
-	if [ -x "$(command -v nginx)" ]; then
-		nginx -v | grep nginx --color=never -s
-	fi
-	
-	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
-		echo -n "CKAN platform version: "
-	    cat /usr/lib/ckan/default/src/ckan/CHANGELOG.rst | grep v2 -m 1 --color=never -s
-	fi
+
+# ===============================================
+# FIX
+# ===============================================
+if [[ $1 == "fix" ]] || [[ $1 == "repair" ]]
+then
+	chmod +x /etc/easyckan/bin/_repair
+	/etc/easyckan/bin/_repair
 fi
 
 
@@ -58,23 +57,49 @@ fi
 
 
 # ===============================================
-# Server (for development)
+# Version
 # ===============================================
-if [[ $1 == "server" ]]
-then
-	chmod +x /etc/easyckan/helpers/server.sh
-	/etc/easyckan/helpers/server.sh
+if [[ $1 == "version" ]]
+then	
+	echo "Easy CKAN version     : "$EASYCKAN_VERSION
+	if [ -f /usr/lib/ckan/default/src/ckan/CHANGELOG.rst ]; then
+		echo "CKAN platform version : "$(cd /usr/lib/ckan/default/src/ckan/ && git name-rev --name-only HEAD)
+		echo "Commit ID / Date      : "$(cd /etc/easyckan && git log -n 1 --format="%h %ad%Creset")
+	fi
 fi
 
 
 
 # ===============================================
-# Deploy
+# Development mode
 # ===============================================
-if [[ $1 == *"deploy"* ]]
+if [[ $1 == "dev" ]]
+then	
+	chmod +x /etc/easyckan/bin/_dev
+	/etc/easyckan/bin/_dev
+fi
+if [[ $1 == "server" ]]
 then
-	chmod +x /etc/easyckan/bin/_deploy
-	/etc/easyckan/bin/_deploy
+	echo "Alias for 'easyckan dev'"
+	echo ""
+	chmod +x /etc/easyckan/bin/easyckan
+	/etc/easyckan/bin/easyckan dev
+fi
+
+# ===============================================
+# Production mode
+# ===============================================
+if [[ $1 == "production" ]]
+then	
+	chmod +x /etc/easyckan/bin/_production
+	/etc/easyckan/bin/_production
+fi
+if [[ $1 == "deploy" ]]
+then
+	echo "Alias for 'easyckan production'"
+	echo ""
+	chmod +x /etc/easyckan/bin/easyckan
+	/etc/easyckan/bin/easyckan dev
 fi
 
 
@@ -102,55 +127,12 @@ fi
 
 
 # ===============================================
-# FIX
-# ===============================================
-if [[ $1 == "fix" ]]
-then
-	chmod +x /etc/easyckan/bin/_fix
-	/etc/easyckan/bin/_fix
-fi
-
-
-# ===============================================
-# Paster
-# ===============================================
-if [[ $1 == "paster" ]]
-then
-	sudo su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && paster --plugin=ckan $2 $3 $4 $5 $6 $7 $8 -c /etc/ckan/default/development.ini"
-fi
-
-
-
-# ===============================================
-# Docker
-# ===============================================
-if [[ $1 == "docker" ]]
-then
-	chmod +x /etc/easyckan/bin/_docker
-	/etc/easyckan/bin/_docker $2 $3 $4 $5 $6 $7 $8
-fi
-
-
-# ===============================================
-# Create
-# ===============================================
-if [[ $1 == "create" ]]
-then
-	chmod +x /etc/easyckan/bin/_create 
-	/etc/easyckan/bin/_create $2 $3 $4 $5 $6 $7 $8
-fi
-
-
-
-
-
-
-# ===============================================
 # Help
 # ===============================================
 if [[ $1 == "help" ]] || [[ $1 == "" ]]
 then
-	echo "Easy CKAN version "$EASYCKAN_VERSION
+	chmod +x /etc/easyckan/bin/easyckan
+	/etc/easyckan/bin/easyckan version
 	echo ""
 	chmod +x /etc/easyckan/bin/_help
 	/etc/easyckan/bin/_help
@@ -164,28 +146,16 @@ fi
 if [[ $1 == *"update"* ]]
 then
 	# Download Easy CKAN from GitHub
-	cd /tmp 
-	rm -rf ./Easy-CKAN
 	if [[ $2 == *"dev"* ]] # Check if will use dev version
 	then
-		git clone -b dev https://github.com/thenets/Easy-CKAN.git
+		curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | bash
 	else
-		git clone https://github.com/thenets/Easy-CKAN.git
+		echo "Not avaliable" # nothing...
 	fi
-	cd ./Easy-CKAN
-
-	# Update Easy CKAN files
-	mkdir -p /etc/easyckan/
-	rm -Rf /etc/easyckan/bin/
-	rm -Rf /etc/easyckan/conf/
-	rm -Rf /etc/easyckan/helpers/
-	rm -Rf /etc/easyckan/installers/
-	cp -R ./bin/ /etc/easyckan/bin/
-	cp -R ./conf/ /etc/easyckan/conf/
-	cp -R ./helpers/ /etc/easyckan/helpers/
-	cp -R ./installers/ /etc/easyckan/installers/
 
 	echo ""
 	echo "Command line tools update success! õ/"
 	/etc/easyckan/bin/easyckan version
 fi
+
+

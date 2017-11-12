@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Import env
+SCRIPT_HOME="/etc/easyckan/bin"
+source $SCRIPT_HOME/_dependencies
+
+# Start CKAN containers dependences
+ckan-dependences >/dev/null
+
+# Copy .bashrc
+rm -f /usr/lib/ckan/.bashrc 2>/dev/null
+cp $SCRIPT_HOME/../src/docker/$V_CKAN_BASE_VERSION/ckan-cli/.bashrc /usr/lib/ckan/.bashrc
+chown 5000.5000 /usr/lib/ckan/.bashrc
+
+# Copy Custom CMD
+rm -f /usr/lib/ckan/custom_cmd.sh 2>/dev/null
+cp $SCRIPT_HOME/../src/docker/$V_CKAN_BASE_VERSION/ckan-cli/custom_cmd.sh /usr/lib/ckan/custom_cmd.sh
+chown 5000.5000 /usr/lib/ckan/custom_cmd.sh
+chmod +x /usr/lib/ckan/custom_cmd.sh
+
+# Custom commands
+shift
+if [[ $(echo $1) ]]; then
+        CUSTOM_COMMANDS="/usr/lib/ckan/custom_cmd.sh $@"
+fi
+
+# Enter on CKAN container
+docker run --net=easyckan --rm -it \
+        -v /usr/lib/ckan:/usr/lib/ckan \
+        -v /etc/ckan:/etc/ckan \
+        -v /var/lib/ckan:/var/lib/ckan \
+        easyckan/ckan-cli:$V_CKAN_BASE_VERSION $CUSTOM_COMMANDS

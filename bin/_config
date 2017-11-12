@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Environment variables
+# ==============================================
+
+# EasyCKAN
+EASYCKAN_VERSION="v2.6 Beta.1"
+
+# CKAN
+V_CKAN_BASE_VERSION="2.6"
+V_CKAN_VERSION="2.6.2"
+
+# PostgreSQL
+if [ -f /var/lib/ckan/default/postgresql.conf]; then
+    v_password=$(cat /var/lib/ckan/default/postgresql.conf)
+fi

@@ -1,26 +1,18 @@
 #!/bin/bash
 
+# Remove all CKAN data
+rm -Rf /etc/ckan/ /usr/lib/ckan/ /var/lib/ckan/
 
-# TODO all messages dialogs
+# Remove Docker containers
+docker rm -f ckan
+docker rm -f ckan-postgres
+docker rm -f ckan-solr
+docker rm -f ckan-dev
+docker rm -f ckan-production
 
-# Ubuntu 14.04 base
-apt-get remove --purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-7-jdk
-
-# Ubuntu 16.04 base
-apt-get remove --purge -y python-dev postgresql libpq-dev python-pip python-virtualenv git-core openjdk-8-jdk
-
-# Solr / Tomcat
-apt-get remove --purge -y solr-tomcat
-
-# Paster (Python)
-apt-get remove --purge -y  python-pastescript
-
-# Deploy
-apt-get remove --purge -y apache2 libapache2-mod-wsgi libapache2-mod-rpaf nginx
-
-# Wipe useless packages
-apt-get autoremove
-
-# Remove CKAN directories
-rm -Rf /etc/ckan/
-rm -Rf /var/lib/ckan/
+# Clean Docker images
+docker image rm -f /easyckan/ckan
+docker image rm -f /easyckan/ckan-postgres
+docker image rm -f /easyckan/ckan-solr
+docker image rm -f /easyckan/ckan-dev
+docker image rm -f /easyckan/ckan-production
