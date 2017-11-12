@@ -7,6 +7,10 @@ CKAN_VERSION="2.6"
 
 # All Docker CKAN images
 CKAN_IMAGES=(ckan ckan-cli ckan-dev ckan-postgres ckan-production ckan-solr ckan-supervisor)
+# CKAN_IMAGES=(ckan ckan-cli ckan-dev ckan-production ckan-datapusher) # DEBUG
+# CKAN_IMAGES=(ckan-supervisor) # DEBUG
+# CKAN_IMAGES=(ckan-production) # DEBUG
+CKAN_IMAGES=(ckan-cli ckan-supervisor ckan-production) # DEBUG
 
 # Build each image
 for i in ${CKAN_IMAGES[@]}; do
