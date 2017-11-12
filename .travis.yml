@@ -20,6 +20,14 @@ install:
     - curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/$TRAVIS_BRANCH/install_easyckan.sh | sudo bash
     - sudo easyckan install
 
+# Kill everything on ports that EasyCKAN dev mode uses
+before-script:
+    - fuser -k 80/tcp
+    - fuser -k 5000/tcp
+    - fuser -k 5432/tcp
+    - fuser -k 8983/tcp
+    - fuser -k 9000/tcp
+
 # Front-end tests (check if server is working)
 script:
     - src/docker/2.6/test.sh
