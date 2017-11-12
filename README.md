@@ -116,7 +116,6 @@ exit
 Now add the plugin to your config file, on "ckan.plugins = my_plugin ..." at /etc/ckan/default/development.ini
 
 
-
 ## 4. Questions? Support?
 **IRC: If you have any question or need support, talk with me at [Freenode.net](webchat.freenode.net/?channels=easyckan) at channel #easyckan. Not need an account, just enter and type "thenets" and I'll answer you if I'm online.**
 
@@ -164,10 +163,4 @@ You need to instal 'curl' and run the command below.
 curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/dev/install_easyckan.sh | sudo bash
 sudo easyckan install
 sudo easyckan dev
-```
-
-To update the Easy CKAN command line tools with the DEV version, just run:
-
-```
-sudo easyckan update dev
 ```
