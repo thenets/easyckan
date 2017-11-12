@@ -3,7 +3,7 @@
 # Dependencies
 # ===========================================================
 echo "Installing Mocha for front-end tests..."
-sudo npm install -g phantomjs@~1.9.1 mocha-phantomjs@3.5.0
+npm install -g phantomjs@~1.9.1 mocha-phantomjs@3.5.0
 
 
 # Test Front-end
