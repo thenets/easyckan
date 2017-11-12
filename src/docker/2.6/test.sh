@@ -2,13 +2,15 @@
 
 # Dependencies
 # ===========================================================
-echo "Installing Mocha for front-end tests..."
-npm install mocha-phantomjs@4.0
+echo "# Installing Mocha for front-end tests..."
+#npm install mocha-phantomjs@4.0
 
 
 # Test Front-end
 # ===========================================================
-docker rm -f $(docker ps -qa)
+echo ""
+echo "# Remove all Docker containers..."
+docker rm -f $(docker ps -qa) 2>/dev/null
 
 # Import env
 EASYCKAN_DEV_MODE=false
@@ -16,8 +18,9 @@ SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_dependencies
 
 # Start CKAN containers dependences
+echo ""
 echo "# Create network and start dependences..."
-ckan-dependencies
+sudo easyckan exec pwd
 
 # Start server dev mode
 echo ""
@@ -52,7 +55,12 @@ MOCHA_ERROR=$?
 
 # Remove all containers
 # ===========================================================
+echo ""
+echo "# Show containers..."
 docker ps -a
+
+echo ""
+echo "# Remove all Docker containers..."
 docker rm -f $(docker ps -qa)
 
 # Error output to Travis
