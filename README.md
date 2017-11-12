@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/thenets/EasyCKAN.svg?branch=dev)](https://travis-ci.org/thenets/EasyCKAN)
+[![Build Status](https://travis-ci.org/thenets/EasyCKAN.svg)](https://travis-ci.org/thenets/EasyCKAN)
 
 # EasyCKAN v2.6 Beta.1
 
