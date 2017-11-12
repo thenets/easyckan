@@ -22,9 +22,9 @@ install:
 
 # Kill everything on ports that EasyCKAN dev mode uses
 before-script:
-    - fuser -k 80/tcp
     - fuser -k 5000/tcp
     - fuser -k 5432/tcp
+    - fuser -k 8080/tcp
     - fuser -k 8983/tcp
     - fuser -k 9000/tcp
 
