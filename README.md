@@ -4,8 +4,11 @@ Easiest way to install the CKAN platform.
 
 Compatible with all Linux x64 distros.
 
+## Do you still use the legacy version?
+The EasyCKAN was updated to new technologies now based on Docker containers. If you still using the old version on you organization or govern portal, you can find the legacy version on [legacy branch](https://github.com/thenets/EasyCKAN/tree/legacy).
+
 ## Who should use EasyCKAN?
-The EasyCKAN project is create for **single node portals** and **development environmet**. If you need load balancer or other advanced features, consider create your environment manually from the [CKAN Source Installation](http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html).
+The EasyCKAN project was created for **single node portals** and **development environmet**. If you need load balancer or other advanced features, consider create your environment manually from the [CKAN Source Installation](http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html).
 
 
 ## What Is Included In Easy CKAN?
@@ -31,8 +34,8 @@ It is generally better to have a completely clean install of Ubuntu to work from
 Run the following commands on your server / virtual machine:
 
 ```
-# Not avaliable yet...
-# Check dev mode below...
+curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/master/install_easyckan.sh | sudo bash
+sudo easyckan install
 ```
 
 ## 3. Easy CKAN Command Line
@@ -51,7 +54,7 @@ Once you have finished development and are ready to push your changes into a pro
 
 ```
 # Production enviroment
-sudo easyckan deploy # Avaliable over port 80
+sudo easyckan production # Avaliable over port 80
 ```
 
 ### 3.3. Create admin user
