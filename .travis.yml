@@ -14,8 +14,6 @@ before_install:
     - src/docker/2.6/build.sh ckan-dev
     - src/docker/2.6/build.sh ckan-production
     - src/docker/2.6/build.sh ckan-supervisor
-    - src/docker/2.6/build.sh ckan-postgres
-    - src/docker/2.6/build.sh ckan-solr
 
 # Install EasyCKAN
 install:
