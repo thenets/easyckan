@@ -16,9 +16,9 @@ echo ""
 echo -e "${PURPLE}--- Testing for development mode: http://ckan-dev:5000/${NC}"
 mocha-phantomjs http://ckan-dev:5000/base/test/index.html 2>&1 | tee -a $MOCHA_STD_FILE
 
-echo ""
-echo -e "${PURPLE}--- Testing for production mode: http://ckan-production:8080/${NC}"
-mocha-phantomjs http://ckan-production:8080/base/test/index.html 2>&1 | tee -a $MOCHA_STD_FILE
+#echo ""
+#echo -e "${PURPLE}--- Testing for production mode: http://ckan-production:8080/${NC}"
+#mocha-phantomjs http://ckan-production:8080/base/test/index.html 2>&1 | tee -a $MOCHA_STD_FILE
 
 
 # Catch error log
