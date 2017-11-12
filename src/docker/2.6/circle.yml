@@ -1,8 +1,0 @@
-machine:
-  services:
-    - docker
-
-dependencies:
-  override:
-    - docker info
-    - pwd

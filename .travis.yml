@@ -1,0 +1,15 @@
+sudo: required
+language: node_js
+node_js:
+  - "iojs"
+  - "7"
+services:
+    - docker
+install:
+    - bash src/docker/2.6/build.sh
+script:
+    - bash src/docker/2.6/test.sh
+notifications:
+  email: on_failure
+  irc:
+    - "chat.freenode.net#easyckan"
