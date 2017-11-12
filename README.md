@@ -4,6 +4,9 @@ Easiest way to install the CKAN platform.
 
 Compatible with all Linux x64 distros.
 
+## Do you still use the legacy version?
+The EasyCKAN was updated to new technologies now based on Docker containers. If you still using the old version on you organization or govern portal, you can find the legacy version on [legacy branch](https://github.com/thenets/EasyCKAN/tree/legacy).
+
 ## Who should use EasyCKAN?
 The EasyCKAN project is create for **single node portals** and **development environmet**. If you need load balancer or other advanced features, consider create your environment manually from the [CKAN Source Installation](http://docs.ckan.org/en/latest/maintaining/installing/install-from-source.html).
 
