@@ -17,12 +17,12 @@ source $SCRIPT_HOME/_dependencies
 
 # Start CKAN containers dependences
 echo "# Create network and start dependences..."
-sudo ckan-dependencies
+ckan-dependencies
 
 # Start server dev mode
 echo ""
 echo "# Start EasyCKAN server..."
-sudo docker run --net=easyckan --name "ckan-main" --rm -d \
+docker run --net=easyckan --name "ckan-main" --rm -d \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
@@ -30,12 +30,11 @@ sudo docker run --net=easyckan --name "ckan-main" --rm -d \
         easyckan/ckan-dev:$V_CKAN_BASE_VERSION
 
 # Start server prod mode
-sudo docker run --net=easyckan --name "ckan-production" -d \
+docker run --net=easyckan --name "ckan-production" --rm -d \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
         -p 80:8080 \
-        --restart unless-stopped \
         easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X -DFOREGROUND
         
 sleep 5 # Make sure the server has fully started
@@ -53,7 +52,7 @@ MOCHA_ERROR=$?
 
 # Remove all containers
 # ===========================================================
-sudo docker rm -f $(docker ps -qa)
+docker rm -f $(docker ps -qa)
 
 # Error output to Travis
 # ===========================================================

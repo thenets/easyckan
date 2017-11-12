@@ -30,7 +30,7 @@ before-script:
 
 # Front-end tests (check if server is working)
 script:
-    - src/docker/2.6/test.sh
+    - sudo src/docker/2.6/test.sh
 
 # Notify
 notifications:
