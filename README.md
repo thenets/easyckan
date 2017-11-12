@@ -1,13 +1,15 @@
-<a href="https://koding.com/"> <img src="https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_RectangleColor.png" srcset="https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_RectangleColor.png 1x, https://koding-cdn.s3.amazonaws.com/badges/made-with-koding/v1/koding_badge_RectangleColor@2x.png 2x" alt="Made with Koding" /> </a>
-
-# Easy-CKAN v0.3 Beta
+# Easy CKAN v0.3 Beta (Legacy)
 Easiest way to install the CKAN platform.
 
+## This is a legacy version
+
+A new EasyCKAN version was release based on Docker containers: https://github.com/thenets/EasyCKAN/
+
 ## What Is Included In Easy CKAN?
-- CKAN 2.5.2
+- CKAN 2.5.6
 - Plugins
   + [[Plugin] DataStore (version for CKAN base installation)](http://docs.ckan.org/en/latest/maintaining/datastore.html)
-  + [[Plugin] Harvest (v0.5)](https://github.com/ckan/ckanext-harvest)
+  + [[Plugin] Harvest](https://github.com/ckan/ckanext-harvest)
   + [[Plugin] Scheming (latest) - Thanks to @timgiles](https://github.com/ckan/ckanext-scheming)
 
 - Easy CKAN command line (NEW!)
@@ -27,7 +29,7 @@ Run the following commands on your server / virtual machine:
 ```
 sudo su -c "apt-get update && apt-get upgrade -y"
 sudo su -c "apt-get install git-core"
-sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
+sudo su -c "cd /tmp && rm -rf ./EasyCKAN && git clone -b legacy https://github.com/thenets/EasyCKAN.git && cd ./EasyCKAN && ./easy_ckan.sh"
 sudo su -c "easyckan install"
 ```
 
@@ -101,8 +103,6 @@ easyckan plugin harvest {COMMAND}
 
 ```
 
-
-
 ## Todo
 I want to add some additional improvements:
 
@@ -123,15 +123,9 @@ I want to add some additional improvements:
 If you want the lastest Easy CKAN version, use following lines to your installation.
 !IMPORTANT! This version will most likely contain bugs, so use at your own risk.
 
-```
-sudo su -c "apt-get update && apt-get upgrade -y"
-sudo su -c "apt-get install git-core"
-sudo su -c "cd /tmp && rm -rf ./Easy-CKAN && git clone -b dev https://github.com/thenets/Easy-CKAN.git && cd ./Easy-CKAN && ./easy_ckan.sh"
-sudo su -c "easyckan install"
-```
-
 To update the Easy CKAN command line tools with the DEV version, just run:
 
 ```
-sudo easyckan update dev
+cd /etc/easyckan
+git pull origin legacy
 ```
