@@ -1,13 +1,7 @@
 #!/bin/bash
 
-# Dependencies
-# ===========================================================
-echo "# Installing Mocha for front-end tests..."
-npm install -g phantomjs@~1.9.1
-npm install -g mocha-phantomjs@4.0
 
-
-# Test Front-end
+# Starting server
 # ===========================================================
 echo ""
 echo "# Remove all Docker containers..."
@@ -15,6 +9,7 @@ docker rm -f $(docker ps -qa) 2>/dev/null
 
 # Import env
 EASYCKAN_DEV_MODE=false
+echo $EASYCKAN_DEV_MODE > /tmp/easyckan_dev_mode
 SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_dependencies
 
@@ -41,28 +36,48 @@ docker run --net=easyckan --name "ckan-production" --rm -d \
         -p 8080:8080 \
         easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X
         
-sleep 15 # Make sure the server has fully started
+sleep 5 # Make sure the server has fully started
 
-# Run test
-mocha-phantomjs http://localhost:5000/base/test/index.html
-mocha-phantomjs http://localhost:8080/base/test/index.html
 
-# Did an error occur?
-MOCHA_ERROR=$?
+# Creating NodeJS container for Mocha PhantomJS
+# ===========================================================
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Did an error occur?
-[ "0" -ne "$MOCHA_ERROR" ] && echo MOCHA tests have failed
+echo ""
+echo "# Creating NodeJS container for Mocha PhantomJS..."
+docker run --net=easyckan --name "ckan-mocha" --rm -it \
+        -v $DIR/mocha.sh:/mocha.sh \
+        -v /tmp/mocha:/tmp/mocha \
+        --entrypoint /mocha.sh \
+        --user root \
+        easyckan/ckan-cli:$V_CKAN_BASE_VERSION bash
 
 
 # Remove all containers
 # ===========================================================
 echo ""
-echo "# Show containers..."
-docker ps -a
-
-echo ""
 echo "# Remove all Docker containers..."
-docker rm -f $(docker ps -qa)
+docker rm -f $(docker ps -qa) &>/dev/null
+
+
+# Tests result
+# ===========================================================echo ""
+echo ""
+MOCHA_ERROR_LOG=$(echo /tmp/mocha/mocha_err.log)
+RED='\033[0;31m'        # Red color
+GREEN='\033[0;32m'      # Green color
+NC='\033[0m'            # No Color
+if [[ -s $MOCHA_ERROR_LOG ]]; then
+        echo -e "${RED}# Tests result..."
+        MOCHA_ERROR=1
+        echo -e "--- MOCHA tests have failed! T.T $NC"
+else
+        echo -e "${GREEN}# Tests result..."
+        MOCHA_ERROR=0
+        echo -e "--- MOCHA tests passed! :D $NC"
+fi
+echo ''
+
 
 # Error output to Travis
 # ===========================================================
