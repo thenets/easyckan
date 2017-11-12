@@ -132,6 +132,36 @@ function ckan-supervisor {
 }
 
 
+# Gate
+# ==============================================
+function ckan-gate {
+    # Set variables
+    v_docker_gate_name="ckan-gate"	            # Container name
+    v_docker_gate_p="9000"
+
+    # Additionals (for production and development)
+    v_docker_supervisor_additonals="--restart unless-stopped"
+    if [ "$EASYCKAN_DEV_MODE" = true ] ; then
+        v_docker_supervisor_additonals="-p $v_docker_supervisor_p:9001 --rm"
+    fi
+    
+    if [[ $(docker container ls | grep -i $v_docker_supervisor_name) ]]; then
+        echo "ckan-supervisor was found..."
+    else
+        # Remove old container if exists
+        docker rm -f $v_docker_supervisor_name 2> /dev/null
+
+        # Create container as daemon
+        docker run --net=easyckan --name $v_docker_supervisor_name \
+                   -v $v_docker_supervisor_path:/etc/supervisor/conf.d \
+                   -v /etc/ckan/default:/etc/ckan/default \
+                   -v /usr/lib/ckan/default:/usr/lib/ckan/default \
+                   $v_docker_supervisor_additonals \
+                   -d easyckan/ckan-supervisor:$V_CKAN_BASE_VERSION
+    fi
+}
+
+
 # Create network if not exist
 # ==============================================
 function ckan-create-network {
@@ -142,7 +172,6 @@ function ckan-create-network {
         docker network create -d bridge easyckan 2> /dev/null
     fi
 }
-
 
 
 # Run all dependences and plugins
