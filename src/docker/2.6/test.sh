@@ -3,7 +3,7 @@
 # Dependencies
 # ===========================================================
 echo "Installing Mocha for front-end tests..."
-npm install -g phantomjs@~1.9.1 mocha-phantomjs@3.5.0
+sudo npm install -g phantomjs@~1.9.1 mocha-phantomjs@3.5.0
 
 
 # Test Front-end
@@ -17,22 +17,32 @@ source $SCRIPT_HOME/_dependencies
 
 # Start CKAN containers dependences
 echo "# Create network and start dependences..."
-ckan-dependencies
+sudo ckan-dependencies
 
-# Start server
+# Start server dev mode
 echo ""
 echo "# Start EasyCKAN server..."
-docker run --net=easyckan --name "ckan-main" --rm -d \
+sudo docker run --net=easyckan --name "ckan-main" --rm -d \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
         -p 5000:5000 \
         easyckan/ckan-dev:$V_CKAN_BASE_VERSION
+
+# Start server prod mode
+sudo docker run --net=easyckan --name "ckan-production" -d \
+        -v /usr/lib/ckan:/usr/lib/ckan \
+        -v /etc/ckan:/etc/ckan \
+        -v /var/lib/ckan:/var/lib/ckan \
+        -p 80:8080 \
+        --restart unless-stopped \
+        easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X -DFOREGROUND
         
 sleep 5 # Make sure the server has fully started
 
 # Run test
 mocha-phantomjs http://localhost:5000/base/test/index.html
+mocha-phantomjs http://localhost/base/test/index.html
 
 # Did an error occur?
 MOCHA_ERROR=$?
@@ -43,7 +53,7 @@ MOCHA_ERROR=$?
 
 # Remove all containers
 # ===========================================================
-docker rm -f $(docker ps -qa)
+sudo docker rm -f $(docker ps -qa)
 
 # Error output to Travis
 # ===========================================================
