@@ -29,14 +29,15 @@ docker run --net=easyckan --name "ckan-dev" --rm -d \
         easyckan/ckan-dev:$V_CKAN_BASE_VERSION
 
 # Start server prod mode
-docker run --net=easyckan --name "ckan-production" --rm -d \
+docker run --net=easyckan --name "ckan-production" -d \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
         -p 8080:8080 \
-        easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X
+        --restart unless-stopped \
+        easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X -DFOREGROUND
         
-sleep 5 # Make sure the server has fully started
+sleep 10 # Make sure the server has fully started
 
 
 # Creating NodeJS container for Mocha PhantomJS
@@ -46,7 +47,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo ""
 echo "# Creating NodeJS container for Mocha PhantomJS..."
 docker run --net=easyckan --name "ckan-mocha" --rm -it \
-        -v $DIR/mocha.sh:/mocha.sh \
+        -v $DIR/travis-mocha.sh:/mocha.sh \
         -v /tmp/mocha:/tmp/mocha \
         --entrypoint /mocha.sh \
         --user root \

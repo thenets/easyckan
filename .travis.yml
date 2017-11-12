@@ -9,15 +9,15 @@ services:
 
 # Build all images
 before_install:
-    - src/docker/2.6/build.sh ckan
-    - src/docker/2.6/build.sh ckan-cli
-    - src/docker/2.6/build.sh ckan-dev
-    - src/docker/2.6/build.sh ckan-production
-    - src/docker/2.6/build.sh ckan-supervisor
+    - src/docker/2.6/travis-build.sh ckan
+    - src/docker/2.6/travis-build.sh ckan-cli
+    - src/docker/2.6/travis-build.sh ckan-dev
+    - src/docker/2.6/travis-build.sh ckan-production
+    - src/docker/2.6/travis-build.sh ckan-supervisor
 
 # Install EasyCKAN
 install:
-    - curl -sSL https://raw.githubusercontent.com/thenets/Easy-CKAN/$TRAVIS_BRANCH/install_easyckan.sh | sudo bash
+    - ./install_easyckan.sh
     - sudo easyckan install
 
 # Kill everything on ports that EasyCKAN dev mode uses
@@ -30,7 +30,7 @@ before-script:
 
 # Front-end tests (check if server is working)
 script:
-    - src/docker/2.6/test.sh
+    - src/docker/2.6/travis-test.sh
 
 # Notify
 notifications:
