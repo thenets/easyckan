@@ -9,7 +9,13 @@ services:
 
 # Build all images
 before_install:
-    - bash src/docker/2.6/build.sh
+    - src/docker/2.6/build.sh ckan
+    - src/docker/2.6/build.sh ckan-cli
+    - src/docker/2.6/build.sh ckan-dev
+    - src/docker/2.6/build.sh ckan-production
+    - src/docker/2.6/build.sh ckan-supervisor
+    - src/docker/2.6/build.sh ckan-postgres
+    - src/docker/2.6/build.sh ckan-solr
 
 # Install EasyCKAN
 install:
@@ -18,7 +24,7 @@ install:
 
 # Front-end tests (check if server is working)
 script:
-    - bash src/docker/2.6/test.sh
+    - src/docker/2.6/test.sh
 
 # Notify
 notifications:

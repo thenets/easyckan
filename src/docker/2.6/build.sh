@@ -5,16 +5,14 @@ cd $DIR/..
 # Version
 CKAN_VERSION="2.6"
 
-# All Docker CKAN images
-CKAN_IMAGES=(ckan ckan-cli ckan-dev ckan-postgres ckan-production ckan-solr ckan-supervisor)
+# Image name
+IMAGE_NAME=$1
 
-# Build each image
-for i in ${CKAN_IMAGES[@]}; do
-    echo "# Building easyckan/"${i}":"$CKAN_VERSION
-    echo "# ====================================================="
-    docker build -f $CKAN_VERSION/${i}/Dockerfile \
-                -t easyckan/${i}:$CKAN_VERSION \
-                $CKAN_VERSION/${i}
-    echo ""
-    echo ""
-done
+# Build image
+echo "# Building easyckan/"${IMAGE_NAME}":"$CKAN_VERSION
+echo "# ====================================================="
+docker build -f $CKAN_VERSION/${IMAGE_NAME}/Dockerfile \
+            -t easyckan/${IMAGE_NAME}:$CKAN_VERSION \
+            $CKAN_VERSION/${IMAGE_NAME}
+echo ""
+echo ""

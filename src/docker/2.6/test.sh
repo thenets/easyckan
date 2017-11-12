@@ -3,7 +3,7 @@
 # Dependencies
 # ===========================================================
 echo "Starting EasyCKAN dependencies..."
-easyckan exec pwd
+sudo easyckan exec pwd
 
 echo "Installing Mocha for front-end tests..."
 npm install -g mocha-phantomjs@3.5.0 phantomjs@~1.9.1
@@ -13,7 +13,7 @@ npm install -g mocha-phantomjs@3.5.0 phantomjs@~1.9.1
 # ===========================================================
 
 # Start CKAN server
-easyckan dev &
+sudo easyckan dev &
 sleep 5 # Make sure the server has fully started
 
 # Run test

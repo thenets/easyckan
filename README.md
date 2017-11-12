@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/thenets/EasyCKAN.svg?branch=dev)](https://travis-ci.org/thenets/EasyCKAN)
+
 # EasyCKAN v2.6 Beta.1
 
 The easiest way to install the CKAN platform.
