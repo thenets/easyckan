@@ -70,11 +70,11 @@ NC='\033[0m'            # No Color
 if [[ -s $MOCHA_ERROR_LOG ]]; then
         echo -e "${RED}# Tests result..."
         MOCHA_ERROR=1
-        echo -e "--- MOCHA tests have failed! T.T $NC"
+        echo -e "${RED}--- MOCHA tests have failed! T.T $NC"
 else
         echo -e "${GREEN}# Tests result..."
         MOCHA_ERROR=0
-        echo -e "--- MOCHA tests passed! :D $NC"
+        echo -e "${GREEN}--- MOCHA tests passed! :D $NC"
 fi
 echo ''
 
