@@ -18,7 +18,7 @@ mocha-phantomjs http://ckan-dev:5000/base/test/index.html 2>&1 | tee -a $MOCHA_S
 
 echo ""
 echo -e "${PURPLE}--- Testing for production mode: http://ckan-production:8080/${NC}"
-mocha-phantomjs http://ckan-production:80/base/test/index.html 2>&1 | tee -a $MOCHA_STD_FILE
+mocha-phantomjs http://ckan-production:8080/base/test/index.html 2>&1 | tee -a $MOCHA_STD_FILE
 
 
 # Catch error log
