@@ -17,7 +17,7 @@ before_install:
 
 # Install EasyCKAN
 install:
-    - ./install_easyckan.sh
+    - sudo ./install_easyckan.sh
     - sudo easyckan install
 
 # Kill everything on ports that EasyCKAN dev mode uses
