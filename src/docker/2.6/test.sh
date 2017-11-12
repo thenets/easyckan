@@ -13,11 +13,11 @@ npm install -g mocha-phantomjs@3.5.0 phantomjs@~1.9.1
 # ===========================================================
 
 # Start CKAN server
-sudo easyckan dev &
+sudo easyckan production &
 sleep 5 # Make sure the server has fully started
 
 # Run test
-mocha-phantomjs http://localhost:5000/base/test/index.html
+mocha-phantomjs http://localhost/base/test/index.html
 
 # Did an error occur?
 MOCHA_ERROR=$?

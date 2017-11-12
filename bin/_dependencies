@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-EASYCKAN_DEV_MODE=true
 
 # Environment variables
 # ==============================================
@@ -176,16 +175,28 @@ function ckan-create-network {
 
 # Run all dependences and plugins
 # ==============================================
-function ckan-dependences {
+function ckan-dependencies {
+    # Check changes between dev
+    # and production mode
+    # ==============================
+    touch /tmp/easyckan_dev_mode
+    if ! [ "$(cat /tmp/easyckan_dev_mode)" = "$EASYCKAN_DEV_MODE" ]; then
+        # Remove all EasyCKAN containers
+        EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | grep -v easyckan |sed 's/"Name": "//g' | sed 's/",//g')
+        for container in $EASYCKAN_CONTAINERS; do
+            docker container rm -f $container
+        done
+    fi
+
     # Main modules
-    # =======================
+    # ==============================
     ckan-create-network
     ckan-solr
     ckan-postgresql
     ckan-supervisor
 
     # Plugins
-    # =======================
+    # ==============================
     PLUGINS_DIR="/etc/ckan/easyckan/plugins/"
     mkdir -p $PLUGINS_DIR
     PLUGINS=$(ls $PLUGINS_DIR)
