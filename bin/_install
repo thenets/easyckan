@@ -45,7 +45,7 @@ fi
 
 # Import env
 SCRIPT_HOME="/etc/easyckan/bin"
-source $SCRIPT_HOME/_tools
+source $SCRIPT_HOME/_dependencies
 
 # Create dirs and set permissions
 mkdir -p /etc/ckan/ /usr/lib/ckan/ /var/lib/ckan/

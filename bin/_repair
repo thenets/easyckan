@@ -5,8 +5,15 @@ echo "# =============================================="
 
 # Import env
 SCRIPT_HOME="/etc/easyckan/bin"
-source $SCRIPT_HOME/_tools
+source $SCRIPT_HOME/_dependencies
 
+# Install a plugin
+if [[ $1 == "add" ]]
+then
+	ln -s /etc/easyckan/plugins/$2.sh /etc/ckan/easyckan/plugins/$2.sh
+	echo "added"
+	exit
+fi
 echo ""
 echo "# Remove all containers and network ========== #"
 EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | grep -v easyckan |sed 's/"Name": "//g' | sed 's/",//g')

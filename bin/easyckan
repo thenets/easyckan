@@ -3,7 +3,7 @@
 # Set vars
 # ===============================================
 SCRIPT_HOME="/etc/easyckan/bin"
-source $SCRIPT_HOME/_tools
+source $SCRIPT_HOME/_dependencies
 
 
 

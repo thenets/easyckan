@@ -11,16 +11,10 @@ RUN apt-get install -y wget && \
     rm -f mod-pagespeed-stable_current_amd64.deb
 
 # Clean container
-# RUN apt-get remove -y wget links htop nano vim libnet-ifconfig-wrapper-perl redis-server gcc git-core postgresql-client && \
-#     apt-get clean all && apt-get autoclean && \
-#     apt-get autoremove -y
+RUN apt-get remove -y wget links htop nano vim libnet-ifconfig-wrapper-perl redis-server gcc git-core postgresql-client && \
+    apt-get clean all && apt-get autoclean && \
+    apt-get autoremove -y
 RUN rm -f /usr/lib/ckan/.bashrc /install.sh
-
-# Install Ubuntu updates (security reasons)
-# RUN apt-get update && apt-get upgrade -y
-
-# USER ckan
-# WORKDIR /usr/lib/ckan
 
 ADD ./easyckan.conf /etc/apache2/sites-available/easyckan.conf
 ADD ./easyckan.wsgi /etc/apache2/easyckan.wsgi
@@ -30,5 +24,6 @@ RUN rm -f /etc/apache2/sites-enabled/* && a2ensite easyckan && \
 ADD ./ckan-entrypoint.sh /ckan-entrypoint.sh
 
 USER ckan
+WORKDIR /usr/lib/ckan
 
 CMD ["ckan-entrypoint.sh"]

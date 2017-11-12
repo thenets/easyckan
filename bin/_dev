@@ -6,7 +6,7 @@
 
 # Import env
 SCRIPT_HOME="/etc/easyckan/bin"
-source $SCRIPT_HOME/_tools
+source $SCRIPT_HOME/_dependencies
 
 # Start CKAN containers dependences
 echo "# Create network and start dependences..."

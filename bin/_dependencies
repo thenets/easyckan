@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+EASYCKAN_DEV_MODE=true
 
 # Environment variables
 # ==============================================
@@ -11,15 +12,19 @@ if [ -f /tmp/foo.txt ]; then
 fi
 
 
-
 # Setup a PostgreSQL database
 # ==============================================
 function ckan-postgresql {
     # Set variables
-    v_docker_postgres_name="ckan-postgres"									# Container name
-    v_docker_postgres_path="/var/easyckan/database"							# Host persistent data path
-    v_docker_postgres_v="$v_docker_postgres_path:/var/lib/postgresql/data"	# Volume path
-    v_docker_postgres_p="5432:5432"											# Port
+    v_docker_postgres_name="ckan-postgres"			# Container name
+    v_docker_postgres_path="/var/easyckan/database"	# Data path on host
+    v_docker_postgres_p="5432"						# Port on host
+
+    # Additionals (for production and development)
+    v_docker_postgres_additonals="--restart unless-stopped"
+    if [ "$EASYCKAN_DEV_MODE" = true ] ; then
+        v_docker_postgres_additonals="-p $v_docker_postgres_p:5432 --rm"
+    fi
 
     if [[ $(docker container ls | grep -i $v_docker_postgres_name) ]]; then
         echo "ckan-postgres was found..."
@@ -31,9 +36,9 @@ function ckan-postgresql {
         mkdir -p $v_docker_postgres_path
 
         # Create container as daemon
-        docker run --net=easyckan --name $v_docker_postgres_name -v $v_docker_postgres_v \
+        docker run --net=easyckan --name $v_docker_postgres_name -v $v_docker_postgres_path:/var/lib/postgresql/data \
                     -e POSTGRES_DB="ckan_default" -e POSTGRES_PASSWORD=$v_password \
-                    -p $v_docker_postgres_p -d easyckan/ckan-postgres:$V_CKAN_BASE_VERSION
+                    $v_docker_postgres_additonals -d easyckan/ckan-postgres:$V_CKAN_BASE_VERSION
         
         # Wait application start
         sleep 2
@@ -52,10 +57,16 @@ function ckan-solr {
     fi
 
     # Set variables
-    v_docker_solr_name="ckan-solr"				                                                # Container name
-    v_docker_solr_p="8983:8983"					                                                # Port
-    v_docker_solr_v="/etc/ckan/default/solr:/usr/lib/ckan/default/src/ckan/ckan/config/solr"	# Volume path
+    v_docker_solr_name="ckan-solr"				# Container name
+    v_docker_solr_p="8983"					    # Port
+    v_docker_solr_path="/etc/ckan/default/solr"	# Config path
 
+    # Additionals (for production and development)
+    v_docker_solr_additonals="--restart unless-stopped"
+    if [ "$EASYCKAN_DEV_MODE" = true ] ; then
+        v_docker_solr_additonals="-p $v_docker_solr_p:8983 --rm"
+    fi
+    
     if [[ $(docker container ls | grep -i $v_docker_solr_name) ]]; then
         echo "ckan-solr was found..."
     else
@@ -63,12 +74,12 @@ function ckan-solr {
         docker rm -f $v_docker_solr_name 2> /dev/null
 
         # Create container as daemon
-        docker run --net=easyckan --name $v_docker_solr_name -p $v_docker_solr_p \
-                   -v $v_docker_solr_v \
-                   -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
+        docker run --net=easyckan --name $v_docker_solr_name \
+                   -v $v_docker_solr_path:/usr/lib/ckan/default/src/ckan/ckan/config/solr \
+                   $v_docker_solr_additonals -d easyckan/ckan-solr:$V_CKAN_BASE_VERSION
 
         # Wait application start
-        sleep 8
+        sleep 6
     fi
 }
 
@@ -94,9 +105,16 @@ function ckan-supervisor {
     chown -R 5000.5000 /etc/ckan/default/supervisor
 
     # Set variables
-    v_docker_supervisor_name="ckan-supervisor"	                                # Container name
-    v_docker_supervisor_v="/etc/ckan/default/supervisor:/etc/supervisor/conf.d"	# Volume path
+    v_docker_supervisor_name="ckan-supervisor"	            # Container name
+    v_docker_supervisor_path="/etc/ckan/default/supervisor"	# Config path
+    v_docker_supervisor_p="9000"
 
+    # Additionals (for production and development)
+    v_docker_supervisor_additonals="--restart unless-stopped"
+    if [ "$EASYCKAN_DEV_MODE" = true ] ; then
+        v_docker_supervisor_additonals="-p $v_docker_supervisor_p:9001 --rm"
+    fi
+    
     if [[ $(docker container ls | grep -i $v_docker_supervisor_name) ]]; then
         echo "ckan-supervisor was found..."
     else
@@ -105,10 +123,10 @@ function ckan-supervisor {
 
         # Create container as daemon
         docker run --net=easyckan --name $v_docker_supervisor_name \
-                   -p 9001:9001 \
-                   -v $v_docker_supervisor_v \
+                   -v $v_docker_supervisor_path:/etc/supervisor/conf.d \
                    -v /etc/ckan/default:/etc/ckan/default \
                    -v /usr/lib/ckan/default:/usr/lib/ckan/default \
+                   $v_docker_supervisor_additonals \
                    -d easyckan/ckan-supervisor:$V_CKAN_BASE_VERSION
     fi
 }
@@ -127,22 +145,23 @@ function ckan-create-network {
 
 
 
-# Other dependences and plugins activated
+# Run all dependences and plugins
 # ==============================================
 function ckan-dependences {
     # Main modules
+    # =======================
     ckan-create-network
-    ckan-postgresql
     ckan-solr
+    ckan-postgresql
     ckan-supervisor
 
     # Plugins
+    # =======================
     PLUGINS_DIR="/etc/ckan/easyckan/plugins/"
     mkdir -p $PLUGINS_DIR
     PLUGINS=$(ls $PLUGINS_DIR)
     PLUGINS=($PLUGINS)
 
-    # Set permissions
     chmod +x $PLUGINS_DIR*.sh
     chown -R 5000.5000 $PLUGINS_DIR
     
