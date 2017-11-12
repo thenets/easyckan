@@ -1,0 +1,39 @@
+# NodeJS for front-end tests
+language: node_js
+node_js: "7"
+
+# Docker support
+sudo: required
+services:
+    - docker
+
+# Build all images
+before_install:
+    - src/docker/2.6/travis-build.sh ckan
+    - src/docker/2.6/travis-build.sh ckan-cli
+    - src/docker/2.6/travis-build.sh ckan-dev
+    - src/docker/2.6/travis-build.sh ckan-production
+    - src/docker/2.6/travis-build.sh ckan-supervisor
+
+# Install EasyCKAN
+install:
+    - sudo bash -c "$(pwd)/install_easyckan.sh"
+    - sudo easyckan install
+
+# Kill everything on ports that EasyCKAN dev mode uses
+before-script:
+    - fuser -k 5000/tcp
+    - fuser -k 5432/tcp
+    - fuser -k 8080/tcp
+    - fuser -k 8983/tcp
+    - fuser -k 9000/tcp
+
+# Front-end tests (check if server is working)
+script:
+    - src/docker/2.6/travis-test.sh
+
+# Notify
+notifications:
+  email: on_failure
+  irc:
+    - "chat.freenode.net#easyckan"

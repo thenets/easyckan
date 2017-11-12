@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # Import env
+EASYCKAN_DEV_MODE=$(cat /tmp/easyckan_dev_mode)
 SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_dependencies
 
 # Start CKAN containers dependences
-ckan-dependences >/dev/null
+ckan-dependencies >/dev/null
 
 # Copy .bashrc
 rm -f /usr/lib/ckan/.bashrc 2>/dev/null

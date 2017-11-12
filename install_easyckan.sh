@@ -26,8 +26,10 @@ else
     exit 1;
 fi
 
-su -c "curl -sSL https://get.docker.com/ | sh"
-usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
+if ! [ -x "$(command -v docker)" ]; then
+    su -c "curl -sSL https://get.docker.com/ | sh"
+    usermod -aG docker $(grep 1000 /etc/passwd | cut -f1 -d:)
+fi
 
 
 

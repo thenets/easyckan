@@ -4,6 +4,7 @@ echo "# EasyCKAN Repair                              #"
 echo "# =============================================="
 
 # Import env
+EASYCKAN_DEV_MODE=$(cat /tmp/easyckan_dev_mode)
 SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_dependencies
 
@@ -26,7 +27,7 @@ docker network rm easyckan
 
 echo ""
 echo "# Restart all dependences ==================== #"
-ckan-dependences
+ckan-dependencies
 
 echo ""
 echo "# Do all migrations pendents ================= #"
