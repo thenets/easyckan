@@ -38,15 +38,18 @@ docker run --net=easyckan --name "ckan-production" -d \
         --restart unless-stopped \
         easyckan/ckan-production:$V_CKAN_BASE_VERSION
         
+docker logs ckan-production
+
 sleep 9 # Make sure the server has fully started
 
 echo ""
 echo "# All Docker containers started..."
 docker ps -a
+docker logs ckan-production
 
 echo ""
 echo "# Curl request test on dev and prod modes..."
-curl -sSf http://127.0.0.1:80 > /dev/null
+curl -sSf http://127.0.0.1:8080 > /dev/null
 curl -sSf http://127.0.0.1:5000 > /dev/null
 
 sleep 2
