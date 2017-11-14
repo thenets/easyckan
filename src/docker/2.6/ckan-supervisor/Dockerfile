@@ -1,7 +1,7 @@
 FROM easyckan/ckan:2.6
 
 # Install supervisor and dependences
-RUN apt-get update && apt-get install -y supervisor && \
+RUN apt-get update && apt-get install -y supervisor curl && \
     apt-get clean all && apt-get autoclean && \
     apt-get autoremove -y
 
