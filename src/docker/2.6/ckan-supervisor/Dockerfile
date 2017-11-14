@@ -11,6 +11,9 @@ RUN chown -R ckan /var/log/supervisor
 
 # Add conf files
 COPY supervisord.conf /etc/supervisord.conf
+COPY apps/easyckan.conf /easyckan.conf
+ADD apps/*.sh  /usr/local/bin/
+
 
 # Entrypoint
 USER root
