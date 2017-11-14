@@ -38,8 +38,13 @@ docker run --net=easyckan --name "ckan-production" -d \
         --restart unless-stopped \
         easyckan/ckan-production:$V_CKAN_BASE_VERSION
         
-sleep 10 # Make sure the server has fully started
+sleep 9 # Make sure the server has fully started
 
+echo ""
+echo "# All Docker containers started..."
+docker ps -qa
+
+sleep 2
 
 # Creating NodeJS container for Mocha PhantomJS
 # ===========================================================
