@@ -35,7 +35,7 @@ docker run --net=easyckan --name "ckan-production" -d \
         -v /var/lib/ckan:/var/lib/ckan \
         -p 8080:8080 \
         --restart unless-stopped \
-        easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X -DFOREGROUND
+        easyckan/ckan-production:$V_CKAN_BASE_VERSION
         
 sleep 10 # Make sure the server has fully started
 

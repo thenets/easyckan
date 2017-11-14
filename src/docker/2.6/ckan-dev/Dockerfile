@@ -9,7 +9,6 @@ USER root
 COPY ./entrypoint.sh /
 RUN chown ckan.ckan /entrypoint.sh && chmod +x entrypoint.sh
 
-
 EXPOSE 8983
 EXPOSE 5432
 EXPOSE 80
