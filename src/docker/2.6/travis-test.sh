@@ -39,6 +39,7 @@ docker run --net=easyckan --name "ckan-production" -d \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
+        -v /var/log/apache2:/var/log/apache2 \
         -p 8080:8080 \
         --restart unless-stopped \
         easyckan/ckan-production:$V_CKAN_BASE_VERSION
@@ -53,7 +54,7 @@ docker ps -a
 echo ""
 echo "# ckan-production container log..."
 docker logs ckan-production
-docker exec -t ckan-production sh -c "cat /var/log/apache2/*"
+cat /var/log/apache2/*
 
 echo ""
 echo "# ckan-dev container log..."
