@@ -10,8 +10,8 @@ RUN mkdir -p /var/log/supervisor
 RUN chown -R ckan /var/log/supervisor
 
 # Add conf files
-COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY supervisord.conf /etc/supervisord.conf
 
 # Entrypoint
-USER ckan
+USER root
 CMD ["/usr/bin/supervisord"]

@@ -42,7 +42,12 @@ sleep 9 # Make sure the server has fully started
 
 echo ""
 echo "# All Docker containers started..."
-docker ps -qa
+docker ps -a
+
+echo ""
+echo "# Curl request test on dev and prod modes..."
+curl -sSf http://127.0.0.1:80 > /dev/null
+curl -sSf http://127.0.0.1:5000 > /dev/null
 
 sleep 2
 
