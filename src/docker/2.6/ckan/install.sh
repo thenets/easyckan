@@ -53,9 +53,11 @@ echo    "# ======================================================== #"
 
 # Create user if doesn't exist
 if id "ckan" >/dev/null 2>&1; then
+	echo 	""
 	echo    "# 3.1. CKAN user already exist. Skipping..."
 	echo 	""
 else
+	echo 	""
 	echo    "# 3.1. Creating CKAN user..."
 	useradd -m -d /usr/lib/ckan -c "CKAN User" ckan
 	sudo usermod -a -G staff ckan
@@ -65,6 +67,7 @@ else
 fi
 
 # Python Virtual Environment
+echo 	""
 echo    "# 3.2. Creating Python Virtual Environment..."
 su -s /bin/bash - ckan -c "mkdir -p /usr/lib/ckan/default"
 su -s /bin/bash - ckan -c "virtualenv --no-site-packages /usr/lib/ckan/default"
@@ -75,11 +78,13 @@ su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install s
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install html5lib==0.999"		# HARD FIX
 
 # Installing CKAN
+echo 	""
 echo    "# 3.3. Installing CKAN..."
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -e 'git+https://github.com/ckan/ckan.git@ckan-$V_CKAN_VERSION#egg=ckan'"
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && python setup.py develop"
 
 # Installing CKAN dependences
+echo 	""
 echo    "# 3.3. Installing CKAN dependences..."
 sed -i "s/bleach==1.4.2/bleach==1.4.3/g" /usr/lib/ckan/default/src/ckan/requirements.txt # HOT FIX
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && pip install -r /usr/lib/ckan/default/src/ckan/pip-requirements-docs.txt"
@@ -113,6 +118,7 @@ sed -i "s/127.0.0.1:8983\/solr/ckan-solr:8983\/solr\/ckan/g" /etc/ckan/default/d
 chown 5000.33 -R /etc/ckan/default
 
 # Setup a storage path
+echo 	""
 echo    "# 4.2. Setting a storage path for upload support..."
 su -c "sleep 1"
 mkdir -p /var/lib/ckan
@@ -132,9 +138,11 @@ echo    "# ======================================================== #"
 echo    "# == 5. Finishing                                       == #"
 echo    "# ======================================================== #"
 
+echo 	""
 echo    "# 5.1. Initilize CKAN database..."
 su -s /bin/bash - ckan -c ". /usr/lib/ckan/default/bin/activate && cd /usr/lib/ckan/default/src/ckan && paster db init -c /etc/ckan/default/development.ini"
 
+echo 	""
 echo    "# 5.2. Set 'who.ini'..."
 rm /etc/ckan/default/who.ini 2> /dev/null
 ln -s /usr/lib/ckan/default/src/ckan/who.ini /etc/ckan/default/who.ini

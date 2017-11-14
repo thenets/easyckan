@@ -10,7 +10,7 @@ RUN apt-get install -y wget && \
     dpkg -i mod-pagespeed-stable_current_amd64.deb && \
     rm -f mod-pagespeed-stable_current_amd64.deb
 
-# Clean container
+# Clean image
 RUN apt-get remove -y wget curl links htop nano vim libnet-ifconfig-wrapper-perl redis-server gcc git-core postgresql-client && \
     apt-get clean all && apt-get autoclean && \
     apt-get autoremove -y
