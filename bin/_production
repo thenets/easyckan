@@ -9,12 +9,19 @@ EASYCKAN_DEV_MODE=false
 SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_dependencies
 
+# Remove all EasyCKAN containers
+echo "# Remove all EasyCKAN containers..."
+EASYCKAN_CONTAINERS=$(docker network inspect easyckan | grep -i '"Name": "' | grep -v easyckan |sed 's/"Name": "//g' | sed 's/",//g')
+for container in $EASYCKAN_CONTAINERS; do
+        docker container rm -f $container
+done
+
 # Start CKAN containers dependences
 echo "# Create network and start PostgreSQL & Solr..."
 ckan-dependencies
 
 # Refresh Solr index
-easyckan exec paster --plugin=ckan search-index rebuild -r --config=/etc/ckan/default/development.ini
+# easyckan exec paster --plugin=ckan search-index rebuild -r --config=/etc/ckan/default/development.ini
 
 # Start server
 docker run --net=easyckan --name "ckan-production" -d \
@@ -23,4 +30,4 @@ docker run --net=easyckan --name "ckan-production" -d \
         -v /var/lib/ckan:/var/lib/ckan \
         -p 80:8080 \
         --restart unless-stopped \
-        easyckan/ckan-production:$V_CKAN_BASE_VERSION apachectl -X -DFOREGROUND
+        easyckan/ckan-production:$V_CKAN_BASE_VERSION

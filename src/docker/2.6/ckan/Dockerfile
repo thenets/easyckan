@@ -13,9 +13,6 @@ ENV CKAN_VIRTUALENV default
 
 USER root
 
-# Set best mirror for Ubuntu packages
-#RUN sed -i -e 's/http:\/\/archive/mirror:\/\/mirrors/' -e 's/\/ubuntu\//\/mirrors.txt/' /etc/apt/sources.list
-
 # Install Ubuntu updates
 RUN apt-get update && apt-get upgrade -y
 
@@ -45,6 +42,7 @@ RUN mkdir -p $CKAN_CONFIG $CKAN_LOG $CKAN_DATA
 
 # DEBUG
 RUN apt-get install -y links htop nano vim libnet-ifconfig-wrapper-perl && \
+    apt-get clean all && apt-get autoclean && \
     apt-get autoremove -y
 
 # Add CKAN installer
@@ -54,4 +52,3 @@ RUN chmod +x ./install.sh
 RUN python --version
 
 VOLUME [$CKAN_CONFIG, $CKAN_LOG, $CKAN_DATA]
-#ENTRYPOINT ["/entrypoint.sh"]
