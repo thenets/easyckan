@@ -44,7 +44,7 @@ RUN mkdir -p $CKAN_CONFIG $CKAN_LOG $CKAN_DATA
 #     sudo make install
 
 # DEBUG
-RUN apt-get install -y links htop nano vim libnet-ifconfig-wrapper-perl 
+RUN apt-get install -y links htop nano vim libnet-ifconfig-wrapper-perl && \
     apt-get clean all && apt-get autoclean && \
     apt-get autoremove -y
 
