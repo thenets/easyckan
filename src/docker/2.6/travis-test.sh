@@ -13,10 +13,11 @@ echo $EASYCKAN_DEV_MODE > /tmp/easyckan_dev_mode
 SCRIPT_HOME="/etc/easyckan/bin"
 source $SCRIPT_HOME/_dependencies
 
-# Start CKAN containers dependences
+# Start CKAN containers dependencies
 echo ""
-echo "# Create network and start dependences..."
-sudo easyckan exec pwd
+echo "# Create network and start dependencies..."
+sudo easyckan exec echo "... done"
+docker rm -f ckan-supervisor
 
 # Start server dev mode
 echo ""
