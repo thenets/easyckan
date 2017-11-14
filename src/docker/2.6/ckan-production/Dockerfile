@@ -26,5 +26,5 @@ RUN rm -f /etc/apache2/sites-enabled/* && a2ensite easyckan && \
 USER ckan
 WORKDIR /usr/lib/ckan
 
-ENTRYPOINT [ "/bin/bash" ]
-CMD ["apachectl", "-DFOREGROUND"]
+ADD /entrypoint.sh /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
