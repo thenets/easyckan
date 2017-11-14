@@ -35,11 +35,13 @@ docker run --net=easyckan --name "ckan-dev" --rm -d \
         easyckan/ckan-dev:$V_CKAN_BASE_VERSION
 
 # Start server prod mode
+mkdir -p /tmp/apache2_log/
+chmod -R 777 /tmp/apache2_log/
 docker run --net=easyckan --name "ckan-production" -d \
         -v /usr/lib/ckan:/usr/lib/ckan \
         -v /etc/ckan:/etc/ckan \
         -v /var/lib/ckan:/var/lib/ckan \
-        -v /var/log/apache2:/var/log/apache2 \
+        -v /tmp/apache2_log:/var/log/apache2 \
         -p 8080:8080 \
         --restart unless-stopped \
         easyckan/ckan-production:$V_CKAN_BASE_VERSION
@@ -54,7 +56,7 @@ docker ps -a
 echo ""
 echo "# ckan-production container log..."
 docker logs ckan-production
-cat /var/log/apache2/*
+cat /tmp/apache2_log/*
 
 echo ""
 echo "# ckan-dev container log..."

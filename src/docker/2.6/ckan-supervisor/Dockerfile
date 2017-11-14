@@ -15,3 +15,4 @@ COPY supervisord.conf /etc/supervisord.conf
 # Entrypoint
 USER root
 CMD ["/usr/bin/supervisord"]
+
