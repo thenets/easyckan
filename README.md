@@ -121,6 +121,23 @@ exit
 Now add the plugin to your config file, on "ckan.plugins = my_plugin ..." at /etc/ckan/default/development.ini
 
 
+
+### 3.9. Update search index
+
+Rebuilds the search index. This is useful to prevent search indexes from getting out of sync with the main database.
+
+
+```
+# Full rebuild
+easyckan exec paster --plugin=ckan search-index rebuild -c /etc/ckan/default/development.ini
+
+# Fast rebuild
+easyckan exec paster --plugin=ckan search-index rebuild_fast -c /etc/ckan/default/development.ini
+```
+
+
+
+
 ## 4. Questions? Support?
 **IRC: If you have any question or need support, talk with me at [Freenode.net](webchat.freenode.net/?channels=easyckan) at channel #easyckan. Not need an account, just enter and type "thenets" and I'll answer you if I'm online.**
 
