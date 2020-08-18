@@ -1,3 +1,9 @@
+# Check the Open Knowledge Foundation project
+
+The EasyCKAN is a legacy project and not maintained anymore. I strongly recommend you to check the https://github.com/okfn/docker-ckan project. It's excellent work to set up a CKAN server and adapts it for your government or organization.
+
+___
+
 [![Build Status](https://travis-ci.org/thenets/EasyCKAN.svg)](https://travis-ci.org/thenets/EasyCKAN)
 
 # EasyCKAN v2.6 Beta.1
